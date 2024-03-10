@@ -19,4 +19,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- View do botão de começar e Já possuo cadastro -->
+    <View
+        android:id="@+id/containerOpening"
+        style="@style/ContainerOpening"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
