@@ -10,8 +10,8 @@
     <!-- View da Logo SmartLocker -->
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="370dp"
-        android:layout_height="380dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_marginTop="170dp"
         android:src="@drawable/logo"
         app:layout_constraintHorizontal_bias="0.491"
