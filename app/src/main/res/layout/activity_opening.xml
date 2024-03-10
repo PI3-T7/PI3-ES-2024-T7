@@ -19,6 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="320dp"
+        />
+
     <!-- View do botão de começar e Já possuo cadastro -->
     <View
         android:id="@+id/containerOpening"
@@ -50,5 +61,6 @@
         android:textColor="@color/orange"
         android:layout_marginTop="5dp"
         android:textAlignment="center" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
