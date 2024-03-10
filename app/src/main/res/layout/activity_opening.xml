@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Opening">
+
+    <!-- View da Logo SmartLocker -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="370dp"
+        android:layout_height="380dp"
+        android:layout_marginTop="170dp"
+        android:src="@drawable/logo"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="320dp"
+        />
+
+    <!-- View do botão de começar e Já possuo cadastro -->
+    <View
+        android:id="@+id/containerOpening"
+        style="@style/ContainerOpening"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <!-- Botão de Começar -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_begin"
+        style="@style/Button"
+        android:text="@string/begin"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="@id/containerOpening"
+        app:layout_constraintEnd_toEndOf="@id/containerOpening"
+        app:layout_constraintTop_toTopOf="@id/containerOpening" />
+
+    <!-- Texto "Já possuo cadastro" -->
+    <TextView
+        android:id="@+id/already"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/already"
+        app:layout_constraintTop_toBottomOf="@id/bt_begin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20sp"
+        android:textColor="@color/orange"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
