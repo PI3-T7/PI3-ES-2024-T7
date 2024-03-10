@@ -27,4 +27,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo" />
 
+    <!-- Botão de Começar -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bt_begin"
+        style="@style/Button"
+        android:text="@string/begin"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="@id/containerOpening"
+        app:layout_constraintEnd_toEndOf="@id/containerOpening"
+        app:layout_constraintTop_toTopOf="@id/containerOpening" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
