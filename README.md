@@ -30,7 +30,7 @@ final (aquele que deseja guardar itens) e pelo gerente de uma unidade locadora d
 * Dê o comando git init
 * Vá ao repositório "forkado", que estará entre os repositórios da sua conta no GitHub, e copie o link HTTPS (Muita atenção aqui, é o HTTPS do fork, não use o do repositório original)
 * Dê o comando "git clone https" (no lugar de https, você deve colocar o link HTTPS que copiou)
-* Em seguida, dê o comando "git remote add origin https" (o mesmo link copiado anteriormente deverá ser colocado aqui)
+* Em seguida, dê o comando "git remote add origin https" (aqui o https deverá ser do repositório original)
 * Por fim, dê o comando "git fetch upstream"<br/>
 3. Criando uma branch nova
 * Toda vez que algum colaborador for contribuir com uma nova funcionalidade para o código, ele deverá fazer isso por meio de uma branch.
