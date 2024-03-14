@@ -45,8 +45,7 @@ final (aquele que deseja guardar itens) e pelo gerente de uma unidade locadora d
 * Também façam muitos commits, sendo o mais descritivos possíveis sem escrever frases muito grandes. (Cada vez que for fazer um commit, deve usar "git add ." antes)
 5. Subindo o código para o respositório
 * Alguns passos importantes a seguir antes de subir o código:<br/>
-a) Tenha certeza que seu clone está atualizado com o repositório original, para isso, você deve entrar no seu repositório "forkado" do GitHub e verificar se ele está sincronizado com o original apertando no botão "Sync Fork" na branch main. Depois, entre na branch criada e aperte o botão "Sync Fork" também. Após isso, dê o comando "git fetch upstream" no terminal do seu projeto no Android Studio. Se não 
-se lembrar de fazer isso, fale com sua gerente de configurações, pois há uma forma de sincronizar após o push.<br/>
+a) Tenha certeza que seu clone está atualizado com o repositório original, para isso, você deve entrar no seu repositório "forkado" do GitHub e verificar se ele está sincronizado com o original apertando no botão "Sync Fork" e depois "Update branch".
 b) Revise o seu código para evitar subir erros, e caso encontre algum, arrume-o e faça o commit que explica a mudança.<br/>
 c) Entre no repositório original e crie uma branch nova, pelo GitHub mesmo (se não souber como, fale com sua gerente de configurações), com o mesmo nome da branch que criou para a nova funcionalidade.<br/>
 * Após os passos acima, dê o comando "git push --set-upstream origin nome-da-sua-branch".
@@ -54,6 +53,7 @@ c) Entre no repositório original e crie uma branch nova, pelo GitHub mesmo (se 
 * Vá até seu GitHub, entre no repositório forkado e aperte em "Compare and Pull request".
 * Muita ATENÇÃO agora: Verifique se está fazendo o pull request da sua branch do repositório clonado, para a branch de mesmo nome do repositório original, que criamos agora pouco.
 * Prontinho, sua gerente de configurações irá revisar o pull request para aceitá-lo, ou solicitar alguma mudança antes do merge, se necessário.
+* Se o Pull request estiver dando erro, verifique agora se a branch nova está sincronizada com o repositório original, apertando em sync fork e update branch.
 * Não aceitem os pull requests vocês mesmos, e não façam merge de nenhuma branch com a main no repositório original, elas serão unidas com a main por meio de Tags periódicas.
 * Assim que finalizarem o pull request, e se quiserem trabalhar em outra funcionalidade, criem uma branch nova pelo android studio.
 6. Qualquer dúvida, sintam-se a vontade para fazer perguntas :)
