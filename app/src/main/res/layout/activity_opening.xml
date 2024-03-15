@@ -41,7 +41,7 @@
     <!-- Botão de Começar -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_begin"
-        style="@style/Button"
+        style="@style/ButtonOpening"
         android:text="@string/begin"
         android:elevation="10dp"
         app:layout_constraintStart_toStartOf="@id/containerOpening"
