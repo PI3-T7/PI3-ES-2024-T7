@@ -21,7 +21,7 @@
 
     <style name="ContainerSignUp">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">450dp</item>
+        <item name="android:layout_height">475dp</item>
         <item name="android:layout_margin">30dp</item>
     </style>
 

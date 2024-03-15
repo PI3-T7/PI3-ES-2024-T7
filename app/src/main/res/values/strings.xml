@@ -7,4 +7,7 @@
     <string name="signup">Cadastrar</string>
     <string name="fullname">Nome Completo</string>
     <string name="cpf">CPF</string>
+    <string name="birthdate">Data de Nascimento</string>
+    <string name="phone">Celular</string>
+    <string name="emailSignup">Email</string>
 </resources>
