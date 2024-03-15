@@ -5,4 +5,6 @@
     <string name="create">Crie sua conta Smart</string>
     <string name="create2">Locker</string>
     <string name="signup">Cadastrar</string>
+    <string name="fullname">Nome Completo</string>
+    <string name="cpf">CPF</string>
 </resources>
