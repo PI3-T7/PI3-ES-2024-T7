@@ -8,7 +8,7 @@
     tools:context=".Opening">
 
     <!-- View da Logo SmartLocker -->
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
         android:layout_width="350dp"
         android:layout_height="350dp"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="50dp"
         android:layout_height="45dp"
         android:src="@drawable/icon_map"
@@ -41,7 +41,7 @@
     <!-- Botão de Começar -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_begin"
-        style="@style/Button"
+        style="@style/ButtonOpening"
         android:text="@string/begin"
         android:elevation="10dp"
         app:layout_constraintStart_toStartOf="@id/containerOpening"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toTopOf="@id/containerOpening" />
 
     <!-- Texto "Já possuo cadastro" -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/already"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
