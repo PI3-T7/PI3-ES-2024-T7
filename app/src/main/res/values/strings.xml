@@ -2,4 +2,13 @@
     <string name="app_name">Projeto_Smart_Locker</string>
     <string name="begin">Começar</string>
     <string name="already">Já possuo cadastro</string>
+    <string name="create">Crie sua conta Smart</string>
+    <string name="create2">Locker</string>
+    <string name="signup">Cadastrar</string>
+    <string name="fullname">Nome Completo</string>
+    <string name="cpf">CPF</string>
+    <string name="birthdate">Data de Nascimento</string>
+    <string name="phone">Celular</string>
+    <string name="emailSignup">Email</string>
+    <string name="passwordSignup">Senha</string>
 </resources>
