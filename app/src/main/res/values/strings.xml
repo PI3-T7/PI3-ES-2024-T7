@@ -17,4 +17,6 @@
     <string name="exemplo_email">exemplo@email.com</string>
     <string name="instruções">Siga as instruções para recuperar sua senha.</string>
     <string name="ok">OK</string>
+    <string name="Verificar">Siga as intruções para verificar sua conta.</string>
+    <string name="verificacao">Um email de verificação foi enviado para</string>
 </resources>
