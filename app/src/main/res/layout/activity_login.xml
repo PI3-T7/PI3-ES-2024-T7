@@ -8,7 +8,7 @@
     android:background="@color/white"
     tools:context=".formlogin.LoginActivity">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
         android:layout_width="350dp"
         android:layout_height="350dp"
@@ -30,11 +30,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/emailSignup"
         android:background="@drawable/signup_fields"
         android:drawableStart="@drawable/icon_email"
         android:drawablePadding="14dp"
@@ -49,18 +49,18 @@
         app:layout_constraintStart_toStartOf="@id/containerLogin"
         app:layout_constraintEnd_toEndOf="@id/containerLogin" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Senha"
+        android:hint="@string/passwordSignup"
         android:background="@drawable/signup_fields"
         android:drawableStart="@drawable/icon_password"
         android:drawablePadding="15dp"
         android:padding="15dp"
         android:inputType="text"
         android:textColorHint="@color/grey"
-        android:textSize="20"
+        android:textSize="20sp"
         android:maxLines="1"
         android:layout_marginVertical="10dp"
         android:layout_marginHorizontal="40dp"
@@ -68,11 +68,11 @@
         app:layout_constraintStart_toStartOf="@id/containerLogin"
         app:layout_constraintEnd_toEndOf="@id/containerLogin" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtEsqueceuSenha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Esqueci minha senha"
+        android:text="@string/esqueci_minha_senha"
         android:textSize="20sp"
         android:textColor="@color/white"
         android:layout_marginTop="5dp"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@id/editSenha"
         app:layout_constraintStart_toStartOf="@id/containerLogin" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

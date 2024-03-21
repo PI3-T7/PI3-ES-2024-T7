@@ -12,4 +12,9 @@
     <string name="emailSignup">Email</string>
     <string name="passwordSignup">Senha</string>
     <string name="login">Entrar</string>
+    <string name="esqueci_minha_senha">Esqueci minha senha</string>
+    <string name="recuperacao">Um email de recuperação foi enviado para</string>
+    <string name="exemplo_email">exemplo@email.com</string>
+    <string name="instruções">Siga as instruções para recuperar sua senha.</string>
+    <string name="ok">OK</string>
 </resources>
