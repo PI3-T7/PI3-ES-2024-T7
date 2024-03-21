@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Login_activity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/containerLogin"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@drawable/container_login"
+        android:layout_marginTop="430dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/emailSignup"
+        android:background="@drawable/signup_fields"
+        android:drawableStart="@drawable/icon_email"
+        android:drawablePadding="14dp"
+        android:textColorHint="@color/grey"
+        android:textSize="20sp"
+        android:padding="15dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintTop_toTopOf="@id/containerLogin"
+        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintEnd_toEndOf="@id/containerLogin" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/passwordSignup"
+        android:background="@drawable/signup_fields"
+        android:drawableStart="@drawable/icon_password"
+        android:drawablePadding="15dp"
+        android:padding="15dp"
+        android:inputType="text"
+        android:textColorHint="@color/grey"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="40dp"
+        app:layout_constraintTop_toBottomOf="@id/editUsuario"
+        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintEnd_toEndOf="@id/containerLogin" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtEsqueceuSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/esqueci_minha_senha"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="60dp"
+        app:layout_constraintTop_toBottomOf="@id/editSenha"
+        app:layout_constraintStart_toStartOf="@id/containerLogin" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        style="@style/ButtonLogin"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:padding="15dp"
+        android:backgroundTint="@color/blue"
+        android:textAllCaps="false"
+        android:elevation="30dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginBottom="68dp"
+        app:layout_constraintTop_toBottomOf="@id/txtEsqueceuSenha"
+        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintEnd_toEndOf="@id/containerLogin"
+        app:layout_constraintBottom_toBottomOf="@id/containerLogin"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:src="@drawable/icon_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="320dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
