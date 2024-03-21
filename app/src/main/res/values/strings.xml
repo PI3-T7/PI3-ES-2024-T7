@@ -11,4 +11,5 @@
     <string name="phone">Celular</string>
     <string name="emailSignup">Email</string>
     <string name="passwordSignup">Senha</string>
+    <string name="login">Entrar</string>
 </resources>
