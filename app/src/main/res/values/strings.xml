@@ -2,4 +2,26 @@
     <string name="app_name">Projeto_Smart_Locker</string>
     <string name="begin">Começar</string>
     <string name="already">Já possuo cadastro</string>
+    <string name="create">Crie sua conta Smart</string>
+    <string name="create2">Locker</string>
+    <string name="signup">Cadastrar</string>
+    <string name="fullname">Nome Completo</string>
+    <string name="cpf">CPF</string>
+    <string name="birthdate">Data de Nascimento</string>
+    <string name="phone">Celular</string>
+    <string name="emailSignup">Email</string>
+    <string name="passwordSignup">Senha</string>
+    <string name="login">Entrar</string>
+    <string name="esqueci_minha_senha">Esqueci minha senha</string>
+    <string name="recuperacao">Um email de recuperação foi enviado para</string>
+    <string name="exemplo_email">exemplo@email.com</string>
+    <string name="instruções">Siga as instruções para recuperar sua senha.</string>
+    <string name="ok">OK</string>
+    <string name="Verificar">Siga as intruções para verificar sua conta.</string>
+    <string name="verificacao">Um email de verificação foi enviado para</string>
+    <!-- Strings da Página Inicial do Cliente   -->
+    <string name="verPontos">Ver pontos de Locação</string>
+    <string name="cartoes">Cartões</string>
+    <string name="alugar">Alugar Armário</string>
+    <string name="nome">Olá, \nIsabella Maria T Bruno</string>
 </resources>
