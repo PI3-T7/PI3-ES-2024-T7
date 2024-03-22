@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="ContainerOpening">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">180dp</item>
@@ -32,14 +33,38 @@
         <item name="android:textSize">21sp</item>
     </style>
 
-
-
     <style name="ContainerSignUp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">475dp</item>
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
         <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <!-- Estilos para a Página inicial do Cliente -->
+
+    <style name="ContainerOptions">
+        <item name="android:elevation">10dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">140dp</item>
+        <item name="android:background">@drawable/button_options</item>
+    </style>
+
+    <style name="IconsOptions">
+        <item name="android:elevation">12dp</item>
+        <item name="layout_constraintVertical_bias">0.35</item>
+        <item name="android:layout_width">57.6dp</item>
+        <item name="android:layout_height">51.2dp</item>
+    </style>
+
+    <style name="StringsOptions">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textSize">18sp</item>
+        <item name="layout_constraintVertical_bias">0.85</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
