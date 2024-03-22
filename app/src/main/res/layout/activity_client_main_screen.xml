@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <View
+        android:id="@+id/containerMainScreen"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:background="@drawable/container_main_screen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:background="@color/orange"
+        android:padding="20dp"
+        android:src="@drawable/icon_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/containerMap"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_margin="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_options"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="57.6dp"
+        android:layout_height="51.2dp"
+        android:background="@drawable/icon_map2"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/containerMap"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toTopOf="@id/containerMap"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:fontFamily="@font/roboto"
+        android:text="Ver pontos de Locação"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@id/containerMap"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toTopOf="@id/containerMap"
+        app:layout_constraintVertical_bias="0.85" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
