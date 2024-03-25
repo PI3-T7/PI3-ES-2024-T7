@@ -30,7 +30,7 @@
         <activity
             android:name=".Opening"
             android:exported="true"
-            android:theme="@style/Theme.Projeto_Smart_Locker">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -32,14 +32,17 @@
         <item name="android:textSize">21sp</item>
     </style>
 
-
-
     <style name="ContainerSignUp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">475dp</item>
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
         <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- estilo necessário para atividade opening,
+        já que pedia um tema descendente de AppCompat -->
     </style>
 
 </resources>
