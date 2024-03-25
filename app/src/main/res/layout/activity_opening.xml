@@ -14,38 +14,37 @@
         android:layout_height="350dp"
         android:layout_marginTop="170dp"
         android:src="@drawable/logo"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="50dp"
         android:layout_height="45dp"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/icon_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="320dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- View do botão de começar e Já possuo cadastro -->
     <View
         android:id="@+id/containerOpening"
         style="@style/ContainerOpening"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo" />
 
     <!-- Botão de Começar -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bt_begin"
         style="@style/ButtonOpening"
-        android:text="@string/begin"
         android:elevation="10dp"
-        app:layout_constraintStart_toStartOf="@id/containerOpening"
+        android:text="@string/begin"
         app:layout_constraintEnd_toEndOf="@id/containerOpening"
+        app:layout_constraintStart_toStartOf="@id/containerOpening"
         app:layout_constraintTop_toTopOf="@id/containerOpening" />
 
     <!-- Texto "Já possuo cadastro" -->
@@ -53,14 +52,13 @@
         android:id="@+id/already"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/already"
-        app:layout_constraintTop_toBottomOf="@id/bt_begin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="20sp"
-        android:textColor="@color/orange"
         android:layout_marginTop="5dp"
-        android:textAlignment="center" />
-
+        android:text="@string/already"
+        android:textAlignment="center"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
