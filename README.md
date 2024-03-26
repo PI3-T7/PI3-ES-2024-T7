@@ -41,7 +41,7 @@ Este projeto está sendo desenvolvido pelos integrantes do Time 7 da disciplina 
    * Dê o comando `git init`.
    * Vá ao repositório "forkado", que estará entre os repositórios da sua conta no GitHub, e copie o link HTTPS (Muita atenção aqui, é o HTTPS do fork, não use o do repositório original).
    * Dê o comando `git clone https` (no lugar de `https`, você deve colocar o link HTTPS que copiou).
-   * Em seguida, dê o comando `git remote add origin https` (aqui o `https` deverá ser do repositório original).
+   * Em seguida, dê o comando `git remote add origin https` (aqui o `https` deverá ser o https do repositório original).
    * Por fim, dê o comando `git fetch upstream`.
 
 3. **Criando uma branch nova**
