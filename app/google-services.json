@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "785215269243",
+    "project_id": "projetointegrador3-416321",
+    "storage_bucket": "projetointegrador3-416321.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785215269243:android:e0b43a3f77a39a96c8f5de",
+        "android_client_info": {
+          "package_name": "br.edu.puccampinas.projeto_smart_locker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaACHf4kbpkpd_fY1X12C2JDXuWzvHgnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
