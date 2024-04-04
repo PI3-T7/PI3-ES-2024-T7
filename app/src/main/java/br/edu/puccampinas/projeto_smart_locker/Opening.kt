@@ -4,12 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 
 /**
  * Esta classe representa a atividade de abertura do aplicativo.
- * Ela exibe um botão que leva à atividade de login e um EditText para cadastro.
+ * Ela exibe um botão que leva à atividade de login e um TextView para cadastro.
  */
 class Opening : AppCompatActivity() {
 
