@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat
 
 class MapActivity : AppCompatActivity() {
 
+    // Lista de lugares
+    // Obs.: Vamos puxar direto do banco de dados
     private val places = arrayListOf(
         Place(
             "SmartLocker unidade Puc Campinas",
@@ -36,9 +38,11 @@ class MapActivity : AppCompatActivity() {
         )
     )
 
+    // Variável que acessa o serviços de localização da API
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     companion object {
+        // Código de solicitação de permissão
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
@@ -50,13 +54,16 @@ class MapActivity : AppCompatActivity() {
 
         val viewInfo = findViewById<View>(R.id.container_info_map)
 
+        // Obtém a referência do fragmento do mapa (no arquivo de layout)
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
 
+        // Obtém o objeto GoogleMap
         mapFragment.getMapAsync { googleMap ->
             addMarkers(googleMap)
             googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
 
+            // Quando o mapa é carregado
             googleMap.setOnMapLoadedCallback {
                 // Verifica se a permissão de localização está concedida
                 if (ContextCompat.checkSelfPermission(
@@ -64,7 +71,7 @@ class MapActivity : AppCompatActivity() {
                         Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    // Obtém a última localização conhecida
+                    // Obtém a última localização conhecida do usuário
                     fusedLocationClient.lastLocation
                         .addOnSuccessListener { location: Location? ->
                             // Verifica se a localização é diferente de nulo e move a câmera
@@ -84,6 +91,7 @@ class MapActivity : AppCompatActivity() {
                             }
                         }
                 } else {
+                    // Solicita permissão de localização se não estiver concedida
                     ActivityCompat.requestPermissions(
                         this,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -92,8 +100,10 @@ class MapActivity : AppCompatActivity() {
                 }
             }
 
-
+            // Quando o mapa é clicado
             googleMap.setOnMapClickListener { _ ->
+
+                // Animação para ajustar a altura da view de informações
                 val newHeight = 1
                 val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
                 anim.addUpdateListener { valueAnimator ->
@@ -110,6 +120,7 @@ class MapActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.tv_reference)?.text = ""
             }
 
+            // Quando um marcador é clicado
             googleMap.setOnMarkerClickListener { clickedMarker ->
                 val clickedPlace = clickedMarker.tag as? Place
                 if (clickedPlace != null) {
@@ -117,6 +128,7 @@ class MapActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.tv_address)?.text = clickedPlace.address
                     findViewById<TextView>(R.id.tv_reference)?.text = clickedPlace.reference
 
+                    // Animação para ajustar a altura da view de informações
                     val newHeight = 800
                     val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
                     anim.addUpdateListener { valueAnimator ->
@@ -134,6 +146,7 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    // Adiciona marcadores ao mapa com informações dos lugares
     private fun addMarkers(googleMap: GoogleMap) {
         places.forEach { place ->
             val marker = googleMap.addMarker(
@@ -154,6 +167,7 @@ class MapActivity : AppCompatActivity() {
 
 }
 
+// Data class para representar um lugar
 data class Place(
     val name: String,
     val latLng: LatLng,

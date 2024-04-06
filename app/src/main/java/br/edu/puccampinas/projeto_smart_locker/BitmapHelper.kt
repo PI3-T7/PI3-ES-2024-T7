@@ -11,6 +11,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
+// Este arquivo contém uma função para converter um vetor de recursos de imagem em um BitmapDescriptor,
+// que é usado para exibir imagens em mapas no Android usando a API do Google Maps.
+
 object BitmapHelper {
     fun vectorToBitmap(
         context: Context,
