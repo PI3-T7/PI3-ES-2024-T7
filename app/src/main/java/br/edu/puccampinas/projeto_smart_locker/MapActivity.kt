@@ -26,7 +26,7 @@ class MapActivity : AppCompatActivity() {
     private val places = arrayListOf(
         Place(
             "SmartLocker unidade Puc Campinas",
-            LatLng(-22.8352868, -47.0603403),
+            LatLng(-22.8342027,-47.0503346),
             "Ac. Publico, 286 - Parque dos Jacarandás, Campinas - SP, 13086-061",
             "Próximo ao portão 2"
         ),
@@ -154,10 +154,10 @@ class MapActivity : AppCompatActivity() {
                     .title(place.name)
                     .snippet(place.address)
                     .position(place.latLng)
-                    .icon( /*para mudar o icon*/
+                    .icon(
                         BitmapHelper.vectorToBitmap(
-                            this, R.drawable.icon_pin_location,
-                            ContextCompat.getColor(this, R.color.orange)
+                            this, R.drawable.icon_pin,
+                            //ContextCompat.getColor(this, R.color.orange)
                         )
                     )
             )
