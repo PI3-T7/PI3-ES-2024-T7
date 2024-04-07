@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 
 /**
@@ -16,6 +17,8 @@ class Opening : AppCompatActivity() {
     private lateinit var botaoComecar: Button
     // EditText para iniciar a atividade de cadastro
     private lateinit var etCadastro: TextView
+    // ImageButton para ver mapa
+    private lateinit var imgButtonMap: ImageButton
 
     /**
      * Método chamado quando a atividade é criada.
@@ -32,7 +35,7 @@ class Opening : AppCompatActivity() {
         // Define o listener de clique para o botão de início
         botaoComecar.setOnClickListener {
             // Cria uma intenção para iniciar a atividade de login
-            val intent = Intent(this, Login_activity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             // Inicia a atividade de login
             startActivity(intent)
         }
@@ -43,9 +46,24 @@ class Opening : AppCompatActivity() {
         // Define o listener de clique para o TextView de cadastro
         etCadastro.setOnClickListener {
             // Cria uma intenção para iniciar a atividade de cadastro
-            val intent = Intent(this, SignUpActivity::class.java)
+            val intent = Intent(this, Login_activity::class.java)
             // Inicia a atividade de cadastro
             startActivity(intent)
         }
+
+        // Inicializa a ImageButton para ver mapa
+        imgButtonMap = findViewById(R.id.imgButton_map)
+
+        // Define o listener de clique para o botão de início
+        imgButtonMap.setOnClickListener {
+            // Cria uma intenção para iniciar a atividade de login
+            val intent = Intent(this, MapActivity::class.java)
+            // Inicia a atividade de login
+            startActivity(intent)
+        }
+
     }
+
+
+
 }

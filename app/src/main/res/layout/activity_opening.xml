@@ -19,15 +19,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="50dp"
-        android:layout_height="45dp"
+    <!-- Image Button para ver mapa -->
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/imgButton_map"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="320dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/icon_map"
+        android:background="@color/background"
+        android:src="@drawable/icon_map_vectorized"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- View do botão de começar e Já possuo cadastro -->
     <View
