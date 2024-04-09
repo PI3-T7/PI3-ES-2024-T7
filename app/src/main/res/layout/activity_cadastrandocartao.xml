@@ -1,0 +1,183 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".CartaoCadastrandoActivity">
+    <!-- ADICIONAR <com.braintreepayments.cardform.cardform.view.CardForm
+        com id=id/cardForm dentro-->
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editNumCartao"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/signup_fields"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical"
+        android:hint="   0000 0000 0000 0000"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColorHint="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/signup_fields"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical"
+        android:hint="   ex Isabella M T Bruno"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColorHint="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editDataValidade"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/signup_fields"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical"
+        android:hint="    000"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColorHint="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editCVV"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/signup_fields"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical"
+        android:hint="    12/24"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColorHint="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <View
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/container_voltar_mapa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/buttonVoltar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/container"
+        app:layout_constraintTop_toTopOf="@+id/container"
+        app:srcCompat="@drawable/icon_back_white" />
+
+    <ImageView
+        android:id="@+id/buttonHome"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="@+id/container"
+        app:layout_constraintStart_toStartOf="@+id/container"
+        app:layout_constraintTop_toTopOf="@+id/container"
+        app:srcCompat="@drawable/icon_home" />
+
+    <Button
+        android:id="@+id/btnCadastrar"
+        android:layout_width="340dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_login"
+        android:text="Cadastrar"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="40dp"
+        android:text="Ao fazer a locação de um armário será cobrada a caução de uma diária e estornada proporcionalmente de acordo com o período utilizado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCVV" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="200dp"
+        android:text="Número do cartão"
+        app:layout_constraintStart_toStartOf="@+id/editNumCartao"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:text="Nome"
+        app:layout_constraintStart_toStartOf="@+id/editName"
+        app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Data de Validade"
+        app:layout_constraintEnd_toEndOf="@+id/editCVV"
+        app:layout_constraintStart_toStartOf="@+id/editCVV"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="CVV"
+        app:layout_constraintStart_toStartOf="@+id/editDataValidade"
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
