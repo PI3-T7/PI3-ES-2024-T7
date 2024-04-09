@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mapa"
+    android:orientation="vertical"
+    tools:context=".MapaActivity">
+
+    <LinearLayout
+        android:id="@+id/containerPesquisa"
+        android:layout_width="360dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/container_pesquisa_mapa"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="25dp"
+            android:src="@drawable/icon_search" />
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/signup_fields"
+            android:gravity="center_vertical|start"
+            android:hint="Localização Atual"
+            android:paddingLeft="20dp"
+            android:textSize="17dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/containervoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="-3dp"
+            android:background="@drawable/container_voltar_mapa">
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:src="@drawable/icon_back_white"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
