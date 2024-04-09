@@ -67,4 +67,9 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- estilo necessário para atividade opening,
+        já que pedia um tema descendente de AppCompat -->
+    </style>
+
 </resources>
