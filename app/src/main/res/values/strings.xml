@@ -19,4 +19,9 @@
     <string name="ok">OK</string>
     <string name="Verificar">Siga as intruções para verificar sua conta.</string>
     <string name="verificacao">Um email de verificação foi enviado para</string>
+    <string name="rating">Avaliação: %1$.1f</string>
+    <string name="nome">Olá, \nIsabella Maria T Bruno</string>
+    <string name="verPontos">Ver pontos de Locação</string>
+    <string name="cartoes">Cartões</string>
+    <string name="alugar">Alugar Armário</string>
 </resources>
