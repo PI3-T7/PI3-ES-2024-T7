@@ -1,0 +1,83 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mapa"
+    tools:context=".MapaActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerRota"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/container_rota"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/voltar"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="26dp"
+            android:src="@drawable/icon_back_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/localUsuario"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="7dp"
+            android:src="@drawable/icon_localizacao_usuario"
+            app:layout_constraintBottom_toBottomOf="@+id/textSeuLocal"
+            app:layout_constraintEnd_toStartOf="@+id/textSeuLocal"
+            app:layout_constraintTop_toTopOf="@+id/textSeuLocal" />
+
+        <ImageView
+            android:id="@+id/localPin"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="7dp"
+            android:src="@drawable/icon_local_pin"
+            app:layout_constraintBottom_toBottomOf="@+id/textLocalLocacao"
+            app:layout_constraintEnd_toStartOf="@+id/textLocalLocacao"
+            app:layout_constraintTop_toTopOf="@+id/textLocalLocacao" />
+
+        <EditText
+            android:id="@+id/textSeuLocal"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/signup_fields"
+            android:gravity="center_vertical|start"
+            android:hint="Localização Atual"
+            android:paddingLeft="20dp"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/textLocalLocacao"
+            android:layout_width="300dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/signup_fields"
+            android:gravity="center_vertical|start"
+            android:hint="Rua das Flores 333"
+            android:paddingLeft="20dp"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textSeuLocal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
