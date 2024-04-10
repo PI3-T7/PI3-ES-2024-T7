@@ -3,9 +3,9 @@ package br.edu.puccampinas.projeto_smart_locker
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class CartaoCadastrandoActivity : AppCompatActivity() {
+class ClientMainScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastrandocartao)
+        setContentView(R.layout.activity_client_main_screen)
     }
 }
