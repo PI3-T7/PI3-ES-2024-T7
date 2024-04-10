@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <View
+        android:id="@+id/containerMainScreen"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/container_main_screen"
+        app:layout_constraintBottom_toTopOf="@id/containerRent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:padding="20dp"
+        android:src="@drawable/icon_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Boas vindas -->
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/profileImage"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:background="@drawable/profile_image"
+        app:layout_constraintBottom_toTopOf="@id/containerMap"
+        app:layout_constraintEnd_toEndOf="@id/containerCards"
+        app:layout_constraintHorizontal_bias=".2"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".6" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/StringsOptions"
+        android:text="@string/nome"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/profileImage"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintHorizontal_bias=".3"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toTopOf="@id/profileImage"
+        app:layout_constraintVertical_bias=".4" />
+
+    <!-- Ver pontos de locação   -->
+
+    <View
+        android:id="@+id/containerMap"
+        style="@style/ContainerOptions"
+        android:layout_margin="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        style="@style/IconsOptions"
+        android:background="@drawable/icon_map2"
+        app:layout_constraintBottom_toBottomOf="@id/containerMap"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toTopOf="@id/containerMap" />
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        style="@style/StringsOptions"
+        android:text="@string/verPontos"
+        app:layout_constraintBottom_toBottomOf="@id/containerMap"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toTopOf="@id/containerMap" />
+
+    <!-- Cartões   -->
+
+    <View
+        android:id="@+id/containerCards"
+        style="@style/ContainerOptions"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@id/containerRent"
+        app:layout_constraintStart_toStartOf="@id/containerMap"
+        app:layout_constraintTop_toBottomOf="@id/containerMap" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        style="@style/IconsOptions"
+        android:background="@drawable/icon_card"
+        app:layout_constraintBottom_toBottomOf="@id/containerCards"
+        app:layout_constraintEnd_toEndOf="@id/containerCards"
+        app:layout_constraintStart_toStartOf="@id/containerCards"
+        app:layout_constraintTop_toTopOf="@id/containerCards" />
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        style="@style/StringsOptions"
+        android:text="@string/cartoes"
+        app:layout_constraintBottom_toBottomOf="@id/containerCards"
+        app:layout_constraintEnd_toEndOf="@id/containerCards"
+        app:layout_constraintStart_toStartOf="@id/containerCards"
+        app:layout_constraintTop_toTopOf="@id/containerCards" />
+
+    <!-- Alugar Armário   -->
+
+    <View
+        android:id="@+id/containerRent"
+        style="@style/ContainerOptions"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="@id/containerMap"
+        app:layout_constraintStart_toEndOf="@id/containerCards"
+        app:layout_constraintTop_toBottomOf="@id/containerMap" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        style="@style/IconsOptions"
+        android:background="@drawable/icon_cabinet"
+        app:layout_constraintBottom_toBottomOf="@id/containerRent"
+        app:layout_constraintEnd_toEndOf="@id/containerRent"
+        app:layout_constraintStart_toStartOf="@id/containerRent"
+        app:layout_constraintTop_toTopOf="@id/containerRent" />
+
+    <androidx.appcompat.widget.AppCompatCheckedTextView
+        style="@style/StringsOptions"
+        android:text="@string/alugar"
+        app:layout_constraintBottom_toBottomOf="@id/containerRent"
+        app:layout_constraintEnd_toEndOf="@id/containerRent"
+        app:layout_constraintStart_toStartOf="@id/containerRent"
+        app:layout_constraintTop_toTopOf="@id/containerRent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
