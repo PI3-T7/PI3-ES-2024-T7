@@ -15,7 +15,8 @@
         android:elevation="50dp"
         app:layout_constraintEnd_toStartOf="@+id/buttonHome"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="171dp">
+        tools:layout_editor_absoluteY="171dp"
+        tools:ignore="MissingConstraints">
 
 
         <ImageView
