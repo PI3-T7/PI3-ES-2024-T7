@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".Login_activity">
+    tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
@@ -39,7 +39,7 @@
         android:drawableStart="@drawable/icon_email"
         android:drawablePadding="14dp"
         android:hint="@string/emailSignup"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:maxLines="1"
         android:padding="15dp"
         android:textColorHint="@color/grey"
@@ -58,7 +58,7 @@
         android:drawableStart="@drawable/icon_password"
         android:drawablePadding="15dp"
         android:hint="@string/passwordSignup"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:maxLines="1"
         android:padding="15dp"
         android:textColorHint="@color/grey"
@@ -99,6 +99,7 @@
         app:layout_constraintTop_toBottomOf="@id/txtEsqueceuSenha" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btMap"
         android:layout_width="50dp"
         android:layout_height="45dp"
         android:layout_marginStart="320dp"

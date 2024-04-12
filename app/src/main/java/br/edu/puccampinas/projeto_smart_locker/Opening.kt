@@ -6,19 +6,17 @@ import android.content.Intent
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * Esta classe representa a atividade de abertura do aplicativo.
  * Ela exibe um botão que leva à atividade de login e um TextView para cadastro.
  */
 class Opening : AppCompatActivity() {
-
-    // Botão para iniciar a atividade de login
-    private lateinit var botaoComecar: Button
-    // EditText para iniciar a atividade de cadastro
-    private lateinit var etCadastro: TextView
-    // ImageButton para ver mapa
-    private lateinit var imgButtonMap: ImageButton
+    override fun onStart() {
+        super.onStart()
+        verifyLoggedUser()
+    }
 
     /**
      * Método chamado quando a atividade é criada.
@@ -28,9 +26,10 @@ class Opening : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_opening)
-
+        val botaoComecar = findViewById<Button>(R.id.bt_begin)
+        val etCadastro = findViewById<TextView>(R.id.already)
+        val imgButtonMap = findViewById<ImageButton>(R.id.imgButton_map)
         // Inicializa o botão de início
-        botaoComecar = findViewById(R.id.bt_begin)
 
         // Define o listener de clique para o botão de início
         botaoComecar.setOnClickListener {
@@ -39,21 +38,13 @@ class Opening : AppCompatActivity() {
             // Inicia a atividade de login
             startActivity(intent)
         }
-
-        // Inicializa o TextView para cadastro
-        etCadastro = findViewById(R.id.already)
-
         // Define o listener de clique para o TextView de cadastro
         etCadastro.setOnClickListener {
             // Cria uma intenção para iniciar a atividade de cadastro
-            val intent = Intent(this, Login_activity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             // Inicia a atividade de cadastro
             startActivity(intent)
         }
-
-        // Inicializa a ImageButton para ver mapa
-        imgButtonMap = findViewById(R.id.imgButton_map)
-
         // Define o listener de clique para o botão de início
         imgButtonMap.setOnClickListener {
             // Cria uma intenção para iniciar a atividade de login
@@ -61,9 +52,11 @@ class Opening : AppCompatActivity() {
             // Inicia a atividade de login
             startActivity(intent)
         }
-
     }
-
-
-
+    private fun verifyLoggedUser() {
+        var user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            startActivity(Intent(this, ClientMainScreenActivity::class.java))
+        }
+    }
 }
