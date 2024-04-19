@@ -72,30 +72,52 @@ class LocationActivity : AppCompatActivity() {
             obterLocalizacaoAtual()
         }
 
-
-        btnConfirmLocation.setOnClickListener {
-            if (btn30min.isChecked) {
-                // Código para 30 minutos selecionado - cadastrar locação no banco
-
-            } else if (btn1hour.isChecked) {
-                // Código para 1 hora selecionada
-
-            } else if (btn2hours.isChecked) {
-                // Código para 2 horas selecionadas
-
-            } else if (btn4hours.isChecked) {
-                // Código para 4 horas selecionadas
-
-            } else if (btnUntil18.isChecked) {
-                // Código para até 18 horas selecionadas
-
-            } else {
-                // Nenhum botão de rádio selecionado
-
+        btn30min.setOnClickListener {
+            changeColorRadio()
+            findViewById<RadioButton>(R.id.btn30min).apply {
+                isChecked = true
+                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
-    }
 
+        btn1hour.setOnClickListener {
+            changeColorRadio()
+            findViewById<RadioButton>(R.id.btn1hour).apply {
+                isChecked = true
+                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+            }
+        }
+
+        btn2hours.setOnClickListener {
+            changeColorRadio()
+            findViewById<RadioButton>(R.id.btn2hours).apply {
+                isChecked = true
+                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+            }
+        }
+
+        btn4hours.setOnClickListener {
+            changeColorRadio()
+            findViewById<RadioButton>(R.id.btn4hours).apply {
+                isChecked = true
+                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+            }
+        }
+
+        btnUntil18.setOnClickListener {
+            changeColorRadio()
+            findViewById<RadioButton>(R.id.btnUntil18).apply {
+                isChecked = true
+                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+            }
+        }
+
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -262,11 +284,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text = "30 minutos                                    ${prices?.get(0)},00"
-                btn1hour.text = "1 hora                                          ${prices?.get(1)},00"
-                btn2hours.text = "2 horas                                        ${prices?.get(2)},00"
-                btn4hours.text = "4 horas                                        ${prices?.get(3)},00"
-                btnUntil18.text = "Do momento até 18h                       ${prices?.get(4)},00"
+                btn30min.text = "30 minutos                                                                ${prices?.get(0)},00"
+                btn1hour.text = "1 hora                                                                          ${prices?.get(1)},00"
+                btn2hours.text = "2 horas                                                                      ${prices?.get(2)},00"
+                btn4hours.text = "4 horas                                                                      ${prices?.get(3)},00"
+                btnUntil18.text = "Do momento até 18h                                          ${prices?.get(4)},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
@@ -302,5 +324,32 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    private fun changeColorRadio() {
+        findViewById<RadioButton>(R.id.btn30min).apply {
+            isChecked = false
+            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        }
+        findViewById<RadioButton>(R.id.btn1hour).apply {
+            isChecked = false
+            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        }
+        findViewById<RadioButton>(R.id.btn2hours).apply {
+            isChecked = false
+            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        }
+        findViewById<RadioButton>(R.id.btn4hours).apply {
+            isChecked = false
+            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        }
+        findViewById<RadioButton>(R.id.btnUntil18).apply {
+            isChecked = false
+            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        }
+    }
 
 }
