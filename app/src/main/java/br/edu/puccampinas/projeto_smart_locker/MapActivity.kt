@@ -28,13 +28,15 @@ class MapActivity : AppCompatActivity() {
             "SmartLocker unidade Puc Campinas",
             LatLng(-22.8342027,-47.0503346),
             "Ac. Publico, 286 - Parque dos Jacarandás, Campinas - SP, 13086-061",
-            "Próximo ao portão 2"
+            "Próximo ao portão 2",
+            listOf(30.00, 50.00, 100.00, 150.00, 300.00)
         ),
         Place(
             "Smart Locker unidade Shopping Dom Pedro",
             LatLng(-22.8475663, -47.0631045),
             "Av. Guilherme Campos, 500 - Jardim Santa Genebra, Campinas - SP, 13080-000",
-            "Próximo à Entrada das Águas"
+            "Próximo à Entrada das Águas",
+            listOf(35.00, 55.00, 110.00, 160.00, 280.00)
         )
     )
 
@@ -172,5 +174,19 @@ data class Place(
     val name: String,
     val latLng: LatLng,
     val address: String,
-    val reference: String
-)
+    val reference: String,
+    val price: List<Double>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Place
+
+        return price == other.price
+    }
+
+    override fun hashCode(): Int {
+        return price.hashCode()
+    }
+}
