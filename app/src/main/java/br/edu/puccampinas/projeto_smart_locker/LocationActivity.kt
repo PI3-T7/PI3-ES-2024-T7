@@ -47,6 +47,8 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
+        checkHour()
+
         btn30min = findViewById(R.id.btn30min)
         btn1hour = findViewById(R.id.btn1hour)
         btn2hours = findViewById(R.id.btn2hours)
@@ -72,6 +74,7 @@ class LocationActivity : AppCompatActivity() {
             obterLocalizacaoAtual()
         }
 
+        // Esta parte do codigo muda a cor do RadioButton ao ser selecionado, e mantém o arredondamento
         btn30min.setOnClickListener {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btn30min).apply {
