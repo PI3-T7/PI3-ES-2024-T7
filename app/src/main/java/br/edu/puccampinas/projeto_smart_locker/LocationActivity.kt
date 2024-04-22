@@ -122,6 +122,12 @@ class LocationActivity : AppCompatActivity() {
             }
         }
 
+        // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
+        btnConfirmLocation.setOnClickListener {
+            val intent = Intent(this,QRcodeActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
