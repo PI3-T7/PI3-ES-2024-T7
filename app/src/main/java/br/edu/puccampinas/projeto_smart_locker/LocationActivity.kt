@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.Manifest
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,6 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
-        checkHour()
 
         btn30min = findViewById(R.id.btn30min)
         btn1hour = findViewById(R.id.btn1hour)
@@ -55,6 +55,8 @@ class LocationActivity : AppCompatActivity() {
         btn4hours = findViewById(R.id.btn4hours)
         btnUntil18 = findViewById(R.id.btnUntil18)
         btnConfirmLocation = findViewById(R.id.bt_confirm_location)
+
+        checkHour()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -193,7 +195,7 @@ class LocationActivity : AppCompatActivity() {
 
         val editLocal = findViewById<TextView>(R.id.local)
 
-        val documentReference = db.collection("Unidades de Locação").document("8W9yNMvak39ZK96EtiFu")
+        val documentReference = db.collection("Unidades de Locação").document("sxtHaqQFSv89iceO0kD0")
 
         Log.d(TAG, "DocumentReference: $documentReference")
 
