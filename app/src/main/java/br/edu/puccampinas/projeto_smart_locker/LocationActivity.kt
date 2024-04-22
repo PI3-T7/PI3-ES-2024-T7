@@ -148,10 +148,12 @@ class LocationActivity : AppCompatActivity() {
             }
         }
 
-        // Para transformar o objeto com os dados a serem passados pelo QRcode em json
-        val gson = Gson()
+        // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
+        // A classe DadosCliente está no final do código
+        val dados = DadosCliente("Isabella", "Unidade 3", "2 horas", 55.0)
 
-        val dados = DadosCliente("Isabella","Unidade 3", "2 horas", 55.0)
+        // Para transformar o objeto com os dados a serem passados pelo QRcode em string
+        val gson = Gson()
         val dadosGson = gson.toJson(dados)
 
         // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode

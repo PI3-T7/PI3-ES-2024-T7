@@ -11,7 +11,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 
 class QRcodeActivity : AppCompatActivity() {
 
-    private lateinit var imgQRcode : ImageView
+    private lateinit var imgQRcode: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +22,13 @@ class QRcodeActivity : AppCompatActivity() {
         // Obtém a string serializada da Intent
         val dados = intent.getStringExtra("dados")
 
+        // Verifica se os dados são nulos e chama a função
         if (dados != null) {
             generateQRCode(dados)
         }
     }
 
+    // Função que gera um QRcode
     private fun generateQRCode(text: String) {
         val width = 500
         val height = 500
@@ -42,6 +44,7 @@ class QRcodeActivity : AppCompatActivity() {
         }
     }
 
+    // Função que faz a conversão uma matriz de bits (BitMatrix) em um objeto Bitmap
     private fun toBitmap(matrix: BitMatrix): Bitmap {
         val width = matrix.width
         val height = matrix.height
