@@ -3,6 +3,9 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -13,10 +16,12 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+
         val signUpButton = findViewById<Button>(R.id.bt_signup)
         signUpButton.setOnClickListener {
             validData()
         }
+
         val arrow = findViewById<ImageView>(R.id.arrow)
         arrow.setOnClickListener {
             finish()
@@ -33,7 +38,11 @@ class SignUpActivity : AppCompatActivity() {
         values.add(findViewById<EditText>(R.id.editPassword).text.toString())
         for (i in values) {
             if (i.isBlank()) {
-                Toast.makeText(this, "Por favor, preencha todos os campos antes de prosseguir.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Por favor, preencha todos os campos antes de prosseguir.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
         }
@@ -44,18 +53,26 @@ class SignUpActivity : AppCompatActivity() {
         val autenticacao = FirebaseAuth.getInstance()
         autenticacao.createUserWithEmailAndPassword(
             informations[4], informations[5]
-        ).addOnSuccessListener {
-            authResult ->
-            authResult.user?.sendEmailVerification()?.addOnCompleteListener{ task ->
-                if (task.isSuccessful){
+        ).addOnSuccessListener { authResult ->
+            authResult.user?.sendEmailVerification()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     val emailVerificationScreen = Intent(this, VerifyActivity::class.java)
                     startActivity(emailVerificationScreen)
                 } else {
-                    Toast.makeText(this, "Falha ao enviar email de verificação, tente outro endereço de email!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Falha ao enviar email de verificação, tente outro endereço de email!",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-        }.addOnFailureListener {
-            exception -> Toast.makeText(this, "Falha ao cadastrar usuário: ${exception.message}", Toast.LENGTH_LONG).show()
+        }.addOnFailureListener { exception ->
+            Toast.makeText(
+                this,
+                "Falha ao cadastrar usuário: ${exception.message}",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
+
 }

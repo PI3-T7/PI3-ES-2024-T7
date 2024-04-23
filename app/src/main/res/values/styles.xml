@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Botoes -->
+    <style name="Botoes">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:background">@drawable/button_opening</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <!-- Activity Sign Up -->
+
+    <style name="InputsCadastro">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
+        <item name="android:background">@drawable/signup_fields</item>
+        <item name="android:drawablePadding">14dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">13dp</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">20dp</item>
+
+    </style>
+
+    <!--Ainda vou arrumar(isa)-->
     <style name="ContainerOpening">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">180dp</item>
@@ -30,14 +62,6 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">21sp</item>
-    </style>
-
-    <style name="ContainerSignUp">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">475dp</item>
-        <item name="android:layout_marginLeft">30dp</item>
-        <item name="android:layout_marginRight">30dp</item>
-        <item name="android:layout_marginTop">15dp</item>
     </style>
 
     <!-- Estilos para a Página inicial do Cliente -->

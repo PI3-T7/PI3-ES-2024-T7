@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,196 +7,157 @@
     android:background="@color/background"
     tools:context=".SignUpActivity">
 
-    <!-- View da Logo -->
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo"
-        android:layout_marginTop="-20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- View da Seta de Voltar -->
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/arrow"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="340dp"
-        android:src="@drawable/icon_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- View do Texto "Crie sua conta Smart" -->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/create"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/logo"
-        app:layout_constraintEnd_toEndOf="@id/logo"
-        app:layout_constraintStart_toStartOf="@id/logo" />
-
-    <!-- View do texto "Locker" -->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/create2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/create2"
-        android:textAlignment="center"
-        android:textColor="@color/orange"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/logo"
-        app:layout_constraintEnd_toEndOf="@id/logo"
-        app:layout_constraintStart_toEndOf="@id/create" />
-
-    <!-- View dos campos de cadastro -->
-    <View
-        android:id="@+id/containerSignUp"
-        style="@style/ContainerSignUp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
-
-    <!-- Botão de Cadastrar -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_signup"
-        style="@style/ButtonOpening"
-        android:layout_marginTop="-30dp"
-        android:text="@string/signup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/containerSignUp" />
-
-    <!-- Campo de Preencher Nome Completo -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editName"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_user"
-        android:drawablePadding="14dp"
-        android:hint="@string/fullname"
-        android:inputType="text"
-        android:maxLines="1"
-        android:padding="13dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/containerSignUp"
-        app:layout_constraintStart_toStartOf="@id/containerSignUp"
-        app:layout_constraintTop_toTopOf="@id/containerSignUp" />
+        tools:context=".SignUpActivity">
 
-    <!-- Campo de Preencher CPF -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editCpf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_cpf"
-        android:drawablePadding="15dp"
-        android:hint="@string/cpf"
-        android:inputType="number"
-        android:maxLines="1"
-        android:maxLength="11"
-        android:padding="14dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editName"
-        app:layout_constraintStart_toStartOf="@id/editName"
-        app:layout_constraintTop_toBottomOf="@id/editName" />
+        <!-- View da Logo -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Campo de Preencher Data de Nascimento -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editBirthDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_birth"
-        android:drawablePadding="15dp"
-        android:hint="@string/birthdate"
-        android:inputType="date"
-        android:maxLines="1"
-        android:padding="14dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editCpf"
-        app:layout_constraintStart_toStartOf="@id/editCpf"
-        app:layout_constraintTop_toBottomOf="@id/editCpf" />
+        <!-- View da Seta de Voltar -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/icon_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Campo de Preencher Celular -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_phone"
-        android:drawablePadding="15dp"
-        android:hint="@string/phone"
-        android:inputType="number"
-        android:maxLines="1"
-        android:padding="14dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editBirthDate"
-        app:layout_constraintStart_toStartOf="@id/editBirthDate"
-        app:layout_constraintTop_toBottomOf="@id/editBirthDate" />
+        <!-- View do Texto "Crie sua conta Smart" -->
 
-    <!-- Campo de Preencher Email -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_email"
-        android:drawablePadding="15dp"
-        android:hint="@string/emailSignup"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:padding="15dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editPhone"
-        app:layout_constraintStart_toStartOf="@id/editPhone"
-        app:layout_constraintTop_toBottomOf="@id/editPhone" />
+        <LinearLayout
+            android:id="@+id/ll_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-    <!-- Campo de Preencher Senha -->
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/signup_fields"
-        android:drawableStart="@drawable/icon_password"
-        android:drawablePadding="15dp"
-        android:hint="@string/passwordSignup"
-        android:inputType="text"
-        android:maxLines="1"
-        android:padding="14dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editEmail"
-        app:layout_constraintStart_toStartOf="@id/editEmail"
-        app:layout_constraintTop_toBottomOf="@id/editEmail" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/create2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create2"
+                android:textColor="@color/orange"
+                android:textSize="20sp"
+
+                />
+        </LinearLayout>
+
+        <!-- Campos de cadastro -->
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editName"
+            style="@style/InputsCadastro"
+            android:layout_marginTop="30dp"
+            android:drawableStart="@drawable/icon_user"
+            android:hint="@string/fullname"
+            android:inputType="textCapWords"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_container" />
+
+        <com.santalu.maskara.widget.MaskEditText
+            android:id="@+id/editCpf"
+            style="@style/InputsCadastro"
+            android:drawableStart="@drawable/icon_cpf"
+            android:hint="@string/cpf"
+            android:inputType="number"
+            android:maxLength="14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editName"
+            app:mask="___.___.___-__"
+            app:maskCharacter="_"
+            app:maskStyle="normal" />
+
+        <com.santalu.maskara.widget.MaskEditText
+            style="@style/InputsCadastro"
+            android:id="@+id/editBirthDate"
+            android:drawableStart="@drawable/icon_birth"
+            android:hint="@string/birthdate"
+            android:inputType="date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editCpf"
+            app:mask="__/__/____"
+            app:maskCharacter="_"
+            app:maskStyle="normal" />
+
+        <com.santalu.maskara.widget.MaskEditText
+            style="@style/InputsCadastro"
+            android:id="@+id/editPhone"
+            android:drawableStart="@drawable/icon_phone"
+            android:hint="@string/phone"
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editBirthDate"
+            app:mask="(__) _____ ____"
+            app:maskCharacter="_"
+            app:maskStyle="normal" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            style="@style/InputsCadastro"
+            android:id="@+id/editEmail"
+            android:drawableStart="@drawable/icon_email"
+            android:hint="@string/emailSignup"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editPhone" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            style="@style/InputsCadastro"
+            android:id="@+id/editPassword"
+            android:drawableStart="@drawable/icon_password"
+            android:hint="@string/passwordSignup"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editEmail" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            style="@style/InputsCadastro"
+            android:id="@+id/editConfirmPassword"
+            android:drawableStart="@drawable/icon_password"
+            android:hint="@string/confirmPasswordSignup"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bt_signup"
+            style="@style/Botoes"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/signup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editConfirmPassword" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
