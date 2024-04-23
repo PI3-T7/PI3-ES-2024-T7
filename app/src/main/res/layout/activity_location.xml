@@ -20,7 +20,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textCadCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -44,7 +43,6 @@
         app:layout_constraintTop_toBottomOf="@+id/opcao1">
 
         <TextView
-            android:id="@+id/numCartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -69,7 +67,6 @@
         app:layout_constraintTop_toBottomOf="@+id/opcao2">
 
         <TextView
-            android:id="@+id/numCartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -94,7 +91,6 @@
         app:layout_constraintTop_toBottomOf="@+id/opcao3">
 
         <TextView
-            android:id="@+id/numCartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
