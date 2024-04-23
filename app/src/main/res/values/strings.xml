@@ -24,4 +24,6 @@
     <string name="verPontos">Ver pontos de Locação</string>
     <string name="cartoes">Cartões</string>
     <string name="alugar">Alugar Armário</string>
+    <string name="checkbox_ciente">Ao fazer a locação de um armário será cobrada a caução de uma diária e estornada proporcionalmente de acordo com o período utilizado</string>
+    <string name="confirmPasswordSignup">Confirme sua senha</string>
 </resources>
