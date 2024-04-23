@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_card"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
         android:background="@color/white"
@@ -44,10 +44,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_add" />
 
             <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView13"
+                android:id="@+id/img_delete_card"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias=".95"
                 app:layout_constraintStart_toEndOf="@+id/imageView13"

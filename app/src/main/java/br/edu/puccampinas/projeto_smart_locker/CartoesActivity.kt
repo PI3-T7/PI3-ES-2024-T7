@@ -17,12 +17,11 @@ class CartoesActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val itens = listOf(
-            CartoesCadastrados("VISA","**** 5256"),
-            CartoesCadastrados("VISA","**** 5552"),
-            CartoesCadastrados("MASTERCARD","**** 4115"),
-            CartoesCadastrados("VISA","**** 8154"),
-        )
+        val itens = mutableListOf(
+            CartoesCadastrados("5896 5895 7841 5589"),
+            CartoesCadastrados("3562 6785 2565 2565"),
+            CartoesCadastrados("6589 6785 2565 2565"),
+            )
 
         binding.rvCards.adapter = CardAdapter(itens)
         binding.rvCards.layoutManager = GridLayoutManager(
@@ -33,7 +32,34 @@ class CartoesActivity : AppCompatActivity() {
     }
 }
 
-data class CartoesCadastrados(
-    val bandeira: String,
-    val numero: String
-)
+
+//      Cartão de crédito Visa  4.
+//      Cartão de crédito Mastercard  5
+//      Cartão de crédito American Express 3
+//      Cartão de crédito Elo é iniciado pelo número 5 ou 6.
+
+class CartoesCadastrados(numero: String) {
+    val bandeira: String
+    val numeroFormatado: String
+
+    init {
+        bandeira = determinarBandeira(numero)
+        numeroFormatado = formatarNumero(numero)
+    }
+
+    private fun determinarBandeira(numeroCartao: String): String {
+        return when {
+            numeroCartao.startsWith("3") -> "A. Express"
+            numeroCartao.startsWith("4") -> "Visa"
+            numeroCartao.startsWith("5") -> "Mastercard"
+            numeroCartao.startsWith("6") -> "Elo"
+            else -> "Desconhecida"
+        }
+    }
+
+    private fun formatarNumero(numeroCartao: String): String {
+        val primeiraParte = "****"
+        val ultimosDigitos = numeroCartao.takeLast(4)
+        return "$primeiraParte $ultimosDigitos"
+    }
+}
