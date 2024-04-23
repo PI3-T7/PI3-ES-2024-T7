@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.Manifest
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import java.util.*
 import kotlin.math.*
 
@@ -33,10 +35,10 @@ class LocationActivity : AppCompatActivity() {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
-    private lateinit var btn30min : RadioButton
-    private lateinit var btn1hour : RadioButton
-    private lateinit var btn2hours : RadioButton
-    private lateinit var btn4hours : RadioButton
+    private lateinit var btn30min: RadioButton
+    private lateinit var btn1hour: RadioButton
+    private lateinit var btn2hours: RadioButton
+    private lateinit var btn4hours: RadioButton
     private lateinit var btnUntil18: RadioButton
     private lateinit var btnConfirmLocation: Button
 
@@ -47,7 +49,6 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
-        checkHour()
 
         btn30min = findViewById(R.id.btn30min)
         btn1hour = findViewById(R.id.btn1hour)
@@ -55,6 +56,8 @@ class LocationActivity : AppCompatActivity() {
         btn4hours = findViewById(R.id.btn4hours)
         btnUntil18 = findViewById(R.id.btnUntil18)
         btnConfirmLocation = findViewById(R.id.bt_confirm_location)
+
+        checkHour()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -79,7 +82,12 @@ class LocationActivity : AppCompatActivity() {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btn30min).apply {
                 isChecked = true
-                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LocationActivity,
+                        R.color.cor_checked
+                    )
+                )
                 background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
@@ -88,7 +96,12 @@ class LocationActivity : AppCompatActivity() {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btn1hour).apply {
                 isChecked = true
-                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LocationActivity,
+                        R.color.cor_checked
+                    )
+                )
                 background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
@@ -97,7 +110,12 @@ class LocationActivity : AppCompatActivity() {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btn2hours).apply {
                 isChecked = true
-                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LocationActivity,
+                        R.color.cor_checked
+                    )
+                )
                 background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
@@ -106,7 +124,12 @@ class LocationActivity : AppCompatActivity() {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btn4hours).apply {
                 isChecked = true
-                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LocationActivity,
+                        R.color.cor_checked
+                    )
+                )
                 background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
@@ -115,12 +138,33 @@ class LocationActivity : AppCompatActivity() {
             changeColorRadio()
             findViewById<RadioButton>(R.id.btnUntil18).apply {
                 isChecked = true
-                setBackgroundColor(ContextCompat.getColor(this@LocationActivity, R.color.cor_checked))
+                setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LocationActivity,
+                        R.color.cor_checked
+                    )
+                )
                 background = ContextCompat.getDrawable(context, R.drawable.container_check)
             }
         }
 
+        // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
+        // A classe DadosCliente está no final do código
+        val dados = DadosCliente("Isabella", "Unidade 3", "2 horas", 55.0)
+
+        // Para transformar o objeto com os dados a serem passados pelo QRcode em string
+        val gson = Gson()
+        val dadosGson = gson.toJson(dados)
+
+        // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
+        btnConfirmLocation.setOnClickListener {
+            val intent = Intent(this, QRcodeActivity::class.java)
+            intent.putExtra("dados", dadosGson)
+            startActivity(intent)
+        }
+
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -193,7 +237,8 @@ class LocationActivity : AppCompatActivity() {
 
         val editLocal = findViewById<TextView>(R.id.local)
 
-        val documentReference = db.collection("Unidades de Locação").document("8W9yNMvak39ZK96EtiFu")
+        val documentReference =
+            db.collection("Unidades de Locação").document("sxtHaqQFSv89iceO0kD0")
 
         Log.d(TAG, "DocumentReference: $documentReference")
 
@@ -245,10 +290,15 @@ class LocationActivity : AppCompatActivity() {
 
                         } else {
                             // A localização não está próxima do ponto de locação
-                            val toast = Toast.makeText(applicationContext, "\"Você não está próximo(a) de nenhuma Unidade SmartLocker. Esteja a pelo menos 100 metros de uma e tente novamente.\"", Toast.LENGTH_LONG)
+                            val toast = Toast.makeText(
+                                applicationContext,
+                                "\"Você não está próximo(a) de nenhuma Unidade SmartLocker. Esteja a pelo menos 100 metros de uma e tente novamente.\"",
+                                Toast.LENGTH_LONG
+                            )
                             val view = layoutInflater.inflate(R.layout.custom_toast_layout, null)
                             val text = view.findViewById<TextView>(R.id.text)
-                            text.text = "Você deve estar a pelo menos 100 metros do ponto de locação escolhido para alugar um armário!"
+                            text.text =
+                                "Você deve estar a pelo menos 100 metros do ponto de locação escolhido para alugar um armário!"
                             toast.view = view
                             toast.show()
 
@@ -287,11 +337,24 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text = "30 minutos                                                                ${prices?.get(0)},00"
-                btn1hour.text = "1 hora                                                                          ${prices?.get(1)},00"
-                btn2hours.text = "2 horas                                                                      ${prices?.get(2)},00"
-                btn4hours.text = "4 horas                                                                      ${prices?.get(3)},00"
-                btnUntil18.text = "Do momento até 18h                                          ${prices?.get(4)},00"
+                btn30min.text =
+                    "30 minutos                                                                ${
+                        prices?.get(0)
+                    },00"
+                btn1hour.text =
+                    "1 hora                                                                          ${
+                        prices?.get(1)
+                    },00"
+                btn2hours.text =
+                    "2 horas                                                                      ${
+                        prices?.get(2)
+                    },00"
+                btn4hours.text =
+                    "4 horas                                                                      ${
+                        prices?.get(3)
+                    },00"
+                btnUntil18.text =
+                    "Do momento até 18h                                          ${prices?.get(4)},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
@@ -314,7 +377,7 @@ class LocationActivity : AppCompatActivity() {
         return r * c
     }
 
-    private fun checkHour(){
+    private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
         val horaAtual = calendario.get(Calendar.HOUR_OF_DAY)
@@ -354,5 +417,12 @@ class LocationActivity : AppCompatActivity() {
             background = ContextCompat.getDrawable(context, R.drawable.container_check2)
         }
     }
-
 }
+
+// Classe apenas para testar a passagem de dados do cliente para o QRcode
+data class DadosCliente(
+    val nome: String,
+    val unidade: String,
+    val opcao: String,
+    val preco: Double
+)

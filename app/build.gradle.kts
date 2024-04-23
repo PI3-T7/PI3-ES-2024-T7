@@ -63,6 +63,13 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // API gerador de QRcode
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
     // Configuração do Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // Configuração do Authentication
