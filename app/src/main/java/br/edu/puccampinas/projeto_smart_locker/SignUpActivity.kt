@@ -1,78 +1,143 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.os.Build
+import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
+// Activity SignUp -> Activity da tela de cadastro de um novo usuário
+@RequiresApi(Build.VERSION_CODES.O)
 class SignUpActivity : AppCompatActivity() {
+    // Configuração do ViewBinding
+    private val binding by lazy { ActivitySignUpBinding.inflate( layoutInflater ) }
+    // Configuração do FirebaseAuth
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    // Configuração do Firebase Firestore
+    private val bd by lazy { FirebaseFirestore.getInstance() }
+    // Criação do mapa para guardar os valores para cadastro
+    private val values = mutableMapOf<String, String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
-
-        val signUpButton = findViewById<Button>(R.id.bt_signup)
-        signUpButton.setOnClickListener {
-            validData()
-        }
-
-        val arrow = findViewById<ImageView>(R.id.arrow)
-        arrow.setOnClickListener {
-            finish()
+        setContentView(binding.root)
+        with(binding) {
+            arrow.setOnClickListener { finish() }
+            btSignup.setOnClickListener { validData() }
         }
     }
 
     private fun validData() {
-        val values = mutableListOf<String>()
-        values.add(findViewById<EditText>(R.id.editName).text.toString())
-        values.add(findViewById<EditText>(R.id.editCpf).text.toString())
-        values.add(findViewById<EditText>(R.id.editBirthDate).text.toString())
-        values.add(findViewById<EditText>(R.id.editPhone).text.toString())
-        values.add(findViewById<EditText>(R.id.editEmail).text.toString())
-        values.add(findViewById<EditText>(R.id.editPassword).text.toString())
-        for (i in values) {
-            if (i.isBlank()) {
-                Toast.makeText(
-                    this,
-                    "Por favor, preencha todos os campos antes de prosseguir.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
+        with(binding){
+            values["nome_completo"] = editName.text.toString()
+            values["cpf"] = editCpf.masked
+            values["data_de_nascimento"] = editBirthDate.masked
+            values["celular"] = editPhone.masked
+            values["email"] = editEmail.text.toString()
+            values["senha"] = editPassword.text.toString().replace(" ", "")
+            values["senha2"] = editConfirmPassword.text.toString().replace(" ", "")
         }
-        cadastrarUsuario(values)
+        if (values.values.any{ it.isBlank() }){
+            Toast.makeText(this, "Por favor, preencha todos os campos antes de prosseguir!", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (!isCPF(values["cpf"].toString())) {
+            Toast.makeText(this, "Por favor, verifique se o CPF está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (!isLegalAge(values["data_de_nascimento"].toString())){
+            Toast.makeText(this, "O usuário deve ter pelo menos 14 anos para ser cadastrado!", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (!isPhone(values["celular"].toString())) {
+            Toast.makeText(this, "Por favor, verifique se o número de telefone está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (!isPassword(values["senha"].toString(), values["senha2"].toString())) return
+        registerUser()
     }
 
-    private fun cadastrarUsuario(informations: List<String>) {
-        val autenticacao = FirebaseAuth.getInstance()
-        autenticacao.createUserWithEmailAndPassword(
-            informations[4], informations[5]
-        ).addOnSuccessListener { authResult ->
-            authResult.user?.sendEmailVerification()?.addOnCompleteListener { task ->
+    private fun isCPF(document: String): Boolean {
+        val numbers = document.filter { it.isDigit() }.map { it.toString().toInt() }
+        if (numbers.size != 11) return false
+        // Caso de repetição
+        if (numbers.all { it == numbers[0] }) return false
+        // Digito 1
+        val dv1 = ((0..8).sumOf { (it + 1) * numbers[it] }).rem(11).let {
+            if (it >= 10) 0 else it
+        }
+        val dv2 = ((0..8).sumOf { it * numbers[it] }.let { (it + (dv1 * 9)).rem(11) }).let {
+            if (it >= 10) 0 else it
+        }
+        return numbers[9] == dv1 && numbers[10] == dv2
+    }
+
+    private fun isLegalAge(givenDate: String): Boolean {
+        if (givenDate.length < 10) return false
+        val birthDate = givenDate.split("/")
+        val age = LocalDate.now()
+            .minusDays(birthDate[0].toLong())
+            .minusMonths(birthDate[1].toLong())
+            .minusYears(birthDate[2].toLong()).year.toLong()
+        return age >= 14
+    }
+
+    private fun isPhone(givenPhone: String): Boolean {
+        val phone = givenPhone.filter { it.isDigit() }
+        if (phone.length != 11) return false
+        if (phone.substring(0, 2).toInt() !in 11..99) return false
+        return true
+    }
+
+    private fun isPassword(givenPassword1: String, givenPassword2: String): Boolean {
+        if (givenPassword1 != givenPassword2) {
+            Toast.makeText(this, "Os campos de senha não batem, por favor digite novamente!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (givenPassword1.length < 8) {
+            Toast.makeText(this, "A senha é muito curta, ela deve conter pelo menos 8 caracteres!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (!givenPassword1.contains(Regex("[A-Z]"))) {
+            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos uma letra maiúscula!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(!givenPassword1.contains(Regex("[a-z]"))) {
+            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos uma letra minúscula!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(!givenPassword1.contains(Regex("\\d"))) {
+            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos um número!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(!givenPassword1.contains(Regex("[^A-Za-z0-9]"))){
+            Toast.makeText(this, "A senha deve conter pelo menos um caracter especial! (ex: !@#$%&*)", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    private fun registerUser() {
+        auth.createUserWithEmailAndPassword(
+            values["email"].toString(), values["senha"].toString()
+        ).addOnSuccessListener {
+                authResult ->
+            authResult.user?.sendEmailVerification()?.addOnCompleteListener{ task ->
                 if (task.isSuccessful) {
-                    val emailVerificationScreen = Intent(this, VerifyActivity::class.java)
-                    startActivity(emailVerificationScreen)
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Falha ao enviar email de verificação, tente outro endereço de email!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    bd.collection("Usuários").document(authResult.user?.uid.toString()).set(values)
+                    startActivity(Intent(this, VerifyActivity::class.java))
+                    finish()
                 }
+                else Toast.makeText(this, "Falha ao enviar email de verificação, tente outro endereço de email!", Toast.LENGTH_LONG).show()
             }
-        }.addOnFailureListener { exception ->
-            Toast.makeText(
-                this,
-                "Falha ao cadastrar usuário: ${exception.message}",
-                Toast.LENGTH_LONG
-            ).show()
+        }.addOnFailureListener {
+                exception -> Toast.makeText(this, "Falha ao cadastrar usuário: ${exception.message}", Toast.LENGTH_LONG).show()
         }
     }
-
 }
