@@ -28,7 +28,7 @@
 
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editName"
+        android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginHorizontal="40dp"
@@ -156,7 +156,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:text="Nome"
-        app:layout_constraintStart_toStartOf="@+id/editName"
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
 
     <TextView
@@ -167,7 +167,7 @@
         android:text="Data de Validade"
         app:layout_constraintEnd_toEndOf="@+id/editCVV"
         app:layout_constraintStart_toStartOf="@+id/editCVV"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
     <TextView
         android:id="@+id/textView14"
@@ -177,7 +177,7 @@
         android:layout_marginTop="24dp"
         android:text="CVV"
         app:layout_constraintStart_toStartOf="@+id/editDataValidade"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

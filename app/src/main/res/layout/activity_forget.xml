@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    tools:context=".Forget_activity">
+    tools:context=".ForgetActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package br.edu.puccampinas.projeto_smart_locker
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -15,9 +14,9 @@ class VerifyActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         emailText.text = user?.email
         val okButton = findViewById<Button>(R.id.butOk)
+        FirebaseAuth.getInstance().signOut()
         okButton.setOnClickListener {
-            val intent = Intent(this, Opening::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 }
