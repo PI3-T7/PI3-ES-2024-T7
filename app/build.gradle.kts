@@ -71,6 +71,10 @@ dependencies {
     // Configuração do Firestore Database
     implementation("com.google.firebase:firebase-firestore-ktx")
 
+    implementation ("com.google.maps:google-maps-services:0.15.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     testImplementation("junit:junit:4.13.2")
