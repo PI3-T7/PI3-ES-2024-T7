@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
         app:layout_constraintStart_toStartOf="@+id/container_info_map"
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
         app:layout_constraintStart_toStartOf="@+id/container_info_map"
         app:layout_constraintTop_toTopOf="@+id/container_info_map"
-        app:layout_constraintVertical_bias=".4" />
+        app:layout_constraintVertical_bias=".5" />
 
     <TextView
         android:id="@+id/tv_reference"
@@ -59,6 +59,24 @@
         app:layout_constraintStart_toStartOf="@+id/container_info_map"
         app:layout_constraintTop_toTopOf="@+id/container_info_map"
         app:layout_constraintVertical_bias=".6" />
+
+    <Button
+        android:id="@+id/btnRotas"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_login"
+        android:text="Traçar rota"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:drawableStart="@drawable/icon_rotas"
+        app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
+        app:layout_constraintStart_toStartOf="@+id/container_info_map"
+        app:layout_constraintTop_toTopOf="@+id/container_info_map"
+        app:layout_constraintVertical_bias=".9" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
