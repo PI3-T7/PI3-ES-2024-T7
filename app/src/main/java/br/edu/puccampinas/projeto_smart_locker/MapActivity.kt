@@ -19,6 +19,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +30,8 @@ class MapActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
+    private var selectedPlace: Place? = null
+    private lateinit var botaoAberturaVoltar: ImageView
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
@@ -36,12 +39,13 @@ class MapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_mapa)
 
         hideInfoView()
 
         firestore = FirebaseFirestore.getInstance()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        botaoAberturaVoltar = findViewById(R.id.voltarOpening)
         val botaoRota = findViewById<Button>(R.id.btnRotas)
 
         val mapFragment =
@@ -54,9 +58,20 @@ class MapActivity : AppCompatActivity() {
         }
 
         botaoRota.setOnClickListener {
-            // Cria uma intenção para iniciar a atividade de traçar rota
-            val intent = Intent(this, RotaActivity::class.java)
-            // Inicia a atividade de traçar rota
+            if (selectedPlace != null) {
+                val intent = Intent(this, RotaActivity::class.java)
+                intent.putExtra("placeName", selectedPlace!!.name)
+                intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
+                intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
+                intent.putExtra("placeAddress", selectedPlace!!.address)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Selecione um lugar primeiro", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        botaoAberturaVoltar.setOnClickListener {
+            val intent = Intent(this, Opening::class.java)
             startActivity(intent)
         }
     }
@@ -71,6 +86,7 @@ class MapActivity : AppCompatActivity() {
         googleMap.setOnMarkerClickListener { marker ->
             val place = marker.tag as? Place
             if (place != null) {
+                selectedPlace = place
                 showPlaceInfo(place)
                 true
             } else {
@@ -131,12 +147,6 @@ class MapActivity : AppCompatActivity() {
 
                     // Adicionando log para depuração
                     Log.d("Firestore", "Place Name: $name, LatLng: $latLng, Address: $address, Reference: $reference, Prices: $prices")
-
-                    Toast.makeText(
-                        this@MapActivity,
-                        "Foi possivel pegar as informações do banco.",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
 
                 addMarkers(places)
@@ -191,7 +201,6 @@ class MapActivity : AppCompatActivity() {
 
     private fun showPlaceInfo(place: Place) {
         val viewInfo = findViewById<View>(R.id.container_info_map)
-        val botaoRota = findViewById<Button>(R.id.btnRotas)
         findViewById<TextView>(R.id.tv_name)?.text = place.name
         findViewById<TextView>(R.id.tv_address)?.text = place.address
         findViewById<TextView>(R.id.tv_reference)?.text = place.reference
