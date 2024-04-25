@@ -73,7 +73,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
 
     // Função para exibir mensagem de erro se a checkbox não estiver marcada
     private fun exibirErroCheckBox() {
-        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Erro")
         alertDialogBuilder.setMessage("Você precisa concordar com os termos para continuar.")
         alertDialogBuilder.setPositiveButton("OK", null)
@@ -82,7 +82,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
 
     // Função para exibir mensagem de erro se os campos não estiverem preenchidos
     private fun exibirErroCampos() {
-        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Erro")
         alertDialogBuilder.setMessage("Preencha todos os campos para continuar.")
         alertDialogBuilder.setPositiveButton("OK", null)
@@ -120,7 +120,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
 
     // Função para exibir uma mensagem simples com um botão "OK"
     private fun exibirMensagem(mensagem: String) {
-        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
         alertDialogBuilder.setMessage(mensagem)
         alertDialogBuilder.setPositiveButton("OK", null)
         alertDialogBuilder.show()
