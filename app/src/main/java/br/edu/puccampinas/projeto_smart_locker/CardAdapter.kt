@@ -75,28 +75,14 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
         return card.size + 1
     }
 
-    private fun confirmarDelecao(position: Int){
-        TODO()
+    private fun deletarCartao(posicao: Int) {
+        if (posicao > 0 && posicao <= card.size) {
+            card.removeAt(posicao - 1)
+            notifyItemRemoved(posicao)
+            notifyItemRangeChanged(posicao, card.size)
+        } else {
+            Log.e("CardAdapter", "Posição inválida ao tentar excluir o cartão")
+        }
     }
-
-    private fun deletarCartao(posicao: Int){
-        TODO()
-    }
-
-
-//    private fun deletarCartao(posicao: Int) {
-//        Log.i("CardAdapter","$posicao")
-//        Log.i("CardAdapter","${card.size}")
-//        if (posicao > 0 && posicao < card.size+1) {
-////            notifyItemRangeChanged(posicao - 1, card.size - (posicao - 1))
-//            card.removeAt(posicao - 1)
-//            notifyItemRemoved(posicao)
-//        } else {
-//            // Tratar caso em que a posição é inválida
-//            // Por exemplo, você pode mostrar uma mensagem de erro ou fazer outra ação apropriada
-//            Log.e("CardAdapter", "Índice inválido: $posicao")
-//        }
-//    }
-
 
 }
