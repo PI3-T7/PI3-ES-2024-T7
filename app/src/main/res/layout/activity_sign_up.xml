@@ -59,7 +59,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editName"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:layout_marginTop="30dp"
             android:drawableStart="@drawable/icon_user"
             android:hint="@string/fullname"
@@ -70,7 +70,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editCpf"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_cpf"
             android:hint="@string/cpf"
             android:inputType="number"
@@ -84,7 +84,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editBirthDate"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_birth"
             android:hint="@string/birthdate"
             android:inputType="date"
@@ -97,7 +97,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editPhone"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_phone"
             android:hint="@string/phone"
             android:inputType="phone"
@@ -110,7 +110,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editEmail"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_email"
             android:hint="@string/emailSignup"
             android:inputType="textEmailAddress"
@@ -120,7 +120,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editPassword"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_password"
             android:hint="@string/passwordSignup"
             android:inputType="textPassword"
@@ -128,15 +128,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editEmail" />
 
+        <ToggleButton
+            android:id="@+id/togglePasswordVisibility"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/seletor_estado"
+            android:checked="false"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="@id/editPassword"
+            app:layout_constraintEnd_toEndOf="@id/editPassword"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="@id/editPassword"
+            app:layout_constraintTop_toTopOf="@id/editPassword" />
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editConfirmPassword"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
+            android:layout_marginTop="16dp"
             android:drawableStart="@drawable/icon_password"
             android:hint="@string/confirmPasswordSignup"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+
+        <ToggleButton
+            android:id="@+id/togglePasswordVisibility2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/seletor_estado"
+            android:checked="false"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="@id/editConfirmPassword"
+            app:layout_constraintEnd_toEndOf="@id/editConfirmPassword"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="@id/editConfirmPassword"
+            app:layout_constraintTop_toTopOf="@id/editConfirmPassword" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_signup"

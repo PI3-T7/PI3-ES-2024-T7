@@ -3,7 +3,6 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCartoesBinding
 
 class CartoesActivity : AppCompatActivity() {
@@ -26,15 +25,27 @@ class CartoesActivity : AppCompatActivity() {
         )
 
         // Chamando o Adapter e seu gerenciador de Layouts
-        //binding.rvCards.adapter = CardAdapter(itens)
+        binding.rvCards.adapter = CardAdapter(itens)
         binding.rvCards.layoutManager = GridLayoutManager(
             this,
             2
         )
 
+
+        val numeroCartao = intent.getStringExtra("numero")
+
+        if (numeroCartao != null) {
+            val novoCartao = CartoesCadastrados(numeroCartao)
+
+            // Adicionar o novo cartão à lista de cartões
+            itens.add(novoCartao)
+
+            // Notificar o adapter sobre a mudança nos dados
+            (binding.rvCards.adapter as CardAdapter).notifyDataSetChanged()
+        }
+
     }
 }
-
 
 //      Cartão de crédito Visa  4.
 //      Cartão de crédito Mastercard  5
@@ -63,7 +74,7 @@ class CartoesCadastrados(numero: String) {
     }
 
     private fun formatarNumero(numeroCartao: String): String {
-        val primeiraParte = ""
+        val primeiraParte = "****"
         val ultimosDigitos = numeroCartao.takeLast(4)
         return "$primeiraParte $ultimosDigitos"
     }

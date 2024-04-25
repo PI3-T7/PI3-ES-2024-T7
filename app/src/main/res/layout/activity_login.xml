@@ -50,7 +50,7 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editUsuario"
-        style="@style/InputsCadastro"
+        style="@style/Inputs"
         android:drawableStart="@drawable/icon_email"
         android:hint="@string/emailSignup"
         android:inputType="textEmailAddress"
@@ -62,13 +62,27 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editSenha"
-        style="@style/InputsCadastro"
+        style="@style/Inputs"
         android:drawableStart="@drawable/icon_password"
         android:hint="@string/passwordSignup"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@id/view_login_container"
         app:layout_constraintStart_toStartOf="@id/view_login_container"
         app:layout_constraintTop_toBottomOf="@id/editUsuario" />
+
+    <ToggleButton
+        android:id="@+id/togglePasswordVisibility"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/seletor_estado"
+        android:checked="false"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toBottomOf="@id/editSenha"
+        app:layout_constraintEnd_toEndOf="@id/editSenha"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@id/editSenha"
+        app:layout_constraintTop_toTopOf="@id/editSenha" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtEsqueceuSenha"
