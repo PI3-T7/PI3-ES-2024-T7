@@ -4,7 +4,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mapa"
     tools:context=".MapaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/voltar"
+            android:id="@+id/voltarMapa"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginStart="8dp"
@@ -50,34 +49,44 @@
             app:layout_constraintEnd_toStartOf="@+id/textLocalLocacao"
             app:layout_constraintTop_toTopOf="@+id/textLocalLocacao" />
 
-        <EditText
+        <TextView
             android:id="@+id/textSeuLocal"
             android:layout_width="300dp"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/signup_fields"
             android:gravity="center_vertical|start"
-            android:hint="Localização Atual"
-            android:paddingLeft="20dp"
-            android:textSize="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Localização Atual"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <TextView
             android:id="@+id/textLocalLocacao"
             android:layout_width="300dp"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/signup_fields"
             android:gravity="center_vertical|start"
-            android:hint="Rua das Flores 333"
-            android:paddingLeft="20dp"
-            android:textSize="16dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSeuLocal" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <fragment
+        android:id="@+id/map_fragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containerRota" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
