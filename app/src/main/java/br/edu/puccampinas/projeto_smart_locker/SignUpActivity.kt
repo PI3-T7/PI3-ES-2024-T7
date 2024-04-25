@@ -5,7 +5,6 @@ import android.os.Build
 import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
@@ -43,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
             values["senha"] = editPassword.text.toString().replace(" ", "")
             values["senha2"] = editConfirmPassword.text.toString().replace(" ", "")
         }
-        if (values.values.any{ it.isBlank() }){
+        if (values.values.any{ it.isBlank() }) {
             Toast.makeText(this, "Por favor, preencha todos os campos antes de prosseguir!", Toast.LENGTH_LONG).show()
             return
         }
@@ -51,10 +50,7 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Por favor, verifique se o CPF está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
             return
         }
-        if (!isLegalAge(values["data_de_nascimento"].toString())){
-            Toast.makeText(this, "O usuário deve ter pelo menos 14 anos para ser cadastrado!", Toast.LENGTH_LONG).show()
-            return
-        }
+        if (!isLegalAge(values["data_de_nascimento"].toString())) return
         if (!isPhone(values["celular"].toString())) {
             Toast.makeText(this, "Por favor, verifique se o número de telefone está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
             return
@@ -66,9 +62,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun isCPF(document: String): Boolean {
         val numbers = document.filter { it.isDigit() }.map { it.toString().toInt() }
         if (numbers.size != 11) return false
-        // Caso de repetição
         if (numbers.all { it == numbers[0] }) return false
-        // Digito 1
         val dv1 = ((0..8).sumOf { (it + 1) * numbers[it] }).rem(11).let {
             if (it >= 10) 0 else it
         }
@@ -79,13 +73,28 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun isLegalAge(givenDate: String): Boolean {
-        if (givenDate.length < 10) return false
+        if (givenDate.length < 10) {
+            Toast.makeText(
+                this,
+                "Por favor, verifique se a data de nascimento está correta antes de prosseguir!",
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
         val birthDate = givenDate.split("/")
         val age = LocalDate.now()
             .minusDays(birthDate[0].toLong())
             .minusMonths(birthDate[1].toLong())
             .minusYears(birthDate[2].toLong()).year.toLong()
-        return age >= 14
+        if (age < 14) {
+            Toast.makeText(
+                this,
+                "O usuário deve ter pelo menos 14 anos de para realizar o cadastro!",
+                Toast.LENGTH_LONG
+            ).show()
+            return false
+        }
+        return true
     }
 
     private fun isPhone(givenPhone: String): Boolean {
@@ -126,18 +135,27 @@ class SignUpActivity : AppCompatActivity() {
     private fun registerUser() {
         auth.createUserWithEmailAndPassword(
             values["email"].toString(), values["senha"].toString()
-        ).addOnSuccessListener {
-                authResult ->
-            authResult.user?.sendEmailVerification()?.addOnCompleteListener{ task ->
-                if (task.isSuccessful) {
-                    bd.collection("Usuários").document(authResult.user?.uid.toString()).set(values)
-                    startActivity(Intent(this, VerifyActivity::class.java))
-                    finish()
-                }
-                else Toast.makeText(this, "Falha ao enviar email de verificação, tente outro endereço de email!", Toast.LENGTH_LONG).show()
+        ).addOnSuccessListener { authResult ->
+            authResult.user?.sendEmailVerification()?.addOnCompleteListener{
+                values.remove("senha2")
+                bd.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
+                startActivity(Intent(this, VerifyActivity::class.java))
+                finish()
             }
-        }.addOnFailureListener {
-                exception -> Toast.makeText(this, "Falha ao cadastrar usuário: ${exception.message}", Toast.LENGTH_LONG).show()
+        }.addOnFailureListener { exception ->
+            if (exception.message.toString() == "The email address is badly formatted.") {
+                Toast.makeText(
+                    this,
+                    "Endereço de email inválido!",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Endereço de email já registrado!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 }

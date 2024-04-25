@@ -15,7 +15,6 @@ class OpeningActivity : AppCompatActivity() {
     private val binding by lazy { ActivityOpeningBinding.inflate( layoutInflater ) }
 
     // No onCreate serão colocados os clickListeners dos botões da tela inicial
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
