@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -17,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
@@ -45,6 +45,7 @@ class RotaActivity : AppCompatActivity() {
     private var placeLongitude: Double = 0.0
     private lateinit var placeAddress: String
     private lateinit var placeLatLng: LatLng
+    private lateinit var placeUid: String
     private lateinit var botaoVoltarMapa: ImageView
 
     companion object {
@@ -132,7 +133,8 @@ class RotaActivity : AppCompatActivity() {
                     val address = document.getString("address") ?: ""
                     val reference = document.getString("reference") ?: ""
                     val prices = document.get("prices") as? List<Double> ?: emptyList()
-                    Place(name, latLng, address, reference, prices)
+                    val uid = document.getString("uid") ?: ""
+                    Place(name, latLng, address, reference, prices, uid)
                 }
 
                 addMarkers()

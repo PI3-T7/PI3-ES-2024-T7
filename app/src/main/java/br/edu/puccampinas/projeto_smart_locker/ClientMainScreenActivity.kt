@@ -16,6 +16,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_client_main_screen)
 
         val botaoAlugar = findViewById<View>(R.id.containerRent)
+        val botaoVerPontos = findViewById<View>(R.id.containerMap)
 
         val logoutButton = findViewById<ImageView>(R.id.btLogout)
         logoutButton.setOnClickListener {
@@ -28,6 +29,12 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Cria uma intenção para iniciar a atividade de locar armario
             val intent = Intent(this, LocationActivity::class.java)
             // Inicia a atividade de locação
+            startActivity(intent)
+        }
+
+        botaoVerPontos.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("vindo_da_tela_usuário", true)
             startActivity(intent)
         }
     }

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -41,6 +42,8 @@ class LocationActivity : AppCompatActivity() {
     private lateinit var btn4hours: RadioButton
     private lateinit var btnUntil18: RadioButton
     private lateinit var btnConfirmLocation: Button
+    private lateinit var botaoVoltar1: ImageView
+    private lateinit var buttonHome1: ImageView
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var userId: String
@@ -49,15 +52,15 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
 
-
         btn30min = findViewById(R.id.btn30min)
         btn1hour = findViewById(R.id.btn1hour)
         btn2hours = findViewById(R.id.btn2hours)
         btn4hours = findViewById(R.id.btn4hours)
         btnUntil18 = findViewById(R.id.btnUntil18)
         btnConfirmLocation = findViewById(R.id.bt_confirm_location)
+        botaoVoltar1 = findViewById(R.id.buttonVoltar1)
+        buttonHome1 = findViewById(R.id.buttonHome1)
 
-        checkHour()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -75,6 +78,18 @@ class LocationActivity : AppCompatActivity() {
         } else {
             // Permissão já concedida, obter a localização atual
             obterLocalizacaoAtual()
+        }
+
+        botaoVoltar1.setOnClickListener {
+            val intent = Intent(this, ClientMainScreenActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        buttonHome1.setOnClickListener {
+            val intent = Intent(this, ClientMainScreenActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         // Esta parte do codigo muda a cor do RadioButton ao ser selecionado, e mantém o arredondamento
@@ -165,6 +180,12 @@ class LocationActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        // Atualiza o layout depois de verificar a hora
+        checkHour()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -234,94 +255,106 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun carregarDadosBanco() {
+        val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
+        val valorRecuperado = sharedPreferences.getString("uid", null)
+
+        Log.d(TAG, "Uid: $valorRecuperado")
 
         val editLocal = findViewById<TextView>(R.id.local)
 
-        val documentReference =
-            db.collection("Unidades de Locação").document("sxtHaqQFSv89iceO0kD0")
+        if (!valorRecuperado.isNullOrEmpty()) {
+            val documentReference = db.collection("Unidades de Locação").document(valorRecuperado)
 
-        Log.d(TAG, "DocumentReference: $documentReference")
+            Log.d(TAG, "DocumentReference: $documentReference")
 
-        documentReference.get()
-            .addOnSuccessListener { document ->
-                Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+            documentReference.get()
+                .addOnSuccessListener { document ->
+                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
 
-                if (document.exists()) {
-                    // O documento com o ID "1" existe, agora você pode acessar seus dados
-                    val nome = document.getString("name")
+                    if (document.exists()) {
+                        // O documento com o ID recuperado existe, agora você pode acessar seus dados
+                        val nome = document.getString("name")
 
-                    // Acessando a latitude e longitude do ponto de locação
-                    val latLng = document.getGeoPoint("latLng")
+                        // Acessando a latitude e longitude do ponto de locação
+                        val latLng = document.getGeoPoint("latLng")
 
+                        if (latLng != null) {
+                            val latitude = latLng.latitude
+                            val longitude = latLng.longitude
 
-                    if (latLng != null) {
-                        val latitude = latLng.latitude
-                        val longitude = latLng.longitude
+                            Log.d(TAG, "Latitude: $latitude")
+                            Log.d(TAG, "Longitude: $longitude")
 
-                        Log.d(TAG, "Latitude: $latitude")
-                        Log.d(TAG, "Longitude: $longitude")
+                            val distanciaLimite = 1 // distância limite em quilômetros
 
-                        val distanciaLimite = 1 // distância limite em quilômetros
+                            val distancia = calcularDistancia(
+                                latitudeUser, longitudeUser, latitude, longitude
+                            )
 
-                        val distancia = calcularDistancia(
-                            latitudeUser, longitudeUser, latitude, longitude
-                        )
+                            if (distancia <= distanciaLimite) {
+                                // A localização está próxima do ponto de locação
 
-                        if (distancia <= distanciaLimite) {
-                            // A localização está próxima do ponto de locação
+                                editLocal.text = nome
 
-                            editLocal.text = nome
+                                val pricesArray = document.get("prices") as? List<*>
+                                if (pricesArray != null) {
+                                    // Limpar as opções anteriores
+                                    clearRadioButtonOptions()
+                                    // Adicionar os preços aos RadioButtons
+                                    addPricesToRadioButtons(pricesArray)
 
-                            val pricesArray = document.get("prices") as? List<*>
-                            if (pricesArray != null) {
-                                // Limpar as opções anteriores
-                                clearRadioButtonOptions()
-                                // Adicionar os preços aos RadioButtons
-                                addPricesToRadioButtons(pricesArray)
+                                } else {
+                                    // O campo 'prices' não é um array ou está vazio
+                                    Toast.makeText(
+                                        this@LocationActivity,
+                                        "Não há preços associados com essa Unidade de Locação.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
 
                             } else {
-                                // O campo 'prices' não é um array ou está vazio
-                                Toast.makeText(
-                                    this@LocationActivity,
-                                    "Não há preços associados com essa Unidade de Locação.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                // A localização não está próxima do ponto de locação
+                                val toast = Toast.makeText(
+                                    applicationContext,
+                                    "\"Você não está próximo(a) de nenhuma Unidade SmartLocker. Esteja a pelo menos 100 metros de uma e tente novamente.\"",
+                                    Toast.LENGTH_LONG
+                                )
+                                val view = layoutInflater.inflate(R.layout.custom_toast_layout, null)
+                                val text = view.findViewById<TextView>(R.id.text)
+                                text.text =
+                                    "Você deve estar a pelo menos 1000 metros do último pin selecionado no mapa."
+                                toast.view = view
+                                toast.show()
+
+                                finish()
                             }
 
                         } else {
-                            // A localização não está próxima do ponto de locação
-                            val toast = Toast.makeText(
-                                applicationContext,
-                                "\"Você não está próximo(a) de nenhuma Unidade SmartLocker. Esteja a pelo menos 100 metros de uma e tente novamente.\"",
-                                Toast.LENGTH_LONG
-                            )
-                            val view = layoutInflater.inflate(R.layout.custom_toast_layout, null)
-                            val text = view.findViewById<TextView>(R.id.text)
-                            text.text =
-                                "Você deve estar a pelo menos 100 metros do ponto de locação escolhido para alugar um armário!"
-                            toast.view = view
-                            toast.show()
-
+                            Toast.makeText(
+                                this@LocationActivity,
+                                "Localização não permitida ou encontrada, tente novamente.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             finish()
                         }
 
                     } else {
-                        Toast.makeText(
-                            this@LocationActivity,
-                            "Geopoint nulo.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Faça algo para lidar com esse caso, se necessário
                     }
-
-                } else {
-                    // O documento com o ID "1" não existe
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.e(TAG, "Error getting document", exception)
-                // Lidar com falhas na recuperação aqui
-            }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Erro ao pegar o documento", exception)
+                }
+        } else {
+            Toast.makeText(
+                this@LocationActivity,
+                "Por favor, selecione um pin no mapa antes de tentar alugar um armário.",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
+        }
     }
+
 
     private fun clearRadioButtonOptions() {
         // Limpar os textos dos RadioButtons
@@ -337,24 +370,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text =
-                    "30 minutos                                                                ${
-                        prices?.get(0)
-                    },00"
-                btn1hour.text =
-                    "1 hora                                                                          ${
-                        prices?.get(1)
-                    },00"
-                btn2hours.text =
-                    "2 horas                                                                      ${
-                        prices?.get(2)
-                    },00"
-                btn4hours.text =
-                    "4 horas                                                                      ${
-                        prices?.get(3)
-                    },00"
-                btnUntil18.text =
-                    "Do momento até 18h                                          ${prices?.get(4)},00"
+                btn30min.text = "30 minutos                                                       ${prices[0]},00"
+                btn1hour.text = "1 hora                                                                ${prices[1]},00"
+                btn2hours.text = "2 horas                                                              ${prices[2]},00"
+                btn4hours.text = "4 horas                                                              ${prices[3]},00"
+                btnUntil18.text = "Do momento até 18h                                      ${prices[4]},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
@@ -380,12 +400,21 @@ class LocationActivity : AppCompatActivity() {
     private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
-        val horaAtual = calendario.get(Calendar.HOUR_OF_DAY)
+        val horaAtual: Int = calendario.get(Calendar.HOUR_OF_DAY)  // Obtém a hora atual como um inteiro
+        val minutoAtual: Int = calendario.get(Calendar.MINUTE)      // Obtém os minutos atuais
+
+        // Converte os valores para Double antes de realizar a operação de divisão
+        val horaAtualDouble: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
+
+        // Log da hora atual
+        Log.d(TAG, "Hora atual: $horaAtualDouble")
 
         // Verificar se está entre 7 e 8 horas
-        if (horaAtual in 7..8) {
+        if (horaAtualDouble >= 7.0 && horaAtualDouble <= 8.0) {
+            Log.d(TAG, "Hora está entre 7 e 8 horas.")
             btnUntil18.visibility = View.VISIBLE
         } else {
+            Log.d(TAG, "Hora não está entre 7 e 8 horas.")
             btnUntil18.visibility = View.GONE
         }
     }

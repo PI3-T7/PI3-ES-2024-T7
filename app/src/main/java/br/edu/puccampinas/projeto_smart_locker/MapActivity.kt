@@ -67,15 +67,25 @@ class MapActivity : AppCompatActivity() {
                 intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
                 intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
                 intent.putExtra("placeAddress", selectedPlace!!.address)
+                intent.putExtra("placeUid", selectedPlace!!.uid)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Selecione um lugar primeiro", Toast.LENGTH_SHORT).show()
             }
         }
+        val vindoDaOpeningActivity = intent.getBooleanExtra("vindo_da_opening_activity", true)
+        val vindoDaTeladoUsuario = intent.getBooleanExtra("vindo_da_tela_usuário", false)
 
         botaoAberturaVoltar.setOnClickListener {
-            val intent = Intent(this, OpeningActivity::class.java)
-            startActivity(intent)
+            if (vindoDaTeladoUsuario) {
+                val intent = Intent(this, ClientMainScreenActivity::class.java)
+                startActivity(intent)
+                finish() // Termina a atividade atual para evitar que ela fique na pilha de atividades
+            } else if (vindoDaOpeningActivity) {
+                val intent = Intent(this, OpeningActivity::class.java)
+                startActivity(intent)
+                finish() // Termina a atividade atual para evitar que ela fique na pilha de atividades
+            }
         }
     }
 
@@ -90,6 +100,14 @@ class MapActivity : AppCompatActivity() {
             val place = marker.tag as? Place
             if (place != null) {
                 selectedPlace = place
+                val uid = selectedPlace!!.uid
+                val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
+
+                // Edita o SharedPreferences para salvar o UID
+                val editor = sharedPreferences.edit()
+                editor.putString("uid", uid)
+                editor.apply()
+
                 showPlaceInfo(place)
                 true
             } else {
@@ -144,12 +162,13 @@ class MapActivity : AppCompatActivity() {
                     val address = document.getString("address") ?: ""
                     val reference = document.getString("reference") ?: ""
                     val prices = document.get("prices") as? List<Double> ?: emptyList()
+                    val uid = document.getString("uid") ?: ""
 
-                    val place = Place(name, latLng, address, reference, prices)
+                    val place = Place(name, latLng, address, reference, prices, uid)
                     places.add(place)
 
                     // Adicionando log para depuração
-                    Log.d("Firestore", "Place Name: $name, LatLng: $latLng, Address: $address, Reference: $reference, Prices: $prices")
+                    Log.d("Firestore", "Place Name: $name, LatLng: $latLng, Address: $address, Reference: $reference, Prices: $prices, Uid: $uid")
                 }
 
                 addMarkers(places)
@@ -227,7 +246,8 @@ data class Place(
     val latLng: GeoPoint?,
     val address: String,
     val reference: String,
-    val prices: List<Double>
+    val prices: List<Double>,
+    val uid: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
