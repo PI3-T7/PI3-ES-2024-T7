@@ -227,7 +227,7 @@ class MapActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_address)?.text = place.address
         findViewById<TextView>(R.id.tv_reference)?.text = place.reference
 
-        val newHeight = 800
+        val newHeight = 650
         val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
         anim.addUpdateListener { valueAnimator ->
             val newVal = valueAnimator.animatedValue as Int
