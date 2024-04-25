@@ -49,10 +49,6 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".Opening"
             android:exported="true"
             android:theme="@style/AppTheme">
