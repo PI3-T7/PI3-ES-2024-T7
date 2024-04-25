@@ -3,6 +3,7 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -24,6 +25,17 @@ class LoginActivity : AppCompatActivity() {
             }
             btMap.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
+            }
+        }
+
+        setCursorToStartOnFocusChange(binding.editUsuario)
+    }
+
+    // Função para voltar o cursor no incício do input
+    private fun setCursorToStartOnFocusChange(editText: EditText) {
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                editText.setSelection(0)
             }
         }
     }

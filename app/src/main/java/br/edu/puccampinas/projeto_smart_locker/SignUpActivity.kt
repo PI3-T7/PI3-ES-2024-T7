@@ -5,6 +5,7 @@ import android.os.Build
 import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
@@ -29,6 +30,20 @@ class SignUpActivity : AppCompatActivity() {
         with(binding) {
             arrow.setOnClickListener { finish() }
             btSignup.setOnClickListener { validData() }
+        }
+
+        setCursorToStartOnFocusChange(binding.editName)
+        setCursorToStartOnFocusChange(binding.editCpf)
+        setCursorToStartOnFocusChange(binding.editEmail)
+
+    }
+
+    // Função para voltar o cursor no incício do input
+    private fun setCursorToStartOnFocusChange(editText: EditText) {
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                editText.setSelection(0)
+            }
         }
     }
 
