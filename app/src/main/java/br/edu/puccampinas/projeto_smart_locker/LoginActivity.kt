@@ -38,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
                 startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                finish()
             }.addOnFailureListener { exception ->
                 if (exception.message.toString() == "The email address is badly formatted."){
                     Toast.makeText(this, "Endereço de email inválido, por favor digite novamente!", Toast.LENGTH_LONG).show()

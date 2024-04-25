@@ -9,14 +9,15 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import android.widget.Button
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCadastrandocartaoBinding
 
 class CartaoCadastrandoActivity : AppCompatActivity() {
-
     private lateinit var checkBoxCiente: CheckBox
+    private val binding by lazy { ActivityCadastrandocartaoBinding.inflate( layoutInflater ) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastrandocartao)
+        setContentView(binding.root)
 
         val etCardNumber = findViewById<EditText>(R.id.editNumCartao)
         val tvCardNumber = findViewById<TextView>(R.id.tvCardNumberDetail)

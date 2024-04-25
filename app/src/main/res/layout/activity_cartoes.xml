@@ -8,6 +8,7 @@
     tools:context=".MapaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonCadastrar"
         android:layout_width="150dp"
         android:layout_height="134dp"
         android:layout_marginStart="16dp"
