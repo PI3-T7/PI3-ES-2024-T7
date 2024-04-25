@@ -7,39 +7,40 @@
     android:background="@color/background"
     tools:context=".MapaActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="150dp"
-        android:layout_height="134dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/container_white"
-        android:elevation="50dp"
-        app:layout_constraintEnd_toStartOf="@+id/buttonHome"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="171dp"
-        tools:ignore="MissingConstraints">
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/constraintLayout2"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="134dp"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:background="@drawable/container_white"-->
+<!--        android:elevation="10dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/buttonHome"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView">-->
 
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_add" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView3"-->
+<!--            android:layout_width="34dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:layout_marginStart="12dp"-->
+<!--            android:layout_marginTop="14dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:srcCompat="@drawable/icon_add" />-->
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginBottom="8dp"
-            android:text="Cadastrar novo cartão"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/textView2"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="12dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:text="Cadastrar novo cartão"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <View
         android:id="@+id/container"
@@ -82,6 +83,17 @@
         android:textSize="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cards"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="571dp"
+        app:layout_constraintBottom_toTopOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
