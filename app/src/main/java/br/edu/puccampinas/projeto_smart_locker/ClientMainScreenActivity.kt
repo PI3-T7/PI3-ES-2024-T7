@@ -17,7 +17,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         val logoutButton = findViewById<ImageView>(R.id.btLogout)
         logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, Opening::class.java))
+            startActivity(Intent(this, OpeningActivity::class.java))
         }
 
         // Define o listener de clique para o botão de início
