@@ -14,14 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
+
+// Classe Adapter para montar a RecyclerView dos cartões
 class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<RecyclerView.ViewHolder>() {
 
+    // ViewHolder dos cards de cartões
     inner class CardItemViewHolder(itemview: View) : ViewHolder(itemview) {
         val cardNumer: TextView = itemView.findViewById(R.id.tv_card_number)
         val cardFlag: TextView = itemView.findViewById(R.id.tv_add)
         val deleteCard : ImageView = itemView.findViewById(R.id.img_delete_card)
     }
 
+    // ViewHolder do card de adicionar cartão
     inner class AddCardViewHolder(itemview: View) : ViewHolder(itemview) {
         val btn: ImageView = itemview.findViewById(R.id.img_add)
         val cardView: CardView = itemview.findViewById(R.id.cv_card)
@@ -52,17 +56,19 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
         if (position == 0) {
             (holder as AddCardViewHolder)
 
+            // Evento que faz o intent para a tela de cadastro de cartao
             holder.cardView.setOnClickListener{
                 val intent = Intent(holder.itemView.context, CartaoCadastrandoActivity::class.java)
                 startActivity(holder.itemView.context,intent,null)
             }
 
         } else {
-            val cartao = card[position - 1] // Subtraia 1 para ajustar a posição do botão adicionar
+            val cartao = card[position - 1]
             val holderCartao = holder as CardItemViewHolder
             holderCartao.cardNumer.text = cartao.numeroFormatado
             holderCartao.cardFlag.text = cartao.bandeira
 
+            // Evento que chama a função de excluir um item
             holderCartao.deleteCard.setOnClickListener{
                 deletarCartao(position)
                 Toast.makeText(holder.itemView.context, "Cartão excluído", Toast.LENGTH_SHORT).show()
@@ -75,6 +81,7 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
         return card.size + 1
     }
 
+    // Função que faz a exclusão de um item do cartao
     private fun deletarCartao(posicao: Int) {
         if (posicao > 0 && posicao <= card.size) {
             card.removeAt(posicao - 1)

@@ -1,5 +1,6 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -26,7 +27,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
             if (isInputValid()) {
                 if (checkBoxCiente.isChecked) {
                     // Realizar o cadastro ou ação desejada quando a checkbox está marcada
-                    cadastrarCartao()
+                    cadastrarCartao("2565 8569 5256 5896")
                 } else {
                     // Exibir mensagem de erro se a checkbox não estiver marcada
                     exibirErroCheckBox()
@@ -62,13 +63,20 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
     }
 
     // Função para realizar o cadastro do cartão
-    private fun cadastrarCartao() {
+    private fun cadastrarCartao(numero: String) {
         // Implemente aqui a lógica de cadastro do cartão
         // Por exemplo, exibir uma mensagem de sucesso
         // ou chamar uma função para realizar o cadastro no banco de dados
         // Este método será chamado apenas se a checkbox estiver marcada
         // e o cadastro for válido
-        exibirMensagem("Cadastro realizado com sucesso!")
+
+        // Criar um Intent para passar os dados do cartão
+        val intent = Intent(this, CartoesActivity::class.java).apply {
+            putExtra("numero", numero)
+        }
+
+        // Iniciar a RecyclerViewActivity com o Intent
+        startActivity(intent)
     }
 
     // Função para exibir mensagem de erro se a checkbox não estiver marcada

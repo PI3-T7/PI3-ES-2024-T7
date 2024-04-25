@@ -30,9 +30,22 @@ class CartoesActivity : AppCompatActivity() {
             this,
             2
         )
+
+
+        val numeroCartao = intent.getStringExtra("numero")
+
+        if (numeroCartao != null) {
+            val novoCartao = CartoesCadastrados(numeroCartao)
+
+            // Adicionar o novo cartão à lista de cartões
+            itens.add(novoCartao)
+
+            // Notificar o adapter sobre a mudança nos dados
+            (binding.rvCards.adapter as CardAdapter).notifyDataSetChanged()
+        }
+
     }
 }
-
 
 //      Cartão de crédito Visa  4.
 //      Cartão de crédito Mastercard  5
