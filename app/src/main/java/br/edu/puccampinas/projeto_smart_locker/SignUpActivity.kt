@@ -5,7 +5,6 @@ import android.os.Build
 import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
@@ -130,7 +129,8 @@ class SignUpActivity : AppCompatActivity() {
                 authResult ->
             authResult.user?.sendEmailVerification()?.addOnCompleteListener{ task ->
                 if (task.isSuccessful) {
-                    bd.collection("Usuários").document(authResult.user?.uid.toString()).set(values)
+                    values.remove("senha2")
+                    bd.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
                     startActivity(Intent(this, VerifyActivity::class.java))
                     finish()
                 }

@@ -24,11 +24,11 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCardNumberDetail" />
 
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editTextName"
+        android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginHorizontal="40dp"
@@ -43,7 +43,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNameDetail" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editDataValidade"
@@ -61,7 +61,7 @@
         android:textColorHint="@color/grey"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCvvDetail" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editCVV"
@@ -79,7 +79,7 @@
         android:textColorHint="@color/grey"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/tvExpDateDetail" />
 
     <View
         android:id="@+id/container"
@@ -126,21 +126,18 @@
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView10"
+    <CheckBox
+        android:id="@+id/checkBoxCiente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:text="Ao fazer a locação de um armário será cobrada a caução de uma diária e estornada proporcionalmente de acordo com o período utilizado"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCVV" />
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/checkbox_ciente"
+        app:layout_constraintTop_toBottomOf="@id/editDataValidade"
+        tools:layout_editor_absoluteX="40dp" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/tvCardNumberDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -150,34 +147,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/tvNameDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:text="Nome"
-        app:layout_constraintStart_toStartOf="@+id/editTextName"
+        app:layout_constraintStart_toStartOf="@+id/editName"
         app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tvExpDateDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Data de Validade"
         app:layout_constraintEnd_toEndOf="@+id/editCVV"
         app:layout_constraintStart_toStartOf="@+id/editCVV"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/tvCvvDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="CVV"
         app:layout_constraintStart_toStartOf="@+id/editDataValidade"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/editName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
