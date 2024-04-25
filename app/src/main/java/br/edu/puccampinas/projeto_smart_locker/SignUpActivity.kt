@@ -5,8 +5,10 @@ import android.os.Build
 import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -16,11 +18,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 @RequiresApi(Build.VERSION_CODES.O)
 class SignUpActivity : AppCompatActivity() {
     // Configuração do ViewBinding
-    private val binding by lazy { ActivitySignUpBinding.inflate( layoutInflater ) }
+    private val binding by lazy { ActivitySignUpBinding.inflate(layoutInflater) }
+
     // Configuração do FirebaseAuth
     private val auth by lazy { FirebaseAuth.getInstance() }
+
     // Configuração do Firebase Firestore
     private val bd by lazy { FirebaseFirestore.getInstance() }
+
     // Criação do mapa para guardar os valores para cadastro
     private val values = mutableMapOf<String, String>()
 
@@ -36,6 +41,64 @@ class SignUpActivity : AppCompatActivity() {
         setCursorToStartOnFocusChange(binding.editCpf)
         setCursorToStartOnFocusChange(binding.editEmail)
 
+        binding.togglePasswordVisibility.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Se o botão está marcado, mostrar a senha
+                binding.editPassword.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                // Se o botão não está marcado, ocultar a senha
+                binding.editPassword.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            // Para atualizar a exibição do EditText
+            binding.editPassword.text?.let { binding.editPassword.setSelection(it.length) }
+        }
+
+        binding.togglePasswordVisibility2.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Se o botão está marcado, mostrar a senha
+                binding.editConfirmPassword.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                // Se o botão não está marcado, ocultar a senha
+                binding.editConfirmPassword.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            // Para atualizar a exibição do EditText
+            binding.editConfirmPassword.text?.let { binding.editConfirmPassword.setSelection(it.length) }
+        }
+
+        setupPasswordToggle(
+            binding.togglePasswordVisibility,
+            binding.editPassword,
+            InputType.TYPE_CLASS_TEXT
+        )
+
+        setupPasswordToggle(
+            binding.togglePasswordVisibility2,
+            binding.editConfirmPassword,
+            InputType.TYPE_CLASS_TEXT
+        )
+    }
+
+    // Função que altera o toggle
+    private fun setupPasswordToggle(
+        toggleButton: ToggleButton,
+        editText: EditText,
+        inputType: Int
+    ) {
+        toggleButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Se o botão está marcado, mostrar a senha
+                editText.inputType = inputType or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                // Se o botão não está marcado, ocultar a senha
+                editText.inputType = inputType or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+            // Para atualizar a exibição do EditText
+            editText.text?.let { editText.setSelection(it.length) }
+        }
     }
 
     // Função para voltar o cursor no incício do input
@@ -48,7 +111,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validData() {
-        with(binding){
+        with(binding) {
             values["nome_completo"] = editName.text.toString()
             values["cpf"] = editCpf.masked
             values["data_de_nascimento"] = editBirthDate.masked
@@ -57,17 +120,29 @@ class SignUpActivity : AppCompatActivity() {
             values["senha"] = editPassword.text.toString().replace(" ", "")
             values["senha2"] = editConfirmPassword.text.toString().replace(" ", "")
         }
-        if (values.values.any{ it.isBlank() }) {
-            Toast.makeText(this, "Por favor, preencha todos os campos antes de prosseguir!", Toast.LENGTH_LONG).show()
+        if (values.values.any { it.isBlank() }) {
+            Toast.makeText(
+                this,
+                "Por favor, preencha todos os campos antes de prosseguir!",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         if (!isCPF(values["cpf"].toString())) {
-            Toast.makeText(this, "Por favor, verifique se o CPF está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Por favor, verifique se o CPF está correto antes de prosseguir!",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         if (!isLegalAge(values["data_de_nascimento"].toString())) return
         if (!isPhone(values["celular"].toString())) {
-            Toast.makeText(this, "Por favor, verifique se o número de telefone está correto antes de prosseguir!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Por favor, verifique se o número de telefone está correto antes de prosseguir!",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         if (!isPassword(values["senha"].toString(), values["senha2"].toString())) return
@@ -121,27 +196,51 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun isPassword(givenPassword1: String, givenPassword2: String): Boolean {
         if (givenPassword1 != givenPassword2) {
-            Toast.makeText(this, "Os campos de senha não batem, por favor digite novamente!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Os campos de senha não batem, por favor digite novamente!",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
         if (givenPassword1.length < 8) {
-            Toast.makeText(this, "A senha é muito curta, ela deve conter pelo menos 8 caracteres!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "A senha é muito curta, ela deve conter pelo menos 8 caracteres!",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
         if (!givenPassword1.contains(Regex("[A-Z]"))) {
-            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos uma letra maiúscula!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "A senha é muito fraca, ela deve conter pelo menos uma letra maiúscula!",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
-        if(!givenPassword1.contains(Regex("[a-z]"))) {
-            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos uma letra minúscula!", Toast.LENGTH_LONG).show()
+        if (!givenPassword1.contains(Regex("[a-z]"))) {
+            Toast.makeText(
+                this,
+                "A senha é muito fraca, ela deve conter pelo menos uma letra minúscula!",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
-        if(!givenPassword1.contains(Regex("\\d"))) {
-            Toast.makeText(this, "A senha é muito fraca, ela deve conter pelo menos um número!", Toast.LENGTH_LONG).show()
+        if (!givenPassword1.contains(Regex("\\d"))) {
+            Toast.makeText(
+                this,
+                "A senha é muito fraca, ela deve conter pelo menos um número!",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
-        if(!givenPassword1.contains(Regex("[^A-Za-z0-9]"))){
-            Toast.makeText(this, "A senha deve conter pelo menos um caracter especial! (ex: !@#$%&*)", Toast.LENGTH_LONG).show()
+        if (!givenPassword1.contains(Regex("[^A-Za-z0-9]"))) {
+            Toast.makeText(
+                this,
+                "A senha deve conter pelo menos um caracter especial! (ex: !@#$%&*)",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
         return true
@@ -151,7 +250,7 @@ class SignUpActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(
             values["email"].toString(), values["senha"].toString()
         ).addOnSuccessListener { authResult ->
-            authResult.user?.sendEmailVerification()?.addOnCompleteListener{
+            authResult.user?.sendEmailVerification()?.addOnCompleteListener {
                 values.remove("senha2")
                 bd.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
                 startActivity(Intent(this, VerifyActivity::class.java))
