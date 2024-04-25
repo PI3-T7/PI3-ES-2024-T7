@@ -17,7 +17,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        with(binding){
+        with(binding) {
+            arrow.setOnClickListener { finish() }
             btLogin.setOnClickListener {
                 validUser(editUsuario.text.toString(), editSenha.text.toString())
             }
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun validUser(email: String, password: String) {
         if (email.isBlank() or password.isBlank()) return
         auth.signInWithEmailAndPassword(email, password)
