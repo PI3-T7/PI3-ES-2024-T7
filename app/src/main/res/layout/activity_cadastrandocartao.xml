@@ -105,7 +105,7 @@
 
             <!-- Campos de input -->
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.santalu.maskara.widget.MaskEditText
                 android:id="@+id/editNumCartao"
                 style="@style/EditTextCard"
                 android:hint="@string/card_number"
@@ -113,19 +113,22 @@
                 android:maxLength="19"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:mask="____ ____ ____ ____"
+                app:maskCharacter="_"
+                app:maskStyle="normal" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editName"
                 style="@style/EditTextCard"
                 android:hint="@string/card_name"
-                android:inputType="text"
+                android:inputType="textCapCharacters"
                 android:maxLength="35"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.santalu.maskara.widget.MaskEditText
                 android:id="@+id/editDataValidade"
                 style="@style/EditTextCard"
                 android:layout_width="0dp"
@@ -137,7 +140,10 @@
                 app:layout_constraintEnd_toStartOf="@id/editCVV"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="@id/editNumCartao"
-                app:layout_constraintTop_toBottomOf="@id/textView14" />
+                app:layout_constraintTop_toBottomOf="@id/textView14"
+                app:mask="__/__"
+                app:maskCharacter="_"
+                app:maskStyle="normal" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editCVV"
