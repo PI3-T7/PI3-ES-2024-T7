@@ -86,10 +86,6 @@ class RotaActivity : AppCompatActivity() {
     private fun setupMap() {
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
 
-        googleMap.setOnMapClickListener {
-            hideInfoView()
-        }
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -168,24 +164,6 @@ class RotaActivity : AppCompatActivity() {
             }
             marker?.tag = place
         }
-    }
-
-    private fun hideInfoView() {
-        val viewInfo = findViewById<View>(R.id.container_info_map)
-        val newHeight = 1
-        val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
-        anim.addUpdateListener { valueAnimator ->
-            val newVal = valueAnimator.animatedValue as Int
-            val layoutParams = viewInfo.layoutParams
-            layoutParams.height = newVal
-            viewInfo.layoutParams = layoutParams
-        }
-        anim.duration = 300
-        anim.start()
-
-        findViewById<TextView>(R.id.tv_name)?.text = ""
-        findViewById<TextView>(R.id.tv_address)?.text = ""
-        findViewById<TextView>(R.id.tv_reference)?.text = ""
     }
 
     private fun traceRoute(origin: LatLng, destination: LatLng) {
