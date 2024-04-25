@@ -27,7 +27,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
             if (isInputValid()) {
                 if (checkBoxCiente.isChecked) {
                     // Realizar o cadastro ou ação desejada quando a checkbox está marcada
-                    cadastrarCartao("2565 8569 5256 5896")
+                    cadastrarCartao(binding.editNumCartao.unMasked)
                 } else {
                     // Exibir mensagem de erro se a checkbox não estiver marcada
                     exibirErroCheckBox()
