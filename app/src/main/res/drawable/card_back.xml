@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Retângulo azul -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/blue"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+    <!-- Retângulo preto horizontal dentro do retângulo azul -->
+    <item android:top="30dp" android:bottom="85dp" >
+        <shape android:shape="rectangle">
+            <solid android:color="#37474F"/>
+            <size
+                android:width="160dp"
+                android:height="30dp"/>
+        </shape>
+    </item>
+</layer-list>

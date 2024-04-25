@@ -1,179 +1,239 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:fillViewport="true"
     tools:context=".CartaoCadastrandoActivity">
-    <!-- ADICIONAR <com.braintreepayments.cardform.cardform.view.CardForm
-        com id=id/cardForm dentro-->
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editNumCartao"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/signup_fields"
-        android:drawablePadding="14dp"
-        android:gravity="center_vertical"
-        android:hint="   0000 0000 0000 0000"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColorHint="@color/grey"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCardNumberDetail" />
-
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/signup_fields"
-        android:drawablePadding="14dp"
-        android:gravity="center_vertical"
-        android:hint="   ex Isabella M T Bruno"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColorHint="@color/grey"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameDetail" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editDataValidade"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/signup_fields"
-        android:drawablePadding="14dp"
-        android:gravity="center_vertical"
-        android:hint="    000"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColorHint="@color/grey"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCvvDetail" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editCVV"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/signup_fields"
-        android:drawablePadding="14dp"
-        android:gravity="center_vertical"
-        android:hint="    12/24"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColorHint="@color/grey"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvExpDateDetail" />
-
-    <View
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="@drawable/container_voltar_mapa"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/buttonVoltar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_back_white" />
-
-    <ImageView
-        android:id="@+id/buttonHome"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/container"
-        app:layout_constraintEnd_toEndOf="@+id/container"
-        app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_home" />
-
-    <Button
-        android:id="@+id/btnCadastrar"
-        android:layout_width="340dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_login"
-        android:text="Cadastrar"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.509"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <CheckBox
-        android:id="@+id/checkBoxCiente"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/checkbox_ciente"
-        app:layout_constraintTop_toBottomOf="@id/editDataValidade"
-        tools:layout_editor_absoluteX="40dp" />
+        android:background="@color/background"
+        tools:context=".CartaoCadastrandoActivity">
 
-    <TextView
-        android:id="@+id/tvCardNumberDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="200dp"
-        android:text="Número do cartão"
-        app:layout_constraintStart_toStartOf="@+id/editNumCartao"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Detalhes do cartão de crédito -->
+        <View
+            android:id="@+id/cardFront"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/card_front"
+            android:layout_marginStart="20dp"
+            android:elevation="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvNameDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:text="Nome"
-        app:layout_constraintStart_toStartOf="@+id/editName"
-        app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:elevation="5dp"
+            android:src="@drawable/chip_card"
+            app:layout_constraintStart_toStartOf="@id/cardFront"
+            app:layout_constraintTop_toTopOf="@id/cardFront" />
 
-    <TextView
-        android:id="@+id/tvExpDateDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Data de Validade"
-        app:layout_constraintEnd_toEndOf="@+id/editCVV"
-        app:layout_constraintStart_toStartOf="@+id/editCVV"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        <View
+            android:id="@+id/cardBack"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/card_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvCvvDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="CVV"
-        app:layout_constraintStart_toStartOf="@+id/editDataValidade"
-        app:layout_constraintTop_toBottomOf="@+id/editName" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCardNumberDetail"
+            style="@style/TextViewCardDetails"
+            android:layout_marginBottom="50dp"
+            android:elevation="5dp"
+            android:text="@string/card_number_detail"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/cardFront"
+            app:layout_constraintEnd_toEndOf="@id/cardFront"
+            app:layout_constraintStart_toStartOf="@id/cardFront" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNameDetail"
+            style="@style/TextViewCardDetails"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp"
+            android:text="@string/card_name_detail"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/cardFront"
+            app:layout_constraintEnd_toEndOf="@id/cardFront"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toStartOf="@id/cardFront" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvExpDateDetail"
+            style="@style/TextViewCardDetails"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp"
+            android:text="@string/card_expiration_detail"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/cardFront"
+            app:layout_constraintEnd_toEndOf="@id/cardFront"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="@id/cardFront" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCvvDetail"
+            style="@style/TextViewCardDetails"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/light_gray"
+            android:paddingStart="30dp"
+            android:paddingEnd="10dp"
+            android:text="@string/card_cvv_detail"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/cardBack"
+            app:layout_constraintEnd_toEndOf="@id/cardBack"
+            app:layout_constraintTop_toTopOf="@id/cardBack" />
+
+        <!-- Campos de input -->
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editNumCartao"
+            style="@style/EditTextCard"
+            android:hint="@string/card_number"
+            android:inputType="number"
+            android:maxLength="19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editName"
+            style="@style/EditTextCard"
+            android:hint="@string/card_name"
+            android:inputType="text"
+            android:maxLength="35"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editDataValidade"
+            style="@style/EditTextCard"
+            android:layout_width="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/card_expiration"
+            android:inputType="date"
+            android:maxLength="5"
+            app:layout_constraintEnd_toStartOf="@id/editCVV"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@id/editNumCartao"
+            app:layout_constraintTop_toBottomOf="@id/textView14" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editCVV"
+            style="@style/EditTextCard"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="0dp"
+            android:hint="@string/card_cvv"
+            android:inputType="number"
+            android:maxLength="3"
+            app:layout_constraintEnd_toEndOf="@id/editNumCartao"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/editDataValidade"
+            app:layout_constraintTop_toBottomOf="@id/textView13" />
+
+        <CheckBox
+            android:id="@+id/checkBoxCiente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/str_checkbox"
+            app:layout_constraintTop_toBottomOf="@id/editDataValidade"
+            tools:layout_editor_absoluteX="40dp" />
+
+        <!-- Label dos inputs -->
+
+        <Button
+            android:id="@+id/btnCadastrar"
+            android:layout_width="340dp"
+            android:layout_height="48dp"
+            android:background="@drawable/button_login"
+            android:text="@string/cadastrar"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginVertical="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxCiente"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/textView11"
+            style="@style/TextViewCard"
+            android:layout_marginTop="50dp"
+            android:text="@string/label_card_number"
+            app:layout_constraintStart_toStartOf="@+id/editNumCartao"
+            app:layout_constraintTop_toBottomOf="@id/cardFront" />
+
+        <TextView
+            android:id="@+id/textView12"
+            style="@style/TextViewCard"
+            android:text="@string/label_card_name"
+            app:layout_constraintStart_toStartOf="@+id/editName"
+            app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
+
+        <TextView
+            android:id="@+id/textView13"
+            style="@style/TextViewCard"
+            android:text="@string/label_card_cvv"
+            app:layout_constraintStart_toStartOf="@+id/editCVV"
+            app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+        <TextView
+            android:id="@+id/textView14"
+            style="@style/TextViewCard"
+            android:text="@string/label_card_expiration"
+            app:layout_constraintStart_toStartOf="@+id/editDataValidade"
+            app:layout_constraintTop_toBottomOf="@+id/editName" />
+
+        <!-- Menu -->
+
+        <!--    <View-->
+        <!--        android:id="@+id/container"-->
+        <!--        android:layout_width="0dp"-->
+        <!--        android:layout_height="60dp"-->
+        <!--        android:background="@drawable/container_voltar_mapa"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintHorizontal_bias="0.0"-->
+        <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+        <!--    <ImageView-->
+        <!--        android:id="@+id/buttonVoltar"-->
+        <!--        android:layout_width="40dp"-->
+        <!--        android:layout_height="40dp"-->
+        <!--        android:layout_marginStart="42dp"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="@+id/container"-->
+        <!--        app:layout_constraintTop_toTopOf="@+id/container"-->
+        <!--        app:srcCompat="@drawable/icon_back_white" />-->
+
+        <!--    <ImageView-->
+        <!--        android:id="@+id/buttonHome"-->
+        <!--        android:layout_width="40dp"-->
+        <!--        android:layout_height="40dp"-->
+        <!--        app:layout_constraintBottom_toBottomOf="@+id/container"-->
+        <!--        app:layout_constraintEnd_toEndOf="@+id/container"-->
+        <!--        app:layout_constraintStart_toStartOf="@+id/container"-->
+        <!--        app:layout_constraintTop_toTopOf="@+id/container"-->
+        <!--        app:srcCompat="@drawable/icon_home" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

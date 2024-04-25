@@ -17,12 +17,15 @@ class CartoesActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        // Lista para adicionar os itens no recyclerview
+        // ainda está estática, tem que puxar do banco
         val itens = mutableListOf(
             CartoesCadastrados("5896 5895 7841 5589"),
             CartoesCadastrados("3562 6785 2565 2565"),
             CartoesCadastrados("6589 6785 2565 2565"),
             )
 
+        // Chamando o Adapter e seu gerenciador de Layouts
         binding.rvCards.adapter = CardAdapter(itens)
         binding.rvCards.layoutManager = GridLayoutManager(
             this,
@@ -38,6 +41,7 @@ class CartoesActivity : AppCompatActivity() {
 //      Cartão de crédito American Express 3
 //      Cartão de crédito Elo é iniciado pelo número 5 ou 6.
 
+// Classe dos cartoes cadastrados
 class CartoesCadastrados(numero: String) {
     val bandeira: String
     val numeroFormatado: String
@@ -47,6 +51,7 @@ class CartoesCadastrados(numero: String) {
         numeroFormatado = formatarNumero(numero)
     }
 
+    // Função para determinar qual a bandeira do cartão
     private fun determinarBandeira(numeroCartao: String): String {
         return when {
             numeroCartao.startsWith("3") -> "A. Express"

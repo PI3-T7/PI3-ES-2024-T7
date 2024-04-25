@@ -5,42 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".MapaActivity">
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/constraintLayout2"-->
-<!--        android:layout_width="150dp"-->
-<!--        android:layout_height="134dp"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:background="@drawable/container_white"-->
-<!--        android:elevation="10dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/buttonHome"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textView">-->
-
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView3"-->
-<!--            android:layout_width="34dp"-->
-<!--            android:layout_height="34dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginTop="14dp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:srcCompat="@drawable/icon_add" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView2"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:text="Cadastrar novo cartão"-->
-<!--            android:textColor="@color/black"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    tools:context=".CartoesActivity">
 
     <View
         android:id="@+id/container"
@@ -78,9 +43,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="42dp"
-        android:text="Seus cartões"
+        android:text="@string/seus_cartoes"
         android:textColor="@color/orange"
-        android:textSize="28dp"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
