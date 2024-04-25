@@ -3,26 +3,39 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ClientMainScreenActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityClientMainScreenBinding.inflate( layoutInflater ) }
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val bd by lazy { FirebaseFirestore.getInstance() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_client_main_screen)
-        val logoutButton = findViewById<ImageView>(R.id.btLogout)
-        logoutButton.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, OpeningActivity::class.java))
-        }
+        setContentView(binding.root)
 
+        bd.collection("Pessoas")
+            .document(auth.currentUser?.uid.toString())
+            .get().addOnSuccessListener { document ->
+                "Olá, ${document.getString("nome_completo")}".also { binding.appCompatTextView3.text = it }
+            }
 
-        // apenas para teste, pode apagar depois
-        val btnCartoes = findViewById<View>(R.id.containerCards)
-        btnCartoes.setOnClickListener{
-            val intent = Intent(this, CartoesActivity::class.java)
-            startActivity(intent)
+        with(binding) {
+            btLogout.setOnClickListener {
+                auth.signOut()
+                finish()
+            }
+            containerMap.setOnClickListener {
+                startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
+            }
+            containerCards.setOnClickListener {
+                startActivity(Intent(this@ClientMainScreenActivity, CartoesActivity::class.java))
+            }
+            containerRent.setOnClickListener {
+                startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
+            }
         }
     }
 }

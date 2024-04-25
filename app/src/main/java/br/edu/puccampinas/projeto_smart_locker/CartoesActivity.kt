@@ -26,11 +26,11 @@ class CartoesActivity : AppCompatActivity() {
             )
 
         // Chamando o Adapter e seu gerenciador de Layouts
-        binding.rvCards.adapter = CardAdapter(itens)
-        binding.rvCards.layoutManager = GridLayoutManager(
-            this,
-            2
-        )
+//        binding.rvCards.adapter = CardAdapter(itens)
+//        binding.rvCards.layoutManager = GridLayoutManager(
+//            this,
+//            2
+//        )
 
     }
 }
