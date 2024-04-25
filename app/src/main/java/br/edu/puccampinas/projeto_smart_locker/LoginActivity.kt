@@ -20,23 +20,35 @@ class LoginActivity : AppCompatActivity() {
             validUser()
         }
         val mapButton = findViewById<ImageView>(R.id.btMap)
-        mapButton.setOnClickListener{
+        mapButton.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
 
+        // adicionar uma seta para voltar
+        val arrowBack = findViewById<ImageView>(R.id.arrow)
+        arrowBack.setOnClickListener {
+            val intent = Intent(this, OpeningActivity::class.java)
+            startActivity(intent)
+        }
+
     }
+
     private fun validUser() {
         val email = findViewById<EditText>(R.id.editUsuario).text.toString()
         val password = findViewById<EditText>(R.id.editSenha).text.toString()
-        if (email.isBlank() or password.isBlank()){
+        if (email.isBlank() or password.isBlank()) {
             return
         }
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 startActivity(Intent(this, ClientMainScreenActivity::class.java))
             }.addOnFailureListener { exception ->
-                Toast.makeText(this, "Falha ao autenticar usuário: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Falha ao autenticar usuário: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 }
