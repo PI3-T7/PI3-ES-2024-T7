@@ -1,62 +1,41 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.content.Intent
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import androidx.annotation.RequiresApi
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBinding
 import com.google.firebase.auth.FirebaseAuth
 
-/**
- * Esta classe representa a atividade de abertura do aplicativo.
- * Ela exibe um botão que leva à atividade de login e um TextView para cadastro.
- */
+@RequiresApi(Build.VERSION_CODES.O)
+// Activity Opening -> Activity da tela de entrada caso o usuário não esteja logado ou não possua conta
 class OpeningActivity : AppCompatActivity() {
-    override fun onStart() {
-        super.onStart()
-        verifyLoggedUser()
-    }
+    // Configuração do ViewBinding
+    private val binding by lazy { ActivityOpeningBinding.inflate( layoutInflater ) }
 
-    /**
-     * Método chamado quando a atividade é criada.
-     * Configura o layout e define o comportamento dos botões de início e cadastro.
-     * @param savedInstanceState O estado da instância da atividade, se disponível.
-     */
+    // No onCreate serão colocados os clickListeners dos botões da tela inicial
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_opening)
-        val botaoComecar = findViewById<Button>(R.id.bt_begin)
-        val etCadastro = findViewById<TextView>(R.id.already)
-        val imgButtonMap = findViewById<ImageButton>(R.id.imgButton_map)
-        // Inicializa o botão de início
-
-        // Define o listener de clique para o botão de início
-        botaoComecar.setOnClickListener {
-            // Cria uma intenção para iniciar a atividade de login
-            val intent = Intent(this, SignUpActivity::class.java)
-            // Inicia a atividade de login
-            startActivity(intent)
-        }
-        // Define o listener de clique para o TextView de cadastro
-        etCadastro.setOnClickListener {
-            // Cria uma intenção para iniciar a atividade de cadastro
-            val intent = Intent(this, LoginActivity::class.java)
-            // Inicia a atividade de cadastro
-            startActivity(intent)
-        }
-        // Define o listener de clique para o botão de início
-        imgButtonMap.setOnClickListener {
-            // Cria uma intenção para iniciar a atividade de login
-            val intent = Intent(this, MapActivity::class.java)
-            // Inicia a atividade de login
-            startActivity(intent)
+        setContentView(binding.root)
+        with(binding){
+            imgBtnMap.setOnClickListener {
+                startActivity(Intent(this@OpeningActivity, MapActivity::class.java))
+            }
+            btnBegin.setOnClickListener {
+                startActivity(Intent(this@OpeningActivity, SignUpActivity::class.java))
+            }
+            btnAlready.setOnClickListener {
+                startActivity(Intent(this@OpeningActivity, LoginActivity::class.java))
+            }
         }
     }
-    private fun verifyLoggedUser() {
-        var user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            startActivity(Intent(this, ClientMainScreenActivity::class.java))
-        }
+
+    // O onStart levará o usuário para a tela principal do app caso ele já esteja logado
+    override fun onStart() {
+        super.onStart()
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) startActivity(Intent(this, ClientMainScreenActivity::class.java))
     }
 }
