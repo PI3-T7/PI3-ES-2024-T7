@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.O)
 // Activity Opening -> Activity da tela de entrada caso o usuário não esteja logado ou não possua conta
-class OpeningActivity : AppCompatActivity() {
+class Opening : AppCompatActivity() {
     // Configuração do ViewBinding
     private val binding by lazy { ActivityOpeningBinding.inflate( layoutInflater ) }
 
@@ -21,13 +21,13 @@ class OpeningActivity : AppCompatActivity() {
         setContentView(binding.root)
         with(binding){
             imgBtnMap.setOnClickListener {
-                startActivity(Intent(this@OpeningActivity, MapActivity::class.java))
+                startActivity(Intent(this@Opening, MapActivity::class.java))
             }
             btnBegin.setOnClickListener {
-                startActivity(Intent(this@OpeningActivity, SignUpActivity::class.java))
+                startActivity(Intent(this@Opening, SignUpActivity::class.java))
             }
             btnAlready.setOnClickListener {
-                startActivity(Intent(this@OpeningActivity, LoginActivity::class.java))
+                startActivity(Intent(this@Opening, LoginActivity::class.java))
             }
         }
     }

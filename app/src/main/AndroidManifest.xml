@@ -53,7 +53,7 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".OpeningActivity"
+            android:name=".Opening"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
