@@ -9,104 +9,87 @@
     tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/logo"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/logo"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/arrow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/icon_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/containerLogin"
-        android:layout_width="match_parent"
+        android:id="@+id/view_login_container"
+        android:layout_width="wrap_content"
         android:layout_height="350dp"
-        android:layout_marginTop="430dp"
         android:background="@drawable/container_login"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btMap"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@color/background"
+        android:src="@drawable/icon_map_vectorized"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@+id/view_login_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="65dp"
-        android:background="@drawable/signup_fields"
+        style="@style/InputsCadastro"
         android:drawableStart="@drawable/icon_email"
-        android:drawablePadding="14dp"
         android:hint="@string/emailSignup"
         android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:padding="15dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/containerLogin"
-        app:layout_constraintStart_toStartOf="@id/containerLogin"
-        app:layout_constraintTop_toTopOf="@id/containerLogin" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_login_container"
+        app:layout_constraintEnd_toEndOf="@id/view_login_container"
+        app:layout_constraintStart_toStartOf="@id/view_login_container"
+        app:layout_constraintTop_toTopOf="@id/view_login_container"
+        app:layout_constraintVertical_bias="0.2" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editSenha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginVertical="10dp"
-        android:background="@drawable/signup_fields"
+        style="@style/InputsCadastro"
         android:drawableStart="@drawable/icon_password"
-        android:drawablePadding="15dp"
         android:hint="@string/passwordSignup"
         android:inputType="textPassword"
-        android:maxLines="1"
-        android:padding="15dp"
-        android:textColorHint="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/containerLogin"
-        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintEnd_toEndOf="@id/view_login_container"
+        app:layout_constraintStart_toStartOf="@id/view_login_container"
         app:layout_constraintTop_toBottomOf="@id/editUsuario" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtEsqueceuSenha"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/esqueci_minha_senha"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintStart_toStartOf="@id/editSenha"
         app:layout_constraintTop_toBottomOf="@id/editSenha" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btLogin"
-        style="@style/ButtonLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginBottom="68dp"
+        style="@style/Botoes"
+        android:layout_marginTop="30dp"
         android:backgroundTint="@color/blue"
-        android:elevation="30dp"
-        android:padding="15dp"
         android:text="@string/login"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/containerLogin"
-        app:layout_constraintEnd_toEndOf="@id/containerLogin"
-        app:layout_constraintStart_toStartOf="@id/containerLogin"
+        app:layout_constraintEnd_toEndOf="@id/view_login_container"
+        app:layout_constraintStart_toStartOf="@id/view_login_container"
         app:layout_constraintTop_toBottomOf="@id/txtEsqueceuSenha" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btMap"
-        android:layout_width="50dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="320dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/icon_map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:visibility="visible"
     tools:context=".MapaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,6 +48,7 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/container_white"
         android:elevation="50dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
