@@ -17,10 +17,12 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -37,6 +39,7 @@ class MapActivity : AppCompatActivity() {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mapa)
@@ -71,7 +74,7 @@ class MapActivity : AppCompatActivity() {
         }
 
         botaoAberturaVoltar.setOnClickListener {
-            val intent = Intent(this, Opening::class.java)
+            val intent = Intent(this, OpeningActivity::class.java)
             startActivity(intent)
         }
     }
