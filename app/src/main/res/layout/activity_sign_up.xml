@@ -59,7 +59,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editName"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:layout_marginTop="30dp"
             android:drawableStart="@drawable/icon_user"
             android:hint="@string/fullname"
@@ -70,7 +70,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editCpf"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_cpf"
             android:hint="@string/cpf"
             android:inputType="number"
@@ -84,7 +84,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editBirthDate"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_birth"
             android:hint="@string/birthdate"
             android:inputType="date"
@@ -97,7 +97,7 @@
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editPhone"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_phone"
             android:hint="@string/phone"
             android:inputType="phone"
@@ -110,7 +110,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editEmail"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_email"
             android:hint="@string/emailSignup"
             android:inputType="textEmailAddress"
@@ -120,7 +120,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editPassword"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_password"
             android:hint="@string/passwordSignup"
             android:inputType="textPassword"
@@ -130,7 +130,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editConfirmPassword"
-            style="@style/InputsCadastro"
+            style="@style/Inputs"
             android:drawableStart="@drawable/icon_password"
             android:hint="@string/confirmPasswordSignup"
             android:inputType="textPassword"

@@ -20,10 +20,11 @@
     <string name="Verificar">Siga as intruções para verificar sua conta.</string>
     <string name="verificacao">Um email de verificação foi enviado para</string>
     <string name="rating">Avaliação: %1$.1f</string>
-    <string name="nome">Olá, \nIsabella Maria T Bruno</string>
+    <string name="nome">Olá, Isabella Maria T Bruno</string>
     <string name="verPontos">Ver pontos de Locação</string>
     <string name="cartoes">Cartões</string>
     <string name="alugar">Alugar Armário</string>
     <string name="checkbox_ciente">Ao fazer a locação de um armário será cobrada a caução de uma diária e estornada proporcionalmente de acordo com o período utilizado</string>
     <string name="confirmPasswordSignup">Confirme sua senha</string>
+    <string name="smartlocker">SmartLocker</string>
 </resources>
