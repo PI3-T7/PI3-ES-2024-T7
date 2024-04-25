@@ -71,7 +71,7 @@ class MapActivity : AppCompatActivity() {
         }
 
         botaoAberturaVoltar.setOnClickListener {
-            val intent = Intent(this, Opening::class.java)
+            val intent = Intent(this, OpeningActivity::class.java)
             startActivity(intent)
         }
     }

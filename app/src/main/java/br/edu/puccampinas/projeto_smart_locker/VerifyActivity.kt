@@ -16,7 +16,7 @@ class VerifyActivity : AppCompatActivity() {
         emailText.text = user?.email
         val okButton = findViewById<Button>(R.id.butOk)
         okButton.setOnClickListener {
-            val intent = Intent(this, Opening::class.java)
+            val intent = Intent(this, OpeningActivity::class.java)
             startActivity(intent)
         }
     }

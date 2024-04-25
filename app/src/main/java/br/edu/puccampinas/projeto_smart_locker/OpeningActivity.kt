@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
  * Esta classe representa a atividade de abertura do aplicativo.
  * Ela exibe um botão que leva à atividade de login e um TextView para cadastro.
  */
-class Opening : AppCompatActivity() {
+class OpeningActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         verifyLoggedUser()
