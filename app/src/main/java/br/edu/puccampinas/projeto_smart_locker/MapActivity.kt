@@ -5,177 +5,229 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
+import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 
 class MapActivity : AppCompatActivity() {
 
-    // Lista de lugares
-    // Obs.: Vamos puxar direto do banco de dados
-    private val places = arrayListOf(
-        Place(
-            "SmartLocker unidade Puc Campinas",
-            LatLng(-22.8342027,-47.0503346),
-            "Ac. Publico, 286 - Parque dos Jacarandás, Campinas - SP, 13086-061",
-            "Próximo ao portão 2",
-            listOf(30.00, 50.00, 100.00, 150.00, 300.00)
-        ),
-        Place(
-            "Smart Locker unidade Shopping Dom Pedro",
-            LatLng(-22.8475663, -47.0631045),
-            "Av. Guilherme Campos, 500 - Jardim Santa Genebra, Campinas - SP, 13080-000",
-            "Próximo à Entrada das Águas",
-            listOf(35.00, 55.00, 110.00, 160.00, 280.00)
-        )
-    )
-
-    // Variável que acessa o serviços de localização da API
+    private lateinit var firestore: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var googleMap: GoogleMap
+    private var selectedPlace: Place? = null
+    private lateinit var botaoAberturaVoltar: ImageView
 
     companion object {
-        // Código de solicitação de permissão
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_mapa)
 
+        hideInfoView()
+
+        firestore = FirebaseFirestore.getInstance()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        botaoAberturaVoltar = findViewById(R.id.voltarOpening)
+        val botaoRota = findViewById<Button>(R.id.btnRotas)
 
-        val viewInfo = findViewById<View>(R.id.container_info_map)
-
-        // Obtém a referência do fragmento do mapa (no arquivo de layout)
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
 
-        // Obtém o objeto GoogleMap
-        mapFragment.getMapAsync { googleMap ->
-            addMarkers(googleMap)
-            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
+        mapFragment.getMapAsync { map ->
+            googleMap = map
+            loadPlacesFromFirestore()
+            setupMap()
+        }
 
-            // Quando o mapa é carregado
-            googleMap.setOnMapLoadedCallback {
-                // Verifica se a permissão de localização está concedida
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    // Obtém a última localização conhecida do usuário
-                    fusedLocationClient.lastLocation
-                        .addOnSuccessListener { location: Location? ->
-                            // Verifica se a localização é diferente de nulo e move a câmera
-                            location?.let {
-                                val userLatLng = LatLng(location.latitude, location.longitude)
-                                googleMap.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        userLatLng,
-                                        15f
-                                    )
-                                )
-
-                                // Adiciona um marcador para a localização do usuário
-                                val markerOptions =
-                                    MarkerOptions().position(userLatLng).title("Sua Localização")
-                                googleMap.addMarker(markerOptions)
-                            }
-                        }
-                } else {
-                    // Solicita permissão de localização se não estiver concedida
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-                    )
-                }
+        botaoRota.setOnClickListener {
+            if (selectedPlace != null) {
+                val intent = Intent(this, RotaActivity::class.java)
+                intent.putExtra("placeName", selectedPlace!!.name)
+                intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
+                intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
+                intent.putExtra("placeAddress", selectedPlace!!.address)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Selecione um lugar primeiro", Toast.LENGTH_SHORT).show()
             }
+        }
 
-            // Quando o mapa é clicado
-            googleMap.setOnMapClickListener { _ ->
-
-                // Animação para ajustar a altura da view de informações
-                val newHeight = 1
-                val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
-                anim.addUpdateListener { valueAnimator ->
-                    val newVal = valueAnimator.animatedValue as Int
-                    val layoutParams = viewInfo.layoutParams
-                    layoutParams.height = newVal
-                    viewInfo.layoutParams = layoutParams
-                }
-                anim.duration = 300
-                anim.start()
-
-                findViewById<TextView>(R.id.tv_name)?.text = ""
-                findViewById<TextView>(R.id.tv_address)?.text = ""
-                findViewById<TextView>(R.id.tv_reference)?.text = ""
-            }
-
-            // Quando um marcador é clicado
-            googleMap.setOnMarkerClickListener { clickedMarker ->
-                val clickedPlace = clickedMarker.tag as? Place
-                if (clickedPlace != null) {
-                    findViewById<TextView>(R.id.tv_name)?.text = clickedPlace.name
-                    findViewById<TextView>(R.id.tv_address)?.text = clickedPlace.address
-                    findViewById<TextView>(R.id.tv_reference)?.text = clickedPlace.reference
-
-                    // Animação para ajustar a altura da view de informações
-                    val newHeight = 800
-                    val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
-                    anim.addUpdateListener { valueAnimator ->
-                        val newVal = valueAnimator.animatedValue as Int
-                        val layoutParams = viewInfo.layoutParams
-                        layoutParams.height = newVal
-                        viewInfo.layoutParams = layoutParams
-                    }
-                    anim.duration = 300
-                    anim.start()
-                }
-                false
-            }
-
+        botaoAberturaVoltar.setOnClickListener {
+            val intent = Intent(this, OpeningActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    // Adiciona marcadores ao mapa com informações dos lugares
-    private fun addMarkers(googleMap: GoogleMap) {
-        places.forEach { place ->
-            val marker = googleMap.addMarker(
-                MarkerOptions()
-                    .title(place.name)
-                    .snippet(place.address)
-                    .position(place.latLng)
-                    .icon(
-                        BitmapHelper.vectorToBitmap(
-                            this, R.drawable.icon_pin,
-                            //ContextCompat.getColor(this, R.color.orange)
+    private fun setupMap() {
+        googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
+
+        googleMap.setOnMapClickListener {
+            hideInfoView()
+        }
+
+        googleMap.setOnMarkerClickListener { marker ->
+            val place = marker.tag as? Place
+            if (place != null) {
+                selectedPlace = place
+                showPlaceInfo(place)
+                true
+            } else {
+                false
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val userLatLng = LatLng(location.latitude, location.longitude)
+                    googleMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            userLatLng,
+                            15f
                         )
                     )
+                    googleMap.addMarker(
+                        MarkerOptions().position(userLatLng).title("Sua Localização")
+                    )
+                }
+            }
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
+        }
+    }
+
+    private fun loadPlacesFromFirestore() {
+        val placesCollection = firestore.collection("Unidades de Locação")
+
+        placesCollection.get()
+            .addOnSuccessListener { documents ->
+                val places = mutableListOf<Place>()
+
+                for (document in documents) {
+                    val name = document.getString("name") ?: ""
+                    val latitude = document.getGeoPoint("latLng")?.latitude ?: 0.0
+                    val longitude = document.getGeoPoint("latLng")?.longitude ?: 0.0
+                    val latLng = GeoPoint(latitude, longitude)
+
+                    Log.d(ContentValues.TAG, "Latitude: $latitude")
+                    Log.d(ContentValues.TAG, "Longitude: $longitude")
+
+                    val address = document.getString("address") ?: ""
+                    val reference = document.getString("reference") ?: ""
+                    val prices = document.get("prices") as? List<Double> ?: emptyList()
+
+                    val place = Place(name, latLng, address, reference, prices)
+                    places.add(place)
+
+                    // Adicionando log para depuração
+                    Log.d("Firestore", "Place Name: $name, LatLng: $latLng, Address: $address, Reference: $reference, Prices: $prices")
+                }
+
+                addMarkers(places)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(
+                    this@MapActivity,
+                    "Não foi possivel pegar as informações do banco.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+    private fun addMarkers(places: List<Place>) {
+        places.forEach { place ->
+            val marker = place.latLng?.let { geoPoint ->
+                googleMap.addMarker(
+                    MarkerOptions()
+                        .title(place.name)
+                        .snippet(place.address)
+                        .position(LatLng(geoPoint.latitude, geoPoint.longitude))
+                        .icon(
+                            BitmapHelper.vectorToBitmap(
+                                this, R.drawable.icon_pin,
+                                //ContextCompat.getColor(this, R.color.orange)
+                            )
+                        )
+                )
+            }
             marker?.tag = place
         }
     }
 
+
+    private fun hideInfoView() {
+        val viewInfo = findViewById<View>(R.id.container_info_map)
+        val newHeight = 1
+        val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
+        anim.addUpdateListener { valueAnimator ->
+            val newVal = valueAnimator.animatedValue as Int
+            val layoutParams = viewInfo.layoutParams
+            layoutParams.height = newVal
+            viewInfo.layoutParams = layoutParams
+        }
+        anim.duration = 300
+        anim.start()
+
+        findViewById<TextView>(R.id.tv_name)?.text = ""
+        findViewById<TextView>(R.id.tv_address)?.text = ""
+        findViewById<TextView>(R.id.tv_reference)?.text = ""
+    }
+
+    private fun showPlaceInfo(place: Place) {
+        val viewInfo = findViewById<View>(R.id.container_info_map)
+        findViewById<TextView>(R.id.tv_name)?.text = place.name
+        findViewById<TextView>(R.id.tv_address)?.text = place.address
+        findViewById<TextView>(R.id.tv_reference)?.text = place.reference
+
+        val newHeight = 800
+        val anim = ValueAnimator.ofInt(viewInfo.height, newHeight)
+        anim.addUpdateListener { valueAnimator ->
+            val newVal = valueAnimator.animatedValue as Int
+            val layoutParams = viewInfo.layoutParams
+            layoutParams.height = newVal
+            viewInfo.layoutParams = layoutParams
+        }
+        anim.duration = 300
+        anim.start()
+    }
 }
 
 // Data class para representar um lugar
 data class Place(
     val name: String,
-    val latLng: LatLng,
+    val latLng: GeoPoint?,
     val address: String,
     val reference: String,
-    val price: List<Double>
+    val prices: List<Double>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -183,10 +235,10 @@ data class Place(
 
         other as Place
 
-        return price == other.price
+        return prices == other.prices
     }
 
     override fun hashCode(): Int {
-        return price.hashCode()
+        return prices.hashCode()
     }
 }
