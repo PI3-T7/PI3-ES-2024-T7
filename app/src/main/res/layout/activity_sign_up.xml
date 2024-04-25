@@ -20,7 +20,7 @@
 
     <!-- View da Seta de Voltar -->
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/arrow"
+        android:id="@+id/btnArrow"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="25dp"
@@ -71,7 +71,7 @@
 
     <!-- Botão de Cadastrar -->
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bt_signup"
+        android:id="@+id/btnSignUp"
         style="@style/ButtonOpening"
         android:layout_marginTop="-30dp"
         android:text="@string/signup"
@@ -81,7 +81,7 @@
 
     <!-- Campo de Preencher Nome Completo -->
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editName"
+        android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -100,7 +100,7 @@
 
     <!-- Campo de Preencher CPF -->
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editCpf"
+        android:id="@+id/editTextCpf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -115,13 +115,13 @@
         android:padding="14dp"
         android:textColorHint="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editName"
-        app:layout_constraintStart_toStartOf="@id/editName"
-        app:layout_constraintTop_toBottomOf="@id/editName" />
+        app:layout_constraintEnd_toEndOf="@id/editTextName"
+        app:layout_constraintStart_toStartOf="@id/editTextName"
+        app:layout_constraintTop_toBottomOf="@id/editTextName" />
 
     <!-- Campo de Preencher Data de Nascimento -->
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editBirthDate"
+        android:id="@+id/editTextBirthDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -135,13 +135,13 @@
         android:padding="14dp"
         android:textColorHint="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editCpf"
-        app:layout_constraintStart_toStartOf="@id/editCpf"
-        app:layout_constraintTop_toBottomOf="@id/editCpf" />
+        app:layout_constraintEnd_toEndOf="@id/editTextCpf"
+        app:layout_constraintStart_toStartOf="@id/editTextCpf"
+        app:layout_constraintTop_toBottomOf="@id/editTextCpf" />
 
     <!-- Campo de Preencher Celular -->
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editPhone"
+        android:id="@+id/editTextPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -155,13 +155,13 @@
         android:padding="14dp"
         android:textColorHint="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editBirthDate"
-        app:layout_constraintStart_toStartOf="@id/editBirthDate"
-        app:layout_constraintTop_toBottomOf="@id/editBirthDate" />
+        app:layout_constraintEnd_toEndOf="@id/editTextBirthDate"
+        app:layout_constraintStart_toStartOf="@id/editTextBirthDate"
+        app:layout_constraintTop_toBottomOf="@id/editTextBirthDate" />
 
     <!-- Campo de Preencher Email -->
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editEmail"
+        android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -175,13 +175,14 @@
         android:padding="15dp"
         android:textColorHint="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editPhone"
-        app:layout_constraintStart_toStartOf="@id/editPhone"
-        app:layout_constraintTop_toBottomOf="@id/editPhone" />
+        app:layout_constraintEnd_toEndOf="@id/editTextPhone"
+        app:layout_constraintStart_toStartOf="@id/editTextPhone"
+        app:layout_constraintTop_toBottomOf="@id/editTextPhone" />
 
     <!-- Campo de Preencher Senha -->
+
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editPassword"
+        android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
@@ -195,8 +196,8 @@
         android:padding="14dp"
         android:textColorHint="@color/grey"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@id/editEmail"
-        app:layout_constraintStart_toStartOf="@id/editEmail"
-        app:layout_constraintTop_toBottomOf="@id/editEmail" />
+        app:layout_constraintEnd_toEndOf="@id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@id/editTextEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

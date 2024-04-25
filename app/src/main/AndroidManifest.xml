@@ -41,7 +41,7 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Forget_activity"
+            android:name=".ForgetActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
@@ -61,7 +61,7 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Opening"
+            android:name=".OpeningActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
