@@ -25,6 +25,10 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".LocationActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".CartaoCadastrandoActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
