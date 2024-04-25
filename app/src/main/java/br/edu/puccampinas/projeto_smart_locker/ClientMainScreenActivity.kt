@@ -19,7 +19,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         bd.collection("Pessoas")
             .document(auth.currentUser?.uid.toString())
             .get().addOnSuccessListener { document ->
-                "Olá\n${document.getString("nome_completo")}".also { binding.name.text = it }
+                "Olá, ${document.getString("nome_completo")}".also { binding.appCompatTextView3.text = it }
             }
 
         with(binding) {
