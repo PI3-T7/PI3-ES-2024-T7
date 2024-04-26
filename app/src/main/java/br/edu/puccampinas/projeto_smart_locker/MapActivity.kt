@@ -42,7 +42,7 @@ class MapActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mapa)
+        setContentView(R.layout.activity_map)
 
         hideInfoView()
 
@@ -62,7 +62,7 @@ class MapActivity : AppCompatActivity() {
 
         botaoRota.setOnClickListener {
             if (selectedPlace != null) {
-                val intent = Intent(this, RotaActivity::class.java)
+                val intent = Intent(this, RouteMappingActivity::class.java)
                 intent.putExtra("placeName", selectedPlace!!.name)
                 intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
                 intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
@@ -192,7 +192,7 @@ class MapActivity : AppCompatActivity() {
                         .position(LatLng(geoPoint.latitude, geoPoint.longitude))
                         .icon(
                             BitmapHelper.vectorToBitmap(
-                                this, R.drawable.icon_pin,
+                                this, R.drawable.icon_custom_pin,
                                 //ContextCompat.getColor(this, R.color.orange)
                             )
                         )

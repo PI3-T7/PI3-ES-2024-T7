@@ -44,16 +44,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_add" />
 
             <ImageView
-                android:id="@+id/img_delete_card"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias=".96"
-                app:layout_constraintStart_toEndOf="@+id/imageView13"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_trash" />
-
-            <ImageView
                 android:id="@+id/imageView13"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

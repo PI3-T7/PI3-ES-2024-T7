@@ -2,7 +2,7 @@
     <!-- Estilos Genéricos -->
 
     <!--  Botoes  -->
-    <style name="Botoes">
+    <style name="ButtonsStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">40dp</item>
@@ -11,17 +11,17 @@
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">21sp</item>
         <item name="android:padding">14dp</item>
-        <item name="android:background">@drawable/button_opening</item>
+        <item name="android:background">@drawable/shape_button</item>
         <item name="android:elevation">10dp</item>
     </style>
 
     <!--  Inputs  -->
-    <style name="Inputs">
+    <style name="InputsStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">40dp</item>
         <item name="android:layout_marginEnd">40dp</item>
-        <item name="android:background">@drawable/signup_fields</item>
+        <item name="android:background">@drawable/shape_inputs</item>
         <item name="android:drawablePadding">14dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:padding">13dp</item>
@@ -49,7 +49,7 @@
         <item name="android:elevation">10dp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">140dp</item>
-        <item name="android:background">@drawable/button_options</item>
+        <item name="android:background">@drawable/shape_buttons_main_screen</item>
     </style>
 
     <style name="IconsOptions">
@@ -83,7 +83,7 @@
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@drawable/signup_fields</item>
+        <item name="android:background">@drawable/shape_inputs</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColorHint">@color/grey</item>
         <item name="android:textSize">18sp</item>
@@ -112,12 +112,12 @@
         <item name="android:elevation">10dp</item>
         <item name="android:padding">12dp</item>
         <item name="android:button">@null</item>
-        <item name="android:background">@drawable/container_white_semborda</item>
+        <item name="android:background">@drawable/shape_radio_buttons</item>
     </style>
 
     <!-- Estilo para o botão da caixa de diálogo -->
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/alert_dialog</item>
+        <item name="android:windowBackground">@drawable/shape_alert_dialog</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

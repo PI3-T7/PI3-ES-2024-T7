@@ -47,7 +47,8 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/button_opening"
+            android:background="@drawable/shape_button"
+            android:backgroundTint="@color/orange"
             android:elevation="10dp"
             android:text="Confirmar Locação"
             android:textAllCaps="false"
@@ -60,7 +61,7 @@
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:background="@drawable/container_voltar_mapa"
+        android:background="@drawable/shape_navigation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -73,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/container"
         app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_back_white" />
+        app:srcCompat="@drawable/icon_arrow_back_white" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/buttonHome1"

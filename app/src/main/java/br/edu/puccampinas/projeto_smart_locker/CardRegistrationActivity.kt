@@ -8,13 +8,13 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCadastrandocartaoBinding
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCardRegistrationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
-class CartaoCadastrandoActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityCadastrandocartaoBinding.inflate(layoutInflater) }
+class CardRegistrationActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityCardRegistrationBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
 
@@ -81,7 +81,7 @@ class CartaoCadastrandoActivity : AppCompatActivity() {
             }
 
         // Criar um Intent para passar os dados do cartão
-        startActivity(Intent(this, CartoesActivity::class.java).apply {
+        startActivity(Intent(this, CardsActivity::class.java).apply {
             putExtra("numero", cartaoInfo["numero"].toString())
         })
         finish()

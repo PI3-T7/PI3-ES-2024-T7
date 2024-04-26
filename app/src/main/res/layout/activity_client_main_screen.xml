@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:elevation="5dp"
-        android:src="@drawable/logo_branco"
+        android:src="@drawable/icon_logo_white"
         app:layout_constraintBottom_toTopOf="@+id/containerMap"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:id="@+id/containerMainScreen"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/container_main_screen"
+        android:background="@drawable/shape_main_screen"
         app:layout_constraintBottom_toTopOf="@id/containerRent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -82,7 +82,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         style="@style/IconsOptions"
-        android:background="@drawable/icon_map2"
+        android:background="@drawable/icon_map"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="@id/containerMap"
         app:layout_constraintEnd_toEndOf="@id/containerMap"
         app:layout_constraintStart_toStartOf="@id/containerMap"
@@ -90,7 +91,7 @@
 
     <androidx.appcompat.widget.AppCompatCheckedTextView
         style="@style/StringsOptions"
-        android:text="@string/verPontos"
+        android:text="@string/btn_rental_points"
         app:layout_constraintBottom_toBottomOf="@id/containerMap"
         app:layout_constraintEnd_toEndOf="@id/containerMap"
         app:layout_constraintHorizontal_bias="0.5"
@@ -118,7 +119,7 @@
 
     <androidx.appcompat.widget.AppCompatCheckedTextView
         style="@style/StringsOptions"
-        android:text="@string/cartoes"
+        android:text="@string/btn_cards"
         app:layout_constraintBottom_toBottomOf="@id/containerCards"
         app:layout_constraintEnd_toEndOf="@id/containerCards"
         app:layout_constraintStart_toStartOf="@id/containerCards"
@@ -145,7 +146,7 @@
 
     <androidx.appcompat.widget.AppCompatCheckedTextView
         style="@style/StringsOptions"
-        android:text="@string/alugar"
+        android:text="@string/btn_rent"
         app:layout_constraintBottom_toBottomOf="@id/containerRent"
         app:layout_constraintEnd_toEndOf="@id/containerRent"
         app:layout_constraintStart_toStartOf="@id/containerRent"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".CartoesActivity">
+    tools:context=".CardsActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="42dp"
-        android:text="@string/seus_cartoes"
+        android:text="@string/your_cards"
         android:textColor="@color/orange"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"

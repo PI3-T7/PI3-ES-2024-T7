@@ -4,13 +4,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapaActivity">
+    tools:context=".RouteMappingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerRota"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@drawable/container_rota"
+        android:background="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
             android:layout_height="28dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="26dp"
-            android:src="@drawable/icon_back_white"
+            android:src="@drawable/icon_arrow_back_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +33,7 @@
             android:layout_marginTop="7dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="7dp"
-            android:src="@drawable/icon_localizacao_usuario"
+            android:src="@drawable/icon_location"
             app:layout_constraintBottom_toBottomOf="@+id/textSeuLocal"
             app:layout_constraintEnd_toStartOf="@+id/textSeuLocal"
             app:layout_constraintStart_toEndOf="@+id/voltarMapa"
@@ -59,7 +59,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/signup_fields"
+            android:background="@drawable/shape_inputs"
             android:gravity="center_vertical|start"
             android:text="Localização Atual"
             android:paddingStart="20dp"
@@ -76,7 +76,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/signup_fields"
+            android:background="@drawable/shape_inputs"
             android:gravity="center_vertical|start"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
