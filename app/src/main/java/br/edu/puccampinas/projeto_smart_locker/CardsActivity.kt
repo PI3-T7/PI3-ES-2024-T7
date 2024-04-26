@@ -33,6 +33,10 @@ class CardsActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         preencherDados()
+
+        // obs para marcos
+        // como usei uma nav bar na tela de cartao, pra acessar os icones home e voltar tem que usar
+        // o binding.nav.buttonVoltar e binding.nav.buttonHome
     }
 
     private fun preencherDados() {

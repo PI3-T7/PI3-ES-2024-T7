@@ -22,7 +22,6 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
     inner class CardItemViewHolder(itemview: View) : ViewHolder(itemview) {
         val cardNumer: TextView = itemView.findViewById(R.id.tv_card_number)
         val cardFlag: TextView = itemView.findViewById(R.id.tv_add)
-        val deleteCard : ImageView = itemView.findViewById(R.id.img_delete_card)
     }
 
     // ViewHolder do card de adicionar cartão
@@ -67,49 +66,11 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
             val holderCartao = holder as CardItemViewHolder
             holderCartao.cardNumer.text = cartao.numeroFormatado
             holderCartao.cardFlag.text = cartao.bandeira
-
-            // Evento que chama a função de excluir um item
-            holderCartao.deleteCard.setOnClickListener{
-                deletarCartao(position)
-                Toast.makeText(holder.itemView.context, "Cartão excluído", Toast.LENGTH_SHORT).show()
-            }
-
         }
     }
 
     override fun getItemCount(): Int {
         return card.size + 1
-    }
-
-    // Função que faz a exclusão de um item do cartao
-    private fun deletarCartao(posicao: Int) {
-        if (posicao > 0 && posicao <= card.size) {
-            card.removeAt(posicao - 1)
-            notifyItemRemoved(posicao)
-            notifyItemRangeChanged(posicao, card.size)
-//            Excluir cartão de credito no bd
-//            val userReference = FirebaseFirestore
-//                .getInstance()
-//                .collection("Pessoas")
-//                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-//            userReference.get().addOnSuccessListener { document ->
-//                    val cartoes = document
-//                        .getString("cartoes")?.toMutableList()?.removeAt(posicao-1)
-//                    val dados = mapOf(
-//                        "cartoes" to cartoes,
-//                        "celular" to document["celular"].toString(),
-//                        "cpf" to document["cpf"].toString(),
-//                        "data_de_nascimento" to document["data_de_nascimento"].toString(),
-//                        "email" to document["email"].toString(),
-//                        "nome_completo" to document["nome_completo"].toString(),
-//                        "senha" to document["senha"].toString()
-//                    )
-//                userReference.update(dados)
-//                }
-
-        } else {
-            Log.e("CardAdapter", "Posição inválida ao tentar excluir o cartão")
-        }
     }
 
 }
