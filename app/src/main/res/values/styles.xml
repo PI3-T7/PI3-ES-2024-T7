@@ -49,7 +49,7 @@
         <item name="android:elevation">10dp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">140dp</item>
-        <item name="android:background">@drawable/button_options</item>
+        <item name="android:background">@drawable/shape_buttons_main_screen</item>
     </style>
 
     <style name="IconsOptions">
