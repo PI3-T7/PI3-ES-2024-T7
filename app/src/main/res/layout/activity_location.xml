@@ -10,87 +10,51 @@
     <RadioGroup
         android:id="@+id/radioGroupOptions"
         android:layout_width="0dp"
-        android:layout_height="520dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView">
 
         <RadioButton
             android:id="@+id/btn30min"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="220dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:button="@null"
-            android:textColor="@color/black" />
+            style="@style/RadioButtons"
+            android:layout_marginTop="15dp" />
 
         <RadioButton
             android:id="@+id/btn1hour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:button="@null"
-            android:textColor="@color/black"/>
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btn2hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:button="@null"
-            android:textColor="@color/black" />
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btn4hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textSize="15sp"
-            android:button="@null"
-            android:textColor="@color/black" />
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btnUntil18"
+            style="@style/RadioButtons"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/bt_confirm_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_opening"
             android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:visibility="gone"/>
+            android:text="Confirmar Locação"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
     </RadioGroup>
-
 
     <View
         android:id="@+id/container"
@@ -101,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/buttonVoltar1"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -111,7 +75,7 @@
         app:layout_constraintTop_toTopOf="@+id/container"
         app:srcCompat="@drawable/icon_back_white" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/buttonHome1"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -121,54 +85,44 @@
         app:layout_constraintTop_toTopOf="@+id/container"
         app:srcCompat="@drawable/icon_home" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/informacao"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
         android:layout_marginTop="50dp"
+        android:gravity="center"
         android:text="Você está locando um armário em: "
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/local"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
-        android:textSize="20sp"
-        android:textColor="@color/orange"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/local"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Unidade 3"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/informacao" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="80dp"
         android:text="Selecione a opção desejada"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/bt_confirm_location"
-        android:layout_width="360dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="130dp"
-        android:background="@drawable/button_opening"
-        android:text="Confirmar Locação"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/local" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

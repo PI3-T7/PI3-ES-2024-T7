@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,115 +7,126 @@
     android:orientation="vertical"
     tools:context=".MapaActivity">
 
-    <LinearLayout
-        android:id="@+id/containerPesquisa"
-        android:layout_width="match_parent"
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"
         android:background="@drawable/container_pesquisa_mapa"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="@+id/map_fragment"
-        android:orientation="horizontal">
+        android:elevation="2dp"
+        app:layout_constraintBottom_toTopOf="@id/map_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/voltarOpening"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="25dp"
-            android:src="@drawable/icon_back_white" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/voltarOpening"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="25dp"
+        android:elevation="2dp"
+        android:src="@drawable/icon_back_white"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view" />
 
-        <TextView
-            android:layout_width="288dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="30dp"
-            android:gravity="center_vertical|start"
-            android:text="Escolha um pin SmartLocker"
-            android:drawableEnd="@drawable/icon_pin"
-            android:textColor="@color/white"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <!-- Aqui está o layout ConstraintLayout que você deseja mesclar -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_marginEnd="10dp"
+        android:drawableEnd="@drawable/icon_pin"
+        android:drawablePadding="20dp"
+        android:elevation="2dp"
+        android:gravity="center_vertical|end"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Escolha um pin SmartLocker"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintStart_toEndOf="@id/voltarOpening"
+        app:layout_constraintTop_toTopOf="@id/view" />
 
-        <fragment
-            android:id="@+id/map_fragment"
-            class="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@id/container_info_map" />
 
-        <View
-            android:id="@+id/container_info_map"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@drawable/container_info_map"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    <fragment
+        android:id="@+id/map_fragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
-            app:layout_constraintStart_toStartOf="@+id/container_info_map"
-            app:layout_constraintTop_toTopOf="@+id/container_info_map"
-            app:layout_constraintVertical_bias=".3" />
+    <View
+        android:id="@+id/container_info_map"
+        android:layout_width="0dp"
+        android:layout_height="0.1dp"
+        android:background="@drawable/container_info_map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
-            app:layout_constraintStart_toStartOf="@+id/container_info_map"
-            app:layout_constraintTop_toTopOf="@+id/container_info_map"
-            app:layout_constraintVertical_bias=".5" />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="Unidade 3"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/container_info_map"
+        app:layout_constraintEnd_toEndOf="@id/container_info_map"
+        app:layout_constraintStart_toStartOf="@id/container_info_map"
+        app:layout_constraintTop_toTopOf="@id/container_info_map"
+        app:layout_constraintVertical_bias=".15" />
 
-        <TextView
-            android:id="@+id/tv_reference"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
-            app:layout_constraintStart_toStartOf="@+id/container_info_map"
-            app:layout_constraintTop_toTopOf="@+id/container_info_map"
-            app:layout_constraintVertical_bias=".6" />
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Rua Manoel Pereira Barbosa, 442"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_name"
+        app:layout_constraintStart_toStartOf="@id/tv_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
 
-        <Button
-            android:id="@+id/btnRotas"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_login"
-            android:text="Traçar rota"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:padding="10dp"
-            android:drawableStart="@drawable/icon_rotas"
-            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
-            app:layout_constraintStart_toStartOf="@+id/container_info_map"
-            app:layout_constraintTop_toTopOf="@+id/container_info_map"
-            app:layout_constraintVertical_bias=".9" />
+        />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_reference"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Próximo ao Parque Alto Taquaral"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_name"
+        app:layout_constraintStart_toStartOf="@id/tv_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_address" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btnRotas"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_login"
+        android:drawableStart="@drawable/icon_rotas"
+        android:elevation="10dp"
+        android:paddingHorizontal="15dp"
+        android:text="Traçar rota"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/container_info_map"
+        app:layout_constraintEnd_toEndOf="@id/container_info_map"
+        app:layout_constraintHeight_max="50dp"
+        app:layout_constraintStart_toStartOf="@id/container_info_map"
+        app:layout_constraintTop_toTopOf="@+id/container_info_map"
+        app:layout_constraintVertical_bias="0.95" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

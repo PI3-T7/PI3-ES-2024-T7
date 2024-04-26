@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:layout_marginStart="20dp"
             android:id="@+id/localUsuario"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -35,23 +36,26 @@
             android:src="@drawable/icon_localizacao_usuario"
             app:layout_constraintBottom_toBottomOf="@+id/textSeuLocal"
             app:layout_constraintEnd_toStartOf="@+id/textSeuLocal"
+            app:layout_constraintStart_toEndOf="@+id/voltarMapa"
             app:layout_constraintTop_toTopOf="@+id/textSeuLocal" />
 
         <ImageView
             android:id="@+id/localPin"
             android:layout_width="20dp"
+            android:layout_marginStart="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="7dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="7dp"
             android:src="@drawable/icon_local_pin"
+            app:layout_constraintStart_toEndOf="@id/voltarMapa"
             app:layout_constraintBottom_toBottomOf="@+id/textLocalLocacao"
             app:layout_constraintEnd_toStartOf="@+id/textLocalLocacao"
             app:layout_constraintTop_toTopOf="@+id/textLocalLocacao" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textSeuLocal"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
@@ -61,12 +65,14 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/localUsuario"
 
-        <TextView
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textLocalLocacao"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
@@ -74,6 +80,7 @@
             android:gravity="center_vertical|start"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
+            app:layout_constraintStart_toEndOf="@id/localPin"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSeuLocal" />
