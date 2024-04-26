@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Estilos Genéricos -->
 
     <style name="ButtonOpening">
         <item name="android:layout_width">match_parent</item>
