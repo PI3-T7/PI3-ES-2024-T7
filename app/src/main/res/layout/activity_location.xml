@@ -20,73 +20,24 @@
 
         <RadioButton
             android:id="@+id/btn30min"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            style="@style/RadioButtons"
+            android:layout_marginTop="15dp" />
 
         <RadioButton
             android:id="@+id/btn1hour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btn2hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btn4hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            style="@style/RadioButtons" />
 
         <RadioButton
             android:id="@+id/btnUntil18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:background="@drawable/container_white_semborda"
-            android:button="@null"
-            android:elevation="10dp"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            style="@style/RadioButtons"
             android:visibility="gone" />
 
         <Button
@@ -104,7 +55,6 @@
             android:textSize="20sp" />
 
     </RadioGroup>
-
 
     <View
         android:id="@+id/container"
