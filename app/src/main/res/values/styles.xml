@@ -66,13 +66,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <!-- Estilo para o botão da caixa de diálogo -->
-    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/alert_dialog</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- estilo necessário para atividade opening,
+        já que pedia um tema descendente de AppCompat -->
     </style>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--  estilo necessário para atividade opening,
-                já que pedia um tema descendente de AppCompat  -->
-    </style>
+
 </resources>
