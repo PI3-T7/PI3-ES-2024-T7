@@ -62,7 +62,7 @@ class LocationActivity : AppCompatActivity() {
         botaoVoltar1 = findViewById(R.id.buttonVoltar1)
         buttonHome1 = findViewById(R.id.buttonHome1)
 
-        verificarCartaoCadastrado()
+        //verificarCartaoCadastrado()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -506,34 +506,6 @@ class LocationActivity : AppCompatActivity() {
             }
         }
     }
-    private fun verificarCartaoCadastrado() {
-        // Pegando o ID do usuário logado
-        val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
-        if (userId != null) {
-            db.collection("usuarios").document(userId)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        // Verifica se o campo "cartoes" existe no documento
-                        if (document.contains("cartoes")) {
-                            // Obtém o array de cartões do documento
-                            val cartoes = document.get("cartoes") as? ArrayList<HashMap<String, String>>
-
-                            if (cartoes.isNullOrEmpty()) {
-                                // Se não houver cartões
-                                Toast.makeText(this, "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.", Toast.LENGTH_LONG).show()
-                                finish()
-                            }
-                        }
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Erro ao acessar documento: $exception", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
 }
 
 // Classe apenas para testar a passagem de dados do cliente para o QRcode
