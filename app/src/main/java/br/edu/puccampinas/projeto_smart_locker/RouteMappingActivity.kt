@@ -1,6 +1,5 @@
 package br.edu.puccampinas.projeto_smart_locker
 
-import android.animation.ValueAnimator
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
@@ -32,7 +30,7 @@ import com.google.maps.model.TravelMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RotaActivity : AppCompatActivity() {
+class RouteMappingActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -54,7 +52,7 @@ class RotaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_rota)
+        setContentView(R.layout.activity_route_mapping)
 
         firestore = FirebaseFirestore.getInstance()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -141,7 +139,7 @@ class RotaActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(
-                    this@RotaActivity,
+                    this@RouteMappingActivity,
                     "Erro ao carregar os lugares do banco de dados.",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -178,7 +176,12 @@ class RotaActivity : AppCompatActivity() {
                 val result: DirectionsResult = DirectionsApi.newRequest(geoApiContext)
                     .mode(TravelMode.DRIVING)
                     .origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
-                    .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
+                    .destination(
+                        com.google.maps.model.LatLng(
+                            destination.latitude,
+                            destination.longitude
+                        )
+                    )
                     .await()
 
                 Log.d("RotaActivity", "Resultado da rota recebido com sucesso: $result")

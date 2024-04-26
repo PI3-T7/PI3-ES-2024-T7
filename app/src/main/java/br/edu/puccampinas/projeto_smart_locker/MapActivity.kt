@@ -62,7 +62,7 @@ class MapActivity : AppCompatActivity() {
 
         botaoRota.setOnClickListener {
             if (selectedPlace != null) {
-                val intent = Intent(this, RotaActivity::class.java)
+                val intent = Intent(this, RouteMappingActivity::class.java)
                 intent.putExtra("placeName", selectedPlace!!.name)
                 intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
                 intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
