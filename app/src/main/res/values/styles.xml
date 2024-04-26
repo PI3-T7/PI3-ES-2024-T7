@@ -1,47 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ContainerOpening">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">180dp</item>
-        <item name="android:layout_margin">30dp</item>
-    </style>
+    <!-- Estilos Genéricos -->
 
-    <style name="ButtonOpening">
+    <!--  Botoes  -->
+    <style name="Botoes">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">40dp</item>
         <item name="android:layout_marginRight">40dp</item>
-        <item name="android:layout_marginTop">50dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:padding">14dp</item>
         <item name="android:background">@drawable/button_opening</item>
-        <item name="android:padding">40px</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:elevation">10dp</item>
     </style>
 
-    <style name="ButtonLogin">
-        <item name="android:layout_width">match_parent</item>
+    <!--  Inputs  -->
+    <style name="Inputs">
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">40dp</item>
-        <item name="android:layout_marginRight">40dp</item>
-        <item name="android:layout_marginTop">50dp</item>
-        <item name="android:background">@drawable/button_login</item>
-        <item name="android:padding">40px</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
+        <item name="android:background">@drawable/signup_fields</item>
+        <item name="android:drawablePadding">14dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">13dp</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <!-- Estilos Específicos das Activitys ************************* -->
+
+    <!-- Activity Verify e Forget -->
+    <style name="EditTextVerify">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
     </style>
 
-    <style name="ContainerSignUp">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">475dp</item>
-        <item name="android:layout_marginLeft">30dp</item>
-        <item name="android:layout_marginRight">30dp</item>
-        <item name="android:layout_marginTop">15dp</item>
-    </style>
-
-    <!-- Estilos para a Página inicial do Cliente -->
-
+    <!--  Estilos para a Página inicial do Cliente  -->
     <style name="ContainerOptions">
         <item name="android:elevation">10dp</item>
         <item name="android:layout_width">0dp</item>
@@ -66,10 +69,59 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- estilo necessário para atividade opening,
-        já que pedia um tema descendente de AppCompat -->
+    <!-- Estilos para o layout do cartão de crédito   -->
+
+    <style name="TextViewCardDetails">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontStyle">@font/roboto</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="EditTextCard">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/signup_fields</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+    </style>
 
+    <style name="TextViewCard">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+    </style>
+
+    <!-- style dos radiobuttons -->
+    <style name="RadioButtons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <item name="android:layout_marginEnd">25dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/container_white_semborda</item>
+    </style>
+
+    <!-- Estilo para o botão da caixa de diálogo -->
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/alert_dialog</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--  estilo necessário para atividade opening,
+                já que pedia um tema descendente de AppCompat  -->
+    </style>
 </resources>
