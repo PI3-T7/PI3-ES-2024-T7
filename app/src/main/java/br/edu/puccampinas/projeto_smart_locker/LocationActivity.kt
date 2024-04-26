@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import java.util.*
@@ -61,6 +62,7 @@ class LocationActivity : AppCompatActivity() {
         botaoVoltar1 = findViewById(R.id.buttonVoltar1)
         buttonHome1 = findViewById(R.id.buttonHome1)
 
+        verificarCartaoCadastrado()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -163,21 +165,10 @@ class LocationActivity : AppCompatActivity() {
             }
         }
 
-        // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
-        // A classe DadosCliente está no final do código
-        val dados = DadosCliente("Isabella", "Unidade 3", "2 horas", 55.0)
-
-        // Para transformar o objeto com os dados a serem passados pelo QRcode em string
-        val gson = Gson()
-        val dadosGson = gson.toJson(dados)
-
         // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
         btnConfirmLocation.setOnClickListener {
-            val intent = Intent(this, QRcodeActivity::class.java)
-            intent.putExtra("dados", dadosGson)
-            startActivity(intent)
+            mandarDadosQrcode()
         }
-
     }
 
     override fun onStart() {
@@ -203,6 +194,81 @@ class LocationActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun mandarDadosQrcode(){
+        // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
+        // A classe DadosCliente está no final do código
+        var dados = DadosCliente("", "", "", 0.0)
+        // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
+        val selectedOption = when {
+            btn30min.isChecked -> "30 minutos"
+            btn1hour.isChecked -> "1 hora"
+            btn2hours.isChecked -> "2 horas"
+            btn4hours.isChecked -> "4 horas"
+            btnUntil18.isChecked -> "Até às 18 horas"
+            else -> ""
+        }
+
+        Log.d(TAG, "Selected Option: $selectedOption")
+
+        val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
+        val valorRecuperado = sharedPreferences.getString("uid", null)
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+        if (!valorRecuperado.isNullOrEmpty()) {
+            val documentReference = db.collection("Unidades de Locação").document(valorRecuperado)
+            documentReference.get()
+                .addOnSuccessListener { document ->
+                    val pricesArray2 = document.get("prices") as? List<*>
+                    val unidade = document.getString("uid")
+                    // Verifica qual é o preço associado à opção selecionada
+                    val selectedPrice = when (selectedOption) {
+                        "30 minutos" -> pricesArray2?.get(0)?.toString()
+                        "1 hora" -> pricesArray2?.get(1)?.toString()
+                        "2 horas" -> pricesArray2?.get(2)?.toString()
+                        "4 horas" -> pricesArray2?.get(3)?.toString()
+                        "Até às 18 horas" -> pricesArray2?.get(4)?.toString()
+                        else -> ""
+                    }
+
+                    if (selectedOption.isNotEmpty()) {
+                        // Verifica se o preço não é nulo ou vazio antes de converter para Double
+                        if (!selectedPrice.isNullOrEmpty()) {
+                            dados.preco = selectedPrice.toDouble()
+                            dados.opcao = selectedOption
+                            if (unidade != null) {
+                                dados.unidade = unidade
+                            }
+                            if (userId != null) {
+                                dados.nome = userId
+                            }
+                            Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Nome: $userId")
+                        }
+                        // Para transformar o objeto com os dados a serem passados pelo QRcode em string
+                        val gson = Gson()
+                        val dadosGson = gson.toJson(dados)
+                        // Cria um intent para a próxima activity (QRcodeActivity)
+                        val intent = Intent(this, QRcodeActivity::class.java)
+                        // Serializa o objeto 'dados' para JSON e o passa para a próxima activity
+                        intent.putExtra("dados", dadosGson)
+                        // Inicia a próxima activity
+                        startActivity(intent)
+                    } else {
+                        // Nenhuma opção selecionada, mostra uma mensagem para o usuário
+                        Toast.makeText(this,
+                            "Por favor, selecione uma opção antes de confirmar a locação.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        } else {
+            Toast.makeText(this,
+                "Erro ao obter documento.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -419,39 +485,61 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    // Essa função muda a cor do radiobutton para branco de novo quando outro for selecionado
+    // e mantém o formato arredondado.
     private fun changeColorRadio() {
-        findViewById<RadioButton>(R.id.btn30min).apply {
-            isChecked = false
-            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
-        }
-        findViewById<RadioButton>(R.id.btn1hour).apply {
-            isChecked = false
-            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
-        }
-        findViewById<RadioButton>(R.id.btn2hours).apply {
-            isChecked = false
-            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
-        }
-        findViewById<RadioButton>(R.id.btn4hours).apply {
-            isChecked = false
-            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
-        }
-        findViewById<RadioButton>(R.id.btnUntil18).apply {
-            isChecked = false
-            setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-            background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+        val radioButtonIds = listOf(
+            R.id.btn30min,
+            R.id.btn1hour,
+            R.id.btn2hours,
+            R.id.btn4hours,
+            R.id.btnUntil18
+        )
+
+        for (radioButtonId in radioButtonIds) {
+            val radioButton = findViewById<RadioButton>(radioButtonId)
+            if (!radioButton.isChecked) {
+                radioButton.apply {
+                    setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
+                    background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+                }
+            }
         }
     }
+    private fun verificarCartaoCadastrado() {
+        // Pegando o ID do usuário logado
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+        if (userId != null) {
+            db.collection("usuarios").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        // Verifica se o campo "cartoes" existe no documento
+                        if (document.contains("cartoes")) {
+                            // Obtém o array de cartões do documento
+                            val cartoes = document.get("cartoes") as? ArrayList<HashMap<String, String>>
+
+                            if (cartoes.isNullOrEmpty()) {
+                                // Se não houver cartões
+                                Toast.makeText(this, "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.", Toast.LENGTH_LONG).show()
+                                finish()
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Erro ao acessar documento: $exception", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
 }
 
 // Classe apenas para testar a passagem de dados do cliente para o QRcode
 data class DadosCliente(
-    val nome: String,
-    val unidade: String,
-    val opcao: String,
-    val preco: Double
+    var nome: String,
+    var unidade: String,
+    var opcao: String,
+    var preco: Double
 )
