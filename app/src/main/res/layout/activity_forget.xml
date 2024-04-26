@@ -26,7 +26,7 @@
         android:id="@+id/appCompatTextView"
         style="@style/EditTextVerify"
         android:layout_marginTop="70dp"
-        android:text="@string/recuperacao"
+        android:text="@string/password_recovery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
@@ -45,7 +45,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appCompatTextView2"
         style="@style/EditTextVerify"
-        android:text="@string/instruções"
+        android:text="@string/instructions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView1" />

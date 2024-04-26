@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/esqueci_minha_senha"
+        android:text="@string/forgot_password"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/editSenha"

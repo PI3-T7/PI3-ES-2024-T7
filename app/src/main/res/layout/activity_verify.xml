@@ -26,7 +26,7 @@
         android:id="@+id/appCompatTextView"
         style="@style/EditTextVerify"
         android:layout_marginTop="70dp"
-        android:text="@string/verificacao"
+        android:text="@string/notice_check_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
@@ -42,7 +42,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appCompatTextView2"
         style="@style/EditTextVerify"
-        android:text="@string/Verificar"
+        android:text="@string/check_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />

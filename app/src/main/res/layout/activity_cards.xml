@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="42dp"
-        android:text="@string/seus_cartoes"
+        android:text="@string/your_cards"
         android:textColor="@color/orange"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
