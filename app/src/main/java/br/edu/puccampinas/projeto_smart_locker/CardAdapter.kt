@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 // Classe Adapter para montar a RecyclerView dos cartões
@@ -59,7 +58,7 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
 
             // Evento que faz o intent para a tela de cadastro de cartao
             holder.cardView.setOnClickListener{
-                val intent = Intent(holder.itemView.context, CartaoCadastrandoActivity::class.java)
+                val intent = Intent(holder.itemView.context, CardRegistrationActivity::class.java)
                 startActivity(holder.itemView.context,intent,null)
             }
 

@@ -13,13 +13,13 @@
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/nav"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".CartaoCadastrandoActivity">
+        tools:context=".CardRegistrationActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
-            tools:context=".CartaoCadastrandoActivity">
+            tools:context=".CardRegistrationActivity">
 
             <!-- Detalhes do cartão de crédito -->
             <View
