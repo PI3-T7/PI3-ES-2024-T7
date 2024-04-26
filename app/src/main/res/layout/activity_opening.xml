@@ -7,62 +7,49 @@
     android:background="@color/background"
     tools:context=".OpeningActivity">
 
-    <!-- View da Logo SmartLocker -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="170dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <!-- Image Button para ver mapa -->
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imgBtnMap"
         android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="320dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@color/background"
         android:src="@drawable/icon_map_vectorized"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <!-- View do botão de começar e Já possuo cadastro -->
-    <View
-        android:id="@+id/containerOpening"
-        style="@style/ContainerOpening"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
-
-    <!-- Botão de Começar -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBegin"
-        style="@style/ButtonOpening"
-        android:elevation="10dp"
+        style="@style/Botoes"
         android:text="@string/begin"
-        app:layout_constraintEnd_toEndOf="@id/containerOpening"
-        app:layout_constraintStart_toStartOf="@id/containerOpening"
-        app:layout_constraintTop_toTopOf="@id/containerOpening" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85" />
 
-    <!-- Texto "Já possuo cadastro" -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/btnAlready"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="12dp"
         android:text="@string/already"
         android:textAlignment="center"
         android:textColor="@color/orange"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBegin" />
+        app:layout_constraintTop_toBottomOf="@+id/btnBegin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
