@@ -34,7 +34,6 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/emailText"
         style="@style/EditTextVerify"
-        android:text="@string/exemplo_email"
         android:textColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

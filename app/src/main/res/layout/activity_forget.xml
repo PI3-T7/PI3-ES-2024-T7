@@ -36,7 +36,6 @@
         android:id="@+id/appCompatTextView1"
 
         style="@style/EditTextVerify"
-        android:text="@string/exemplo_email"
         android:textColor="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

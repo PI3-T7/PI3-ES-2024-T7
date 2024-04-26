@@ -1,49 +1,59 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCartoesBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CartoesActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityCartoesBinding
+    private val binding by lazy { ActivityCartoesBinding.inflate( layoutInflater ) }
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val database by lazy { FirebaseFirestore.getInstance() }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var itens: MutableList<CartoesCadastrados>
+    private lateinit var adapter: CardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityCartoesBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
-        // Lista para adicionar os itens no recyclerview
-        // ainda está estática, tem que puxar do banco
-        val itens = mutableListOf(
-            CartoesCadastrados("5896 5895 7841 5589"),
-            CartoesCadastrados("3562 6785 2565 2565"),
-            CartoesCadastrados("6589 6785 2565 2565"),
-        )
+        recyclerView = binding.rvCards
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.setHasFixedSize(true)
+
+        itens = mutableListOf()
+
+        adapter = CardAdapter(itens)
 
         // Chamando o Adapter e seu gerenciador de Layouts
-        binding.rvCards.adapter = CardAdapter(itens)
-        binding.rvCards.layoutManager = GridLayoutManager(
-            this,
-            2
-        )
+        recyclerView.adapter = adapter
 
+        preencherDados()
+    }
 
-        val numeroCartao = intent.getStringExtra("numero")
+    private fun preencherDados() {
+        database
+            .collection("Pessoas")
+            .document(auth.currentUser?.uid.toString())
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("Erro no Firebase Firestore", error.message.toString())
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    val mapList = snapshot.get("cartoes") as? List<Map<String, Any>>
+                    mapList?.forEach { map ->
+                        if (map.containsKey("numero")) {
+                            itens.add(CartoesCadastrados(map["numero"].toString()))
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
 
-        if (numeroCartao != null) {
-            val novoCartao = CartoesCadastrados(numeroCartao)
-
-            // Adicionar o novo cartão à lista de cartões
-            itens.add(novoCartao)
-
-            // Notificar o adapter sobre a mudança nos dados
-            (binding.rvCards.adapter as CardAdapter).notifyDataSetChanged()
-        }
-
+                }
+            }
     }
 }
 

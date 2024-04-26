@@ -5,78 +5,86 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import android.widget.Button
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCadastrandocartaoBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CartaoCadastrandoActivity : AppCompatActivity() {
-    private lateinit var checkBoxCiente: CheckBox
     private val binding by lazy { ActivityCadastrandocartaoBinding.inflate(layoutInflater) }
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val database by lazy { FirebaseFirestore.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        checkBoxCiente = findViewById(R.id.checkBoxCiente)
+        with(binding){
 
-        val btnCadastrar = findViewById<Button>(R.id.btnCadastrar)
-        binding.btnCadastrar.setOnClickListener {
-            if (isInputValid()) {
-                if (checkBoxCiente.isChecked) {
-                    // Realizar o cadastro ou ação desejada quando a checkbox está marcada
-                    cadastrarCartao(binding.editNumCartao.unMasked)
+            btnCadastrar.setOnClickListener {
+                if (isInputValid()) {
+                    if (checkBoxCiente.isChecked) {
+                        // Realizar o cadastro ou ação desejada quando a checkbox está marcada
+                        cadastrarCartao()
+                    } else {
+                        // Exibir mensagem de erro se a checkbox não estiver marcada
+                        exibirErroCheckBox()
+                    }
                 } else {
-                    // Exibir mensagem de erro se a checkbox não estiver marcada
-                    exibirErroCheckBox()
+                    // Exibir mensagem de erro se os campos não estiverem preenchidos
+                    exibirErroCampos()
                 }
-            } else {
-                // Exibir mensagem de erro se os campos não estiverem preenchidos
-                exibirErroCampos()
             }
+
+            // Chamando os eventos do input
+            editNumCartao.addTextChangedListener(
+                createTextWatcher(
+                    tvCardNumberDetail,
+                )
+            )
+            editName.addTextChangedListener(
+                createTextWatcher(
+                    tvNameDetail,
+                )
+            )
+            editDataValidade.addTextChangedListener(
+                createTextWatcher(
+                    tvExpDateDetail,
+                )
+            )
+            editCVV.addTextChangedListener(
+                createTextWatcher(
+                    tvCvvDetail,
+                )
+            )
         }
-
-        // Chamando os eventos do input
-        binding.editNumCartao.addTextChangedListener(
-            createTextWatcher(
-                binding.tvCardNumberDetail,
-            )
-        )
-        binding.editName.addTextChangedListener(
-            createTextWatcher(
-                binding.tvNameDetail,
-            )
-        )
-        binding.editDataValidade.addTextChangedListener(
-            createTextWatcher(
-                binding.tvExpDateDetail,
-            )
-        )
-        binding.editCVV.addTextChangedListener(
-            createTextWatcher(
-                binding.tvCvvDetail,
-            )
-        )
-
     }
 
     // Função para realizar o cadastro do cartão
-    private fun cadastrarCartao(numero: String) {
-        // Implemente aqui a lógica de cadastro do cartão
-        // Por exemplo, exibir uma mensagem de sucesso
-        // ou chamar uma função para realizar o cadastro no banco de dados
-        // Este método será chamado apenas se a checkbox estiver marcada
-        // e o cadastro for válido
+    private fun cadastrarCartao() {
+        val cartaoInfo = mapOf(
+            "validade" to binding.editDataValidade.masked,
+            "nome" to binding.editName.text.toString(),
+            "numero" to binding.editNumCartao.masked,
+        )
+        database
+            .collection("Pessoas")
+            .document(auth.currentUser?.uid.toString())
+            .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
+            .addOnSuccessListener {
+                exibirMensagem("Cartão cadastrado com êxito!")
+            }.addOnFailureListener {
+                exibirMensagem("Falha ao cadastrar cartão!")
+            }
 
         // Criar um Intent para passar os dados do cartão
-        val intent = Intent(this, CartoesActivity::class.java).apply {
-            putExtra("numero", numero)
-        }
-
-        // Iniciar a RecyclerViewActivity com o Intent
-        startActivity(intent)
+        startActivity(Intent(this, CartoesActivity::class.java).apply {
+            putExtra("numero", cartaoInfo["numero"].toString())
+        })
+        finish()
     }
 
     // Função para exibir mensagem de erro se a checkbox não estiver marcada

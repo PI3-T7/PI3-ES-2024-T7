@@ -24,7 +24,7 @@ class SignUpActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
 
     // Configuração do Firebase Firestore
-    private val bd by lazy { FirebaseFirestore.getInstance() }
+    private val database by lazy { FirebaseFirestore.getInstance() }
 
     // Criação do mapa para guardar os valores para cadastro
     private val values = mutableMapOf<String, String>()
@@ -252,7 +252,7 @@ class SignUpActivity : AppCompatActivity() {
         ).addOnSuccessListener { authResult ->
             authResult.user?.sendEmailVerification()?.addOnCompleteListener {
                 values.remove("senha2")
-                bd.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
+                database.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
                 startActivity(Intent(this, VerifyActivity::class.java))
                 finish()
             }

@@ -10,13 +10,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 class ClientMainScreenActivity : AppCompatActivity() {
     private val binding by lazy { ActivityClientMainScreenBinding.inflate( layoutInflater ) }
     private val auth by lazy { FirebaseAuth.getInstance() }
-    private val bd by lazy { FirebaseFirestore.getInstance() }
+    private val database by lazy { FirebaseFirestore.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        bd.collection("Pessoas")
+        database.collection("Pessoas")
             .document(auth.currentUser?.uid.toString())
             .get().addOnSuccessListener { document ->
                 "Olá, ${document.getString("nome_completo")}".also { binding.appCompatTextView3.text = it }

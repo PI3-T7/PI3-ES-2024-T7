@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 // Classe Adapter para montar a RecyclerView dos cartões
@@ -87,6 +89,11 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
             card.removeAt(posicao - 1)
             notifyItemRemoved(posicao)
             notifyItemRangeChanged(posicao, card.size)
+//            Excluir cartão de credito no bd
+//            FirebaseFirestore
+//                .getInstance()
+//                .collection("Pessoas")
+//                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
         } else {
             Log.e("CardAdapter", "Posição inválida ao tentar excluir o cartão")
         }
