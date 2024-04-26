@@ -81,7 +81,7 @@ class CardRegistrationActivity : AppCompatActivity() {
             }
 
         // Criar um Intent para passar os dados do cartão
-        startActivity(Intent(this, CartoesActivity::class.java).apply {
+        startActivity(Intent(this, CardsActivity::class.java).apply {
             putExtra("numero", cartaoInfo["numero"].toString())
         })
         finish()

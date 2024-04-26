@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCartoesBinding
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCardsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class CartoesActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityCartoesBinding.inflate( layoutInflater ) }
+class CardsActivity : AppCompatActivity() {
+    private val binding by lazy { ActivityCardsBinding.inflate( layoutInflater ) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
     private lateinit var recyclerView: RecyclerView

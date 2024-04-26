@@ -42,7 +42,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
                 startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
             }
             containerCards.setOnClickListener {
-                startActivity(Intent(this@ClientMainScreenActivity, CartoesActivity::class.java))
+                startActivity(Intent(this@ClientMainScreenActivity, CardsActivity::class.java))
             }
             containerRent.setOnClickListener {
                 startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
