@@ -50,7 +50,7 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editUsuario"
-        style="@style/Inputs"
+        style="@style/InputsStyle"
         android:drawableStart="@drawable/icon_email"
         android:hint="@string/emailSignup"
         android:inputType="textEmailAddress"
@@ -62,7 +62,7 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editSenha"
-        style="@style/Inputs"
+        style="@style/InputsStyle"
         android:drawableStart="@drawable/icon_password"
         android:hint="@string/passwordSignup"
         android:inputType="textPassword"
@@ -98,7 +98,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btLogin"
-        style="@style/Botoes"
+        style="@style/ButtonsStyle"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/blue"
         android:text="@string/login"

@@ -31,7 +31,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBegin"
-        style="@style/Botoes"
+        style="@style/ButtonsStyle"
         android:text="@string/begin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
