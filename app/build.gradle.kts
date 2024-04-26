@@ -71,6 +71,13 @@ dependencies {
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // https://github.com/santalu/maskara - biblioteca mascaras
+    implementation("com.github.santalu:maskara:1.0.0")
+    // API gerador de QRcode
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    // Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
     // Configuração do Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // Configuração do Authentication
