@@ -156,7 +156,7 @@ class RouteMappingActivity : AppCompatActivity() {
                         .position(LatLng(geoPoint.latitude, geoPoint.longitude))
                         .icon(
                             BitmapHelper.vectorToBitmap(
-                                this, R.drawable.icon_pin,
+                                this, R.drawable.icon_custom_pin,
                                 //ContextCompat.getColor(this, R.color.orange)
                             )
                         )

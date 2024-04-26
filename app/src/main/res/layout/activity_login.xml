@@ -14,7 +14,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/icon_back"
+        android:src="@drawable/icon_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
         android:background="@color/background"
-        android:src="@drawable/icon_map_vectorized"
+        android:src="@drawable/icon_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +42,7 @@
         android:id="@+id/logo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/img_logo"
         app:layout_constraintBottom_toTopOf="@+id/view_login_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,7 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editSenha"
         style="@style/InputsStyle"
-        android:drawableStart="@drawable/icon_password"
+        android:drawableStart="@drawable/icon_key"
         android:hint="@string/passwordSignup"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@id/view_login_container"
@@ -74,7 +74,7 @@
         android:id="@+id/togglePasswordVisibility"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/seletor_estado"
+        android:background="@drawable/selector_visibility_state"
         android:checked="false"
         android:textOff=""
         android:textOn=""

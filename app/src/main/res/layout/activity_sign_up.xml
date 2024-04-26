@@ -16,7 +16,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/img_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/icon_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +85,7 @@
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editBirthDate"
             style="@style/InputsStyle"
-            android:drawableStart="@drawable/icon_birth"
+            android:drawableStart="@drawable/icon_calendar"
             android:hint="@string/birthdate"
             android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +121,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editPassword"
             style="@style/InputsStyle"
-            android:drawableStart="@drawable/icon_password"
+            android:drawableStart="@drawable/icon_key"
             android:hint="@string/passwordSignup"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +132,7 @@
             android:id="@+id/togglePasswordVisibility"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/seletor_estado"
+            android:background="@drawable/selector_visibility_state"
             android:checked="false"
             android:textOff=""
             android:textOn=""
@@ -146,7 +146,7 @@
             android:id="@+id/editConfirmPassword"
             style="@style/InputsStyle"
             android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/icon_password"
+            android:drawableStart="@drawable/icon_key"
             android:hint="@string/confirmPasswordSignup"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -158,7 +158,7 @@
             android:id="@+id/togglePasswordVisibility2"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/seletor_estado"
+            android:background="@drawable/selector_visibility_state"
             android:checked="false"
             android:textOff=""
             android:textOn=""

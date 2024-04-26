@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/container"
         app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_back_white" />
+        app:srcCompat="@drawable/icon_arrow_back_white" />
 
     <ImageView
         android:id="@+id/buttonHome2"

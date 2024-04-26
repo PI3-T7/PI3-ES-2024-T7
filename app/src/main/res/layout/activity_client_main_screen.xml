@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:elevation="5dp"
-        android:src="@drawable/logo_branco"
+        android:src="@drawable/icon_logo_white"
         app:layout_constraintBottom_toTopOf="@+id/containerMap"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         style="@style/IconsOptions"
-        android:background="@drawable/icon_map2"
+        android:background="@drawable/icon_map"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="@id/containerMap"
         app:layout_constraintEnd_toEndOf="@id/containerMap"
         app:layout_constraintStart_toStartOf="@id/containerMap"
