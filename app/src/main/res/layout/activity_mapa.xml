@@ -4,61 +4,118 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mapa"
     android:orientation="vertical"
     tools:context=".MapaActivity">
 
     <LinearLayout
         android:id="@+id/containerPesquisa"
-        android:layout_width="360dp"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_gravity="center"
-        android:layout_marginTop="28dp"
         android:background="@drawable/container_pesquisa_mapa"
         android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="@+id/map_fragment"
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/voltarOpening"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="25dp"
-            android:src="@drawable/icon_search" />
+            android:src="@drawable/icon_back_white" />
 
-        <EditText
-            android:layout_width="250dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/signup_fields"
+        <TextView
+            android:layout_width="288dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="30dp"
             android:gravity="center_vertical|start"
-            android:hint="Localização Atual"
-            android:paddingLeft="20dp"
-            android:textSize="17dp" />
+            android:text="Escolha um pin SmartLocker"
+            android:drawableEnd="@drawable/icon_pin"
+            android:textColor="@color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
-    <RelativeLayout
+    <!-- Aqui está o layout ConstraintLayout que você deseja mesclar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/containervoltar"
-            android:layout_width="wrap_content"
-            android:layout_height="65dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="-3dp"
-            android:background="@drawable/container_voltar_mapa">
+        <fragment
+            android:id="@+id/map_fragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="@id/container_info_map" />
 
-            <ImageView
-                android:layout_width="42dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:src="@drawable/icon_back_white"/>
-        </LinearLayout>
+        <View
+            android:id="@+id/container_info_map"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@drawable/container_info_map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
+            app:layout_constraintStart_toStartOf="@+id/container_info_map"
+            app:layout_constraintTop_toTopOf="@+id/container_info_map"
+            app:layout_constraintVertical_bias=".3" />
 
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
+            app:layout_constraintStart_toStartOf="@+id/container_info_map"
+            app:layout_constraintTop_toTopOf="@+id/container_info_map"
+            app:layout_constraintVertical_bias=".5" />
+
+        <TextView
+            android:id="@+id/tv_reference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
+            app:layout_constraintStart_toStartOf="@+id/container_info_map"
+            app:layout_constraintTop_toTopOf="@+id/container_info_map"
+            app:layout_constraintVertical_bias=".6" />
+
+        <Button
+            android:id="@+id/btnRotas"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_login"
+            android:text="Traçar rota"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:drawableStart="@drawable/icon_rotas"
+            app:layout_constraintBottom_toBottomOf="@+id/container_info_map"
+            app:layout_constraintStart_toStartOf="@+id/container_info_map"
+            app:layout_constraintTop_toTopOf="@+id/container_info_map"
+            app:layout_constraintVertical_bias=".9" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
