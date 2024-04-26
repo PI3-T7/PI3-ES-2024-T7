@@ -1,8 +1,13 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCardsBinding
@@ -10,7 +15,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CardsActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityCardsBinding.inflate( layoutInflater ) }
+    // Essa variavel broadcastReceiver vai possibilitar a realização de uma função nesta activity
+    // a partir de outra, nesse caso a função de finalizar essa activity
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            finish()
+        }
+    }
+    private val binding by lazy { ActivityCardsBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
     private lateinit var recyclerView: RecyclerView
@@ -34,9 +46,26 @@ class CardsActivity : AppCompatActivity() {
 
         preencherDados()
 
-        // obs para marcos
-        // como usei uma nav bar na tela de cartao, pra acessar os icones home e voltar tem que usar
-        // o binding.nav.buttonVoltar e binding.nav.buttonHome
+        // Aqui estão os botões de voltar e home do navbar
+        binding.nav.buttonVoltar.setOnClickListener { finish() }
+        binding.nav.buttonHome.setOnClickListener { finish() }
+
+        // Aqui é atribuido um filtro ao broadcast para poder ser executado em outra activity a
+        // partir deste filtro
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
+
+        // Intent para os botoes
+        binding.nav.buttonVoltar.setOnClickListener {
+            startActivity(Intent(this,ClientMainScreenActivity::class.java))
+            finish()
+        }
+
+        binding.nav.buttonHome.setOnClickListener {
+            startActivity(Intent(this,ClientMainScreenActivity::class.java))
+            finish()
+        }
+
     }
 
     private fun preencherDados() {
@@ -88,7 +117,7 @@ class CartoesCadastrados(numero: String) {
     }
 
     private fun formatarNumero(numeroCartao: String): String {
-        val primeiraParte = "****"
+        val primeiraParte = "**"
         val ultimosDigitos = numeroCartao.takeLast(4)
         return "$primeiraParte $ultimosDigitos"
     }
