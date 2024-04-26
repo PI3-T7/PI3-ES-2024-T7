@@ -33,6 +33,7 @@
         android:id="@+id/btnBegin"
         style="@style/ButtonsStyle"
         android:text="@string/begin"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -113,7 +113,7 @@
         android:id="@+id/btnRotas"
         android:layout_width="150dp"
         android:layout_height="0dp"
-        android:background="@drawable/button_login"
+        android:background="@drawable/shape_button"
         android:drawableStart="@drawable/icon_rotas"
         android:elevation="10dp"
         android:paddingHorizontal="15dp"
