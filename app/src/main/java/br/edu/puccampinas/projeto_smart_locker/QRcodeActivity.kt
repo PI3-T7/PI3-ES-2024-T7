@@ -54,27 +54,84 @@ class QRcodeActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        // Defina o nome das SharedPreferences e a chave do QR code bitmap
+        // Define o nome das SharedPreferences e as chaves corretas
         val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Corrigido para qrCodeBitmap
+        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
+        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+
+        // Salva o status de locação pendente nas SharedPreferences
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
+        editor.apply()
 
         // Verifica se há um QR code bitmap para salvar
         qrCodeBitmap?.let { bitmap ->
             // Salva o QR code bitmap nas SharedPreferences
-            val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-            val editor = prefs.edit()
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
             val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
             editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.putBoolean("locacaoPendente", true) // Defina como true se houver uma locação pendente
+            editor.apply()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        // Define o nome das SharedPreferences e as chaves corretas
+        val sharedPref = "Locacao"
+        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
+        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+
+        // Salva o status de locação pendente nas SharedPreferences
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
+        editor.apply()
+
+        // Verifica se há um QR code bitmap para salvar
+        qrCodeBitmap?.let { bitmap ->
+            // Salva o QR code bitmap nas SharedPreferences
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+            editor.putString(qrCodeBitMapKey, encodedBitmap)
             editor.apply()
         }
     }
 
     override fun onResume() {
         super.onResume()
+
+        // Defina o nome das SharedPreferences e as chaves corretas
+        val sharedPref = "Locacao"
+        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
+        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+
+        // Recupera o QR code bitmap das SharedPreferences
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
+
+        // Recupera o status de locação pendente das SharedPreferences
+        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
+
+        // Verifica se o QR code bitmap está disponível
+        if (encodedBitmap != null) {
+            // Decodifica o bitmap do Base64
+            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
+            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
+
+            // Define o bitmap na ImageView
+            imgQRcode.setImageBitmap(decodedBitmap)
+            imgQRcode.visibility = ImageView.VISIBLE
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         // Defina o nome das SharedPreferences e as chaves corretas
         val sharedPref = "Locacao"

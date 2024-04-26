@@ -9,18 +9,17 @@ import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBindin
 import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.O)
-// Activity Opening -> Activity da tela de entrada caso o usuário não esteja logado ou não possua conta
 class OpeningActivity : AppCompatActivity() {
-    // Configuração do ViewBinding
-    private val binding by lazy { ActivityOpeningBinding.inflate( layoutInflater ) }
+    private val REQUEST_LOCATION_PERMISSION = 1001 // Defina um código de solicitação para a permissão de localização
+    private val binding by lazy { ActivityOpeningBinding.inflate(layoutInflater) }
 
-    // No onCreate serão colocados os clickListeners dos botões da tela inicial
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         with(binding){
             imgBtnMap.setOnClickListener {
-                startActivity(Intent(this@OpeningActivity, MapActivity::class.java))
+                // Quando o botão for clicado, solicite a permissão de localização
+                requestLocationPermission()
             }
             btnBegin.setOnClickListener {
                 startActivity(Intent(this@OpeningActivity, SignUpActivity::class.java))
@@ -31,10 +30,32 @@ class OpeningActivity : AppCompatActivity() {
         }
     }
 
-    // O onStart levará o usuário para a tela principal do app caso ele já esteja logado
     override fun onStart() {
         super.onStart()
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) startActivity(Intent(this, ClientMainScreenActivity::class.java))
+    }
+
+    private fun requestLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                // Se a permissão foi concedida, abra a activity do mapa
+                startActivity(Intent(this, MapActivity::class.java))
+            }
+        }
     }
 }

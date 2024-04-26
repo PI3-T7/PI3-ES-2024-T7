@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCardRegistrationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -21,8 +22,7 @@ class CardRegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        with(binding){
+        with(binding) {
 
             btnCadastrar.setOnClickListener {
                 if (isInputValid()) {
@@ -60,6 +60,17 @@ class CardRegistrationActivity : AppCompatActivity() {
                     tvCvvDetail,
                 )
             )
+            // Aqui é atribuido o botão de home do navbar, onde primeiro é finalizada a
+            // CartoesActivity e depois essa activity
+            nav.buttonHome.setOnClickListener {
+                LocalBroadcastManager.getInstance(this@CardRegistrationActivity)
+                    .sendBroadcast(Intent("meuFiltro"))
+                finish()
+            }
+            // Aqui é atribuido o botão voltar do navbar, onde é finalizado somente essa activity
+            nav.buttonVoltar.setOnClickListener {
+                finish()
+            }
         }
     }
 
@@ -80,16 +91,19 @@ class CardRegistrationActivity : AppCompatActivity() {
                 exibirMensagem("Falha ao cadastrar cartão!")
             }
 
-        // Criar um Intent para passar os dados do cartão
-        startActivity(Intent(this, CardsActivity::class.java).apply {
-            putExtra("numero", cartaoInfo["numero"].toString())
-        })
+        // Depois que o cartão foi cadastrado no banco de dados é preciso primeiro finalizar a
+        // activity que está funcionando por trás dessa (CartoesActivity)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
+        // Despois o usuário é redirecionado para a CartoesActvity (agora com os dados no novo
+        // cartão incluidos
+        startActivity(Intent(this, CardsActivity::class.java))
+        // Depois é finalizada essa activity
         finish()
     }
 
     // Função para exibir mensagem de erro se a checkbox não estiver marcada
     private fun exibirErroCheckBox() {
-        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Erro")
         alertDialogBuilder.setMessage("Você precisa concordar com os termos para continuar.")
         alertDialogBuilder.setPositiveButton("OK", null)
@@ -98,7 +112,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     // Função para exibir mensagem de erro se os campos não estiverem preenchidos
     private fun exibirErroCampos() {
-        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Erro")
         alertDialogBuilder.setMessage("Preencha todos os campos para continuar.")
         alertDialogBuilder.setPositiveButton("OK", null)
@@ -136,7 +150,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     // Função para exibir uma mensagem simples com um botão "OK"
     private fun exibirMensagem(mensagem: String) {
-        val alertDialogBuilder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
         alertDialogBuilder.setMessage(mensagem)
         alertDialogBuilder.setPositiveButton("OK", null)
         alertDialogBuilder.show()
