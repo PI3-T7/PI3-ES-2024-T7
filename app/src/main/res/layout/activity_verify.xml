@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="50dp"
-        android:src="@drawable/forget_password"
+        android:src="@drawable/img_email"
         app:layout_constraintBottom_toTopOf="@id/appCompatTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="300dp"
@@ -26,7 +26,7 @@
         android:id="@+id/appCompatTextView"
         style="@style/EditTextVerify"
         android:layout_marginTop="70dp"
-        android:text="@string/verificacao"
+        android:text="@string/notice_check_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
@@ -42,16 +42,17 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appCompatTextView2"
         style="@style/EditTextVerify"
-        android:text="@string/Verificar"
+        android:text="@string/check_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/butOk"
-        style="@style/Botoes"
+        style="@style/ButtonsStyle"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/orange"
         android:text="@string/ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

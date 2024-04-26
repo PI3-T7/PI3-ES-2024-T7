@@ -102,10 +102,10 @@ class LocationActivity : AppCompatActivity() {
                 setBackgroundColor(
                     ContextCompat.getColor(
                         this@LocationActivity,
-                        R.color.cor_checked
+                        R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -116,10 +116,10 @@ class LocationActivity : AppCompatActivity() {
                 setBackgroundColor(
                     ContextCompat.getColor(
                         this@LocationActivity,
-                        R.color.cor_checked
+                        R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -130,10 +130,10 @@ class LocationActivity : AppCompatActivity() {
                 setBackgroundColor(
                     ContextCompat.getColor(
                         this@LocationActivity,
-                        R.color.cor_checked
+                        R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -144,10 +144,10 @@ class LocationActivity : AppCompatActivity() {
                 setBackgroundColor(
                     ContextCompat.getColor(
                         this@LocationActivity,
-                        R.color.cor_checked
+                        R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -158,10 +158,10 @@ class LocationActivity : AppCompatActivity() {
                 setBackgroundColor(
                     ContextCompat.getColor(
                         this@LocationActivity,
-                        R.color.cor_checked
+                        R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -436,11 +436,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text = "30 minutos                                                       ${prices[0]},00"
-                btn1hour.text = "1 hora                                                                ${prices[1]},00"
-                btn2hours.text = "2 horas                                                              ${prices[2]},00"
-                btn4hours.text = "4 horas                                                              ${prices[3]},00"
-                btnUntil18.text = "Do momento até 18h                                      ${prices[4]},00"
+                btn30min.text = "30 minutos                                                ${prices[0]},00"
+                btn1hour.text = "1 hora                                                         ${prices[1]},00"
+                btn2hours.text = "2 horas                                                       ${prices[2]},00"
+                btn4hours.text = "4 horas                                                       ${prices[3]},00"
+                btnUntil18.text = "Do momento até 18h                               ${prices[4]},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
@@ -501,7 +501,7 @@ class LocationActivity : AppCompatActivity() {
             if (!radioButton.isChecked) {
                 radioButton.apply {
                     setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-                    background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+                    background = ContextCompat.getDrawable(context, R.drawable.shape_unchecked)
                 }
             }
         }

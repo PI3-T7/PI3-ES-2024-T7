@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MapaActivity">
+    tools:context=".MapActivity">
 
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:background="@drawable/container_pesquisa_mapa"
+        android:background="@color/orange"
         android:elevation="2dp"
         app:layout_constraintBottom_toTopOf="@id/map_fragment"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="25dp"
         android:elevation="2dp"
-        android:src="@drawable/icon_back_white"
+        android:src="@drawable/icon_arrow_back_white"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintStart_toStartOf="@id/view"
         app:layout_constraintTop_toTopOf="@id/view" />
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"
-        android:drawableEnd="@drawable/icon_pin"
+        android:drawableEnd="@drawable/icon_custom_pin"
         android:drawablePadding="20dp"
         android:elevation="2dp"
         android:gravity="center_vertical|end"
@@ -63,7 +63,7 @@
         android:id="@+id/container_info_map"
         android:layout_width="0dp"
         android:layout_height="0.1dp"
-        android:background="@drawable/container_info_map"
+        android:background="@drawable/shape_info_map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -113,8 +113,8 @@
         android:id="@+id/btnRotas"
         android:layout_width="150dp"
         android:layout_height="0dp"
-        android:background="@drawable/button_login"
-        android:drawableStart="@drawable/icon_rotas"
+        android:background="@drawable/shape_button"
+        android:drawableStart="@drawable/icon_routes"
         android:elevation="10dp"
         android:paddingHorizontal="15dp"
         android:text="Traçar rota"

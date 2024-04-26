@@ -21,15 +21,15 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".RotaActivity"
+            android:name=".RouteMappingActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".CartoesActivity"
+            android:name=".CardsActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".CartaoCadastrandoActivity"
+            android:name=".CardRegistrationActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
