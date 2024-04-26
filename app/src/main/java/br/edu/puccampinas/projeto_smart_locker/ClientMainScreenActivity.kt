@@ -3,6 +3,7 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,9 +18,13 @@ class ClientMainScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         database.collection("Pessoas")
-            .document(auth.currentUser?.uid.toString())
-            .get().addOnSuccessListener { document ->
-                "Olá, ${document.getString("nome_completo")}".also { binding.appCompatTextView3.text = it }
+            .document(auth.currentUser?.uid.toString()).addSnapshotListener {snapshot, error ->
+                if (error != null) {
+                    Log.e("Erro no Firebase Firestore", error.message.toString())
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    "Olá, ${snapshot.get("nome_completo").toString()}".also { binding.appCompatTextView3.text = it }
+                }
             }
 
         with(binding) {

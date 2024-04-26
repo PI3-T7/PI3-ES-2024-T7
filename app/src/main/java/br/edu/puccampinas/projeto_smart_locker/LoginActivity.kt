@@ -23,11 +23,14 @@ class LoginActivity : AppCompatActivity() {
 
         with(binding) {
             arrow.setOnClickListener { finish() }
+            btMap.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, MapActivity::class.java))
+            }
             btLogin.setOnClickListener {
                 validUser(editUsuario.text.toString(), editSenha.text.toString())
             }
-            btMap.setOnClickListener {
-                startActivity(Intent(this@LoginActivity, MapActivity::class.java))
+            txtEsqueceuSenha.setOnClickListener {
+                forgotPassword(editUsuario.text.toString())
             }
         }
 
@@ -38,6 +41,21 @@ class LoginActivity : AppCompatActivity() {
             binding.editSenha,
             InputType.TYPE_CLASS_TEXT
         )
+    }
+
+    private fun forgotPassword(email: String) {
+        if (email.isBlank()) {
+            Toast.makeText(this, "Digite um email para a recuperação de senha!", Toast.LENGTH_LONG).show()
+            return
+        }
+        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                startActivity(Intent(this, ForgetActivity::class.java).putExtra("email", email))
+                finish()
+            } else {
+                Toast.makeText(this, "Endereço de email inválido!", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     // Função que altera o toggle

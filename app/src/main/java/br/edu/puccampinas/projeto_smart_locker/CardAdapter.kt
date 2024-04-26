@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -90,10 +89,25 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
             notifyItemRemoved(posicao)
             notifyItemRangeChanged(posicao, card.size)
 //            Excluir cartão de credito no bd
-//            FirebaseFirestore
+//            val userReference = FirebaseFirestore
 //                .getInstance()
 //                .collection("Pessoas")
 //                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+//            userReference.get().addOnSuccessListener { document ->
+//                    val cartoes = document
+//                        .getString("cartoes")?.toMutableList()?.removeAt(posicao-1)
+//                    val dados = mapOf(
+//                        "cartoes" to cartoes,
+//                        "celular" to document["celular"].toString(),
+//                        "cpf" to document["cpf"].toString(),
+//                        "data_de_nascimento" to document["data_de_nascimento"].toString(),
+//                        "email" to document["email"].toString(),
+//                        "nome_completo" to document["nome_completo"].toString(),
+//                        "senha" to document["senha"].toString()
+//                    )
+//                userReference.update(dados)
+//                }
+
         } else {
             Log.e("CardAdapter", "Posição inválida ao tentar excluir o cartão")
         }
