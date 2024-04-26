@@ -22,7 +22,7 @@
         android:id="@+id/view_login_container"
         android:layout_width="wrap_content"
         android:layout_height="350dp"
-        android:background="@drawable/container_login"
+        android:background="@drawable/shape_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

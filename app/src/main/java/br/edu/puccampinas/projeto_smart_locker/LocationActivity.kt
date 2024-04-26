@@ -105,7 +105,7 @@ class LocationActivity : AppCompatActivity() {
                         R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -119,7 +119,7 @@ class LocationActivity : AppCompatActivity() {
                         R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -133,7 +133,7 @@ class LocationActivity : AppCompatActivity() {
                         R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -147,7 +147,7 @@ class LocationActivity : AppCompatActivity() {
                         R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -161,7 +161,7 @@ class LocationActivity : AppCompatActivity() {
                         R.color.color_checked
                     )
                 )
-                background = ContextCompat.getDrawable(context, R.drawable.container_check)
+                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
             }
         }
 
@@ -501,7 +501,7 @@ class LocationActivity : AppCompatActivity() {
             if (!radioButton.isChecked) {
                 radioButton.apply {
                     setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-                    background = ContextCompat.getDrawable(context, R.drawable.container_check2)
+                    background = ContextCompat.getDrawable(context, R.drawable.shape_unchecked)
                 }
             }
         }

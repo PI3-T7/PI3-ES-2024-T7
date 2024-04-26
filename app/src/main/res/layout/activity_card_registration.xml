@@ -28,7 +28,7 @@
                 android:layout_height="150dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="100dp"
-                android:background="@drawable/card_front"
+                android:background="@drawable/shape_card_front"
                 android:elevation="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:elevation="5dp"
-                android:src="@drawable/chip_card"
+                android:src="@drawable/icon_chip_card"
                 app:layout_constraintStart_toStartOf="@id/cardFront"
                 app:layout_constraintTop_toTopOf="@id/cardFront" />
 
@@ -49,7 +49,7 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/card_back"
+                android:background="@drawable/shape_card_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

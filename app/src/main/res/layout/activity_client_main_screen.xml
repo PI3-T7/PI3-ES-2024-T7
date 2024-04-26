@@ -35,7 +35,7 @@
         android:id="@+id/containerMainScreen"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/container_main_screen"
+        android:background="@drawable/shape_main_screen"
         app:layout_constraintBottom_toTopOf="@id/containerRent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
