@@ -1,8 +1,11 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -45,6 +49,11 @@ class LocationActivity : AppCompatActivity() {
     private lateinit var btnConfirmLocation: Button
     private lateinit var botaoVoltar1: ImageView
     private lateinit var buttonHome1: ImageView
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            finish()
+        }
+    }
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var userId: String
@@ -61,6 +70,8 @@ class LocationActivity : AppCompatActivity() {
         btnConfirmLocation = findViewById(R.id.bt_confirm_location)
         botaoVoltar1 = findViewById(R.id.buttonVoltar1)
         buttonHome1 = findViewById(R.id.buttonHome1)
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
 
         //verificarCartaoCadastrado()
 
@@ -83,14 +94,10 @@ class LocationActivity : AppCompatActivity() {
         }
 
         botaoVoltar1.setOnClickListener {
-            val intent = Intent(this, ClientMainScreenActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
         buttonHome1.setOnClickListener {
-            val intent = Intent(this, ClientMainScreenActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
