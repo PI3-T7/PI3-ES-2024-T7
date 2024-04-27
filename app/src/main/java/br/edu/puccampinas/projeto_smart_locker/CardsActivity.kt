@@ -54,18 +54,6 @@ class CardsActivity : AppCompatActivity() {
         // partir deste filtro
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
-
-        // Intent para os botoes
-        binding.nav.buttonVoltar.setOnClickListener {
-            startActivity(Intent(this,ClientMainScreenActivity::class.java))
-            finish()
-        }
-
-        binding.nav.buttonHome.setOnClickListener {
-            startActivity(Intent(this,ClientMainScreenActivity::class.java))
-            finish()
-        }
-
     }
 
     private fun preencherDados() {
