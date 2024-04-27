@@ -27,38 +27,43 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
             }
             btLogin.setOnClickListener {
+                // Chama a função para validar o usuário ao clicar no botão de login
                 validUser(editUsuario.text.toString(), editSenha.text.toString())
             }
             txtEsqueceuSenha.setOnClickListener {
+                // Chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
                 forgotPassword(editUsuario.text.toString())
             }
         }
-
+        // Configura o cursor para começar no início do campo de usuário ao receber o foco
         setCursorToStartOnFocusChange(binding.editUsuario)
-
+        // Configura o botão de alternar visibilidade da senha
         setupPasswordToggle(
             binding.togglePasswordVisibility,
             binding.editSenha,
             InputType.TYPE_CLASS_TEXT
         )
     }
-
+    // Função para enviar e-mail de redefinição de senha
     private fun forgotPassword(email: String) {
-        if (email.isBlank()) {
+        if (email.isBlank()) {   // Verifica se o campo de e-mail está em branco
             Toast.makeText(this, "Digite um email para a recuperação de senha!", Toast.LENGTH_LONG).show()
             return
         }
+        // Envia um e-mail de redefinição de senha para o endereço fornecido
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                // Se a operação for bem-sucedida, redireciona para a tela de redefinição de senha
                 startActivity(Intent(this, ForgetActivity::class.java).putExtra("email", email))
                 finish()
             } else {
+                // Se a operação falhar, exibe uma mensagem de erro
                 Toast.makeText(this, "Endereço de email inválido!", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    // Função que altera o toggle
+    // Função que altera a visibilidade da senha ao alternar o toggle
     private fun setupPasswordToggle(
         toggleButton: ToggleButton,
         editText: EditText,
@@ -87,10 +92,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validUser(email: String, password: String) {
+        // Verifica se o email ou a senha estão em branco
         if (email.isBlank() or password.isBlank()) return
+        // Tenta fazer login com o email e a senha fornecidos
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
+                // Verifica se o email do usuário foi verificado
                 if (authResult.user?.isEmailVerified == false) {
+                    // Se não estiver verificado, faz logout e exibe mensagem para o usuário
                     auth.signOut()
                     Toast.makeText(
                         this,
@@ -99,16 +108,20 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                     return@addOnSuccessListener
                 }
+                // Se o login for bem-sucedido e o email estiver verificado, redireciona para a tela principal do cliente
                 startActivity(Intent(this, ClientMainScreenActivity::class.java))
                 finish()
             }.addOnFailureListener { exception ->
+                // Trata falhas durante o processo de login
                 if (exception.message.toString() == "The email address is badly formatted.") {
+                    // Verifica se o formato do email está incorreto
                     Toast.makeText(
                         this,
                         "Endereço de email inválido, por favor digite novamente!",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
+                    // Se a falha não for relacionada ao formato do email, exibe mensagem de erro genérica
                     Toast.makeText(
                         this,
                         "Email ou senha incorretos, por favor digite novamente!",

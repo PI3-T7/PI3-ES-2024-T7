@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RouteMappingActivity : AppCompatActivity() {
-
+    // declaração do banco e das variaveis que serão usadas para representar as localizações/unidades
     private lateinit var firestore: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
@@ -83,26 +83,34 @@ class RouteMappingActivity : AppCompatActivity() {
     }
 
     private fun setupMap() {
+        // define um adaptador para as janelas de informações dos marcadores
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
 
+        // verifica se a permissão de localização está concedida
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            // obtém a última localização conhecida do dispositivo
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
+                    // define a localização do usuário
+                    // obtém as coordenadas do local de destino do intent
                     userLatLng = LatLng(location.latitude, location.longitude)
                     placeLatitude = intent.getDoubleExtra("placeLatitude", 0.0)
                     placeLongitude = intent.getDoubleExtra("placeLongitude", 0.0)
                     placeLatLng = LatLng(placeLatitude, placeLongitude)
+                    // traça a rota no mapa
                     traceRoute(userLatLng, placeLatLng)
+                    // move a câmera para a posição do usuário
                     googleMap.moveCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             userLatLng,
                             15f
                         )
                     )
+                    // adiciona um marcador na posição do usuário
                     googleMap.addMarker(
                         MarkerOptions().position(userLatLng).title("Sua Localização")
                     )
@@ -110,6 +118,7 @@ class RouteMappingActivity : AppCompatActivity() {
                 }
             }
         } else {
+            // solicita permissão de acesso à localização
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -119,10 +128,13 @@ class RouteMappingActivity : AppCompatActivity() {
     }
 
     private fun loadPlacesFromFirestore() {
+        // obtém a coleção de lugares do Firestore
         val placesCollection = firestore.collection("Unidades de Locação")
 
+        // obtém os documentos da coleção
         placesCollection.get()
             .addOnSuccessListener { documents ->
+                // mapeia os documentos para objetos Place
                 places = documents.mapNotNull { document ->
                     val name = document.getString("name") ?: ""
                     val latitude = document.getGeoPoint("latLng")?.latitude ?: 0.0
@@ -134,10 +146,11 @@ class RouteMappingActivity : AppCompatActivity() {
                     val uid = document.getString("uid") ?: ""
                     Place(name, latLng, address, reference, prices, uid)
                 }
-
+                // adiciona marcadores para os lugares no mapa
                 addMarkers()
             }
             .addOnFailureListener { exception ->
+                // exibe uma mensagem de erro se falhar ao obter os lugares do Firestore
                 Toast.makeText(
                     this@RouteMappingActivity,
                     "Erro ao carregar os lugares do banco de dados.",
@@ -147,8 +160,10 @@ class RouteMappingActivity : AppCompatActivity() {
     }
 
     private fun addMarkers() {
+        // itera sobre a lista de lugares
         places.forEach { place ->
             val marker = place.latLng?.let { geoPoint ->
+                // adiciona um marcador para cada lugar no mapa
                 googleMap.addMarker(
                     MarkerOptions()
                         .title(place.name)
@@ -167,10 +182,11 @@ class RouteMappingActivity : AppCompatActivity() {
     }
 
     private fun traceRoute(origin: LatLng, destination: LatLng) {
+        // configuração do GeoApiContext com a chave de API
         val geoApiContext = GeoApiContext.Builder()
             .apiKey("AIzaSyBCzkVPB40LH6dVBphGEgLp7-Ydu5JcGMI")
             .build()
-
+        // executa a solicitação assíncrona para traçar a rota
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val result: DirectionsResult = DirectionsApi.newRequest(geoApiContext)
@@ -183,18 +199,19 @@ class RouteMappingActivity : AppCompatActivity() {
                         )
                     )
                     .await()
-
+                // exibe o resultado da solicitação de rota no log
                 Log.d("RotaActivity", "Resultado da rota recebido com sucesso: $result")
-
+                // atualiza a UI principal para desenhar a rota no mapa
                 runOnUiThread {
                     drawRoute(result)
                 }
             } catch (e: Exception) {
+                // manipula erros ao traçar a rota
                 Log.e("RotaActivity", "Erro ao traçar rota: ${e.message}")
             }
         }
     }
-
+    // configurações do desenho do traçado da rota
     private fun drawRoute(result: DirectionsResult) {
         Log.d("RotaActivity", "Desenhando rota no mapa")
 

@@ -32,7 +32,7 @@ class CardsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        // definição do RecyclerView para exibir cartões
         recyclerView = binding.rvCards
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.setHasFixedSize(true)
@@ -115,7 +115,7 @@ class CartoesCadastrados(numero: String) {
             else -> "Desconhecida"
         }
     }
-
+    // formatarNumero: faz a formatação do número do cartão para exibir dessa forma : "**** 1234"
     private fun formatarNumero(numeroCartao: String): String {
         val primeiraParte = "**"
         val ultimosDigitos = numeroCartao.takeLast(4)
