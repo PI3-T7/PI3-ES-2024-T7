@@ -436,11 +436,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text = "30 minutos                                                ${prices[0]},00"
-                btn1hour.text = "1 hora                                                         ${prices[1]},00"
-                btn2hours.text = "2 horas                                                       ${prices[2]},00"
-                btn4hours.text = "4 horas                                                       ${prices[3]},00"
-                btnUntil18.text = "Do momento até 18h                               ${prices[4]},00"
+                btn30min.text = "30 minutos - ${prices[0]},00"
+                btn1hour.text = "1 hora - ${prices[1]},00"
+                btn2hours.text = "2 horas - ${prices[2]},00"
+                btn4hours.text = "4 horas - ${prices[3]},00"
+                btnUntil18.text = "Do momento até 18h - ${prices[4]},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
