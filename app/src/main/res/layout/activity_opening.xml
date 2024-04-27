@@ -29,6 +29,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ver Mapa"
+        android:textColor="@color/blue"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imgBtnMap"
+        app:layout_constraintStart_toStartOf="@+id/imgBtnMap"
+        app:layout_constraintTop_toBottomOf="@+id/imgBtnMap" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnBegin"
         style="@style/ButtonsStyle"
