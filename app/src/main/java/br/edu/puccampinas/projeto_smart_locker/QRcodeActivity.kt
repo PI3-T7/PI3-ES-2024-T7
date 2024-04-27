@@ -13,6 +13,7 @@ import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
 import android.util.Base64
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
 class QRcodeActivity : AppCompatActivity() {
@@ -39,14 +40,12 @@ class QRcodeActivity : AppCompatActivity() {
         }
 
         buttonVoltar2.setOnClickListener {
-            val intent = Intent(this, LocationActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
         buttonHome2.setOnClickListener {
-            val intent = Intent(this, ClientMainScreenActivity::class.java)
-            startActivity(intent)
+            LocalBroadcastManager.getInstance(this)
+                .sendBroadcast(Intent("meuFiltro"))
             finish()
         }
     }
