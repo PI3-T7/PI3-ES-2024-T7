@@ -447,7 +447,7 @@ class LocationActivity : AppCompatActivity() {
             }
         }
     }
-
+    // cálculo da distância
     private fun calcularDistancia(
         lat1: Double, lon1: Double, lat2: Double, lon2: Double
     ): Double {

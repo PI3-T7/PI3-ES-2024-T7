@@ -59,15 +59,15 @@
             android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/shape_inputs"
             android:gravity="center_vertical|start"
-            android:text="Localização Atual"
-            android:paddingStart="20dp"
+            android:paddingStart="10dp"
             android:paddingEnd="20dp"
+            android:text="Localização Atual"
+            android:textColor="@color/black"
             android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@id/localUsuario"
-
             app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toEndOf="@id/localUsuario"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -76,14 +76,24 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/shape_inputs"
             android:gravity="center_vertical|start"
-            android:paddingStart="20dp"
+            android:paddingStart="10dp"
             android:paddingEnd="20dp"
-            app:layout_constraintStart_toEndOf="@id/localPin"
+            android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/localPin"
             app:layout_constraintTop_toBottomOf="@+id/textSeuLocal" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/textLocalLocacao"
+            app:layout_constraintStart_toStartOf="@+id/textSeuLocal"
+            app:layout_constraintTop_toBottomOf="@+id/textSeuLocal"
+            app:srcCompat="@drawable/icon_arrow_down" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment

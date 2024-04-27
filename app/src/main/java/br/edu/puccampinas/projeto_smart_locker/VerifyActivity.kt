@@ -15,9 +15,13 @@ class VerifyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         with(binding){
+            // Exibe o email do usuário atualmente logado
             emailText.text = auth.currentUser?.email
+            // Realiza logout do usuário atual
             auth.signOut()
+            // Define o comportamento do botão de confirmação
             butOk.setOnClickListener {
+                // Navega para a tela de login e finaliza a atividade atual
                 startActivity(Intent(this@VerifyActivity, LoginActivity::class.java))
                 finish()
             }

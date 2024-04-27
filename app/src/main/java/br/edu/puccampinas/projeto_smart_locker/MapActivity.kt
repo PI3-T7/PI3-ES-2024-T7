@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
 class MapActivity : AppCompatActivity() {
-
+    // declarações de variaveis e inicialização
     private lateinit var firestore: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
@@ -43,7 +43,7 @@ class MapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-
+        // inicializa os componentes e configura o mapa
         hideInfoView()
 
         firestore = FirebaseFirestore.getInstance()
@@ -53,13 +53,13 @@ class MapActivity : AppCompatActivity() {
 
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
-
+        // Carrega os lugares do Firestore e configura o mapa
         mapFragment.getMapAsync { map ->
             googleMap = map
             loadPlacesFromFirestore()
             setupMap()
         }
-
+        // Lida com o clique no botão para mapeamento de rotas
         botaoRota.setOnClickListener {
             if (selectedPlace != null) {
                 val intent = Intent(this, RouteMappingActivity::class.java)
@@ -142,7 +142,7 @@ class MapActivity : AppCompatActivity() {
             )
         }
     }
-
+    // função que carrega unidades que estão no firestore
     private fun loadPlacesFromFirestore() {
         val placesCollection = firestore.collection("Unidades de Locação")
 

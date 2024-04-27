@@ -51,6 +51,7 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
         }
     }
 
+    // onBindViewHolder: associa os dados do cartão ao ViewHolder apropriado com base na posição
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 0) {
             (holder as AddCardViewHolder)
@@ -68,7 +69,7 @@ class CardAdapter(private val card: MutableList<CartoesCadastrados>) : Adapter<R
             holderCartao.cardFlag.text = cartao.bandeira
         }
     }
-
+    // getItemCount: retorna o número total de itens (cartões cadastrados + 1 para o botão de adicionar)
     override fun getItemCount(): Int {
         return card.size + 1
     }

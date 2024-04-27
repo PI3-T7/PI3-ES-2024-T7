@@ -19,6 +19,7 @@ class CardRegistrationActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
 
+    // onCreate: atividade criada + configuração do layout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

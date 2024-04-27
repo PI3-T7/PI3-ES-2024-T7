@@ -14,10 +14,11 @@ import java.util.ArrayList
 import java.util.HashMap
 
 class ClientMainScreenActivity : AppCompatActivity() {
+    // declaração/inicialização do layout,firebase e firestore
     private val binding by lazy { ActivityClientMainScreenBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
-
+    // chaves para SharedPreferences
     private val sharedPref = "Locacao"
     private val qrCodeBitMapKey = "locacaoPendente"
 
