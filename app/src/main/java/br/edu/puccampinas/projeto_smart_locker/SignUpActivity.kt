@@ -251,7 +251,6 @@ class SignUpActivity : AppCompatActivity() {
             values["email"].toString(), values["senha"].toString()
         ).addOnSuccessListener { authResult ->
             authResult.user?.sendEmailVerification()?.addOnCompleteListener {
-                values.remove("senha")
                 values.remove("senha2")
                 database.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
                 startActivity(Intent(this, VerifyActivity::class.java))
