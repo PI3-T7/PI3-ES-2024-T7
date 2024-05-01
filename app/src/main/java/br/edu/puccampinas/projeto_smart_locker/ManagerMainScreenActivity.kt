@@ -2,11 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityForgetBinding
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityManagerMainScreenBinding
 
 class ManagerMainScreenActivity : AppCompatActivity() {
@@ -18,7 +14,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.viewReadNfc.setOnClickListener{
-            startActivity(Intent(this,ReadNnfActivity::class.java))
+            startActivity(Intent(this,ReadNfcActivity::class.java))
         }
     }
 }

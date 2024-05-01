@@ -40,4 +40,5 @@
     <string name="reade_nfc">Ler pulseira</string>
     <string name="release_rental">Liberar locação</string>
     <string name="bring_bracelet_close">Aproxime a pulseira NFC do celular.</string>
+    <string name="confirm">Confirmar</string>
 </resources>
