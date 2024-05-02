@@ -17,9 +17,16 @@
         android:theme="@style/Theme.Projeto_Smart_Locker"
         tools:targetApi="31">
         <activity
-            android:name=".OpenLockerActivity"
-            android:theme="@style/AppTheme"
+            android:name=".EndLeaseActivity"
             android:exported="false" />
+        <activity
+            android:name=".ConfirmOpenActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".OpenLockerActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".CheckDataNfcActivity"
             android:exported="false"

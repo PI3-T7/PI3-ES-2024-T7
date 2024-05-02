@@ -24,12 +24,12 @@ class OpenLockerActivity : AppCompatActivity() {
         binding.btConfirm.setOnClickListener {
             if (binding.btnOpen.isChecked) {
                 // Se o botão abrir armario estiver selecionado
-               // val intent = Intent(this, OpenActivity::class.java)
-               // startActivity(intent)
+                val intent = Intent(this, ConfirmOpenActivity::class.java)
+                startActivity(intent)
             } else if (binding.btnFinish.isChecked) {
                 // Se o botão encerrar locação estiver selecionado
-                //val intent = Intent(this, FinishActivity::class.java)
-                //startActivity(intent)
+                val intent = Intent(this, EndLeaseActivity::class.java)
+                startActivity(intent)
             } else {
                 // Se nenhum botão estiver selecionado
                 Toast.makeText(this, "Por favor, selecione uma opção", Toast.LENGTH_SHORT).show()
