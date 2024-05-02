@@ -27,6 +27,7 @@ class OpenLockerActivity : AppCompatActivity() {
                 val intent = Intent(this, ConfirmOpenActivity::class.java)
                 startActivity(intent)
             } else if (binding.btnFinish.isChecked) {
+
                 // Se o botão encerrar locação estiver selecionado
                 val intent = Intent(this, EndLeaseActivity::class.java)
                 startActivity(intent)
