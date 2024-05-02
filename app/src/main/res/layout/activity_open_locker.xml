@@ -42,15 +42,11 @@
         <RadioButton
             android:id="@+id/btn_open"
             style="@style/RadioButtons"
-            android:background="@drawable/selector_radio_buttons"
-            android:button="@null"
             android:text="@string/open_locker" />
 
         <RadioButton
             android:id="@+id/btn_finish"
             style="@style/RadioButtons"
-            android:background="@drawable/selector_radio_buttons"
-            android:button="@null"
             android:text="@string/end_lease" />
 
         <Button
