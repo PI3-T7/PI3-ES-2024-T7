@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLocationBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +30,8 @@ import java.util.*
 import kotlin.math.*
 
 class LocationActivity : AppCompatActivity() {
+
+    private val binding by lazy { ActivityLocationBinding.inflate(layoutInflater) }
 
     // Variável que acessa os serviços de localização da API
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -41,14 +44,6 @@ class LocationActivity : AppCompatActivity() {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
-    private lateinit var btn30min: RadioButton
-    private lateinit var btn1hour: RadioButton
-    private lateinit var btn2hours: RadioButton
-    private lateinit var btn4hours: RadioButton
-    private lateinit var btnUntil18: RadioButton
-    private lateinit var btnConfirmLocation: Button
-    private lateinit var botaoVoltar1: ImageView
-    private lateinit var buttonHome1: ImageView
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             finish()
@@ -60,16 +55,8 @@ class LocationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_location)
+        setContentView(binding.root)
 
-        btn30min = findViewById(R.id.btn30min)
-        btn1hour = findViewById(R.id.btn1hour)
-        btn2hours = findViewById(R.id.btn2hours)
-        btn4hours = findViewById(R.id.btn4hours)
-        btnUntil18 = findViewById(R.id.btnUntil18)
-        btnConfirmLocation = findViewById(R.id.bt_confirm_location)
-        botaoVoltar1 = findViewById(R.id.buttonVoltar1)
-        buttonHome1 = findViewById(R.id.buttonHome1)
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
 
@@ -93,87 +80,16 @@ class LocationActivity : AppCompatActivity() {
             obterLocalizacaoAtual()
         }
 
-        botaoVoltar1.setOnClickListener {
+        binding.buttonHome1.setOnClickListener {
             finish()
         }
 
-        buttonHome1.setOnClickListener {
+        binding.buttonVoltar1.setOnClickListener {
             finish()
-        }
-
-        // Esta parte do codigo muda a cor do RadioButton ao ser selecionado, e mantém o arredondamento
-        btn30min.setOnClickListener {
-            changeColorRadio()
-            findViewById<RadioButton>(R.id.btn30min).apply {
-                isChecked = true
-                setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@LocationActivity,
-                        R.color.color_checked
-                    )
-                )
-                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
-            }
-        }
-
-        btn1hour.setOnClickListener {
-            changeColorRadio()
-            findViewById<RadioButton>(R.id.btn1hour).apply {
-                isChecked = true
-                setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@LocationActivity,
-                        R.color.color_checked
-                    )
-                )
-                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
-            }
-        }
-
-        btn2hours.setOnClickListener {
-            changeColorRadio()
-            findViewById<RadioButton>(R.id.btn2hours).apply {
-                isChecked = true
-                setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@LocationActivity,
-                        R.color.color_checked
-                    )
-                )
-                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
-            }
-        }
-
-        btn4hours.setOnClickListener {
-            changeColorRadio()
-            findViewById<RadioButton>(R.id.btn4hours).apply {
-                isChecked = true
-                setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@LocationActivity,
-                        R.color.color_checked
-                    )
-                )
-                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
-            }
-        }
-
-        btnUntil18.setOnClickListener {
-            changeColorRadio()
-            findViewById<RadioButton>(R.id.btnUntil18).apply {
-                isChecked = true
-                setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@LocationActivity,
-                        R.color.color_checked
-                    )
-                )
-                background = ContextCompat.getDrawable(context, R.drawable.shape_checked)
-            }
         }
 
         // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
-        btnConfirmLocation.setOnClickListener {
+        binding.btConfirmLocation.setOnClickListener {
             mandarDadosQrcode()
         }
     }
@@ -210,11 +126,11 @@ class LocationActivity : AppCompatActivity() {
         var dados = DadosCliente("", "", "", 0.0)
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
-            btn30min.isChecked -> "30 minutos"
-            btn1hour.isChecked -> "1 hora"
-            btn2hours.isChecked -> "2 horas"
-            btn4hours.isChecked -> "4 horas"
-            btnUntil18.isChecked -> "Até às 18 horas"
+            binding.btn30min.isChecked -> "30 minutos"
+            binding.btn1hour.isChecked -> "1 hora"
+            binding.btn2hours.isChecked -> "2 horas"
+            binding.btn4hours.isChecked -> "4 horas"
+            binding.btnUntil18.isChecked -> "Até às 18 horas"
             else -> ""
         }
 
@@ -431,11 +347,11 @@ class LocationActivity : AppCompatActivity() {
 
     private fun clearRadioButtonOptions() {
         // Limpar os textos dos RadioButtons
-        btn30min.text = ""
-        btn1hour.text = ""
-        btn2hours.text = ""
-        btn4hours.text = ""
-        btnUntil18.text = ""
+        binding.btn30min.text = ""
+        binding.btn1hour.text = ""
+        binding.btn2hours.text = ""
+        binding.btn4hours.text = ""
+        binding.btnUntil18.text = ""
     }
 
     private fun addPricesToRadioButtons(prices: List<*>?) {
@@ -443,11 +359,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                btn30min.text = "30 minutos - ${prices[0]},00"
-                btn1hour.text = "1 hora - ${prices[1]},00"
-                btn2hours.text = "2 horas - ${prices[2]},00"
-                btn4hours.text = "4 horas - ${prices[3]},00"
-                btnUntil18.text = "Do momento até 18h - ${prices[4]},00"
+                binding.btn30min.text = "30 minutos - ${prices[0]},00"
+                binding.btn1hour.text = "1 hora - ${prices[1]},00"
+                binding.btn2hours.text = "2 horas - ${prices[2]},00"
+                binding.btn4hours.text = "4 horas - ${prices[3]},00"
+                binding.btnUntil18.text = "Do momento até 18h - ${prices[4]},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
@@ -485,32 +401,10 @@ class LocationActivity : AppCompatActivity() {
         // Verificar se está entre 7 e 8 horas
         if (horaAtualDouble >= 7.0 && horaAtualDouble <= 8.0) {
             Log.d(TAG, "Hora está entre 7 e 8 horas.")
-            btnUntil18.visibility = View.VISIBLE
+            binding.btnUntil18.visibility = View.VISIBLE
         } else {
             Log.d(TAG, "Hora não está entre 7 e 8 horas.")
-            btnUntil18.visibility = View.GONE
-        }
-    }
-
-    // Essa função muda a cor do radiobutton para branco de novo quando outro for selecionado
-    // e mantém o formato arredondado.
-    private fun changeColorRadio() {
-        val radioButtonIds = listOf(
-            R.id.btn30min,
-            R.id.btn1hour,
-            R.id.btn2hours,
-            R.id.btn4hours,
-            R.id.btnUntil18
-        )
-
-        for (radioButtonId in radioButtonIds) {
-            val radioButton = findViewById<RadioButton>(radioButtonId)
-            if (!radioButton.isChecked) {
-                radioButton.apply {
-                    setBackgroundColor(ContextCompat.getColor(this@LocationActivity, android.R.color.white))
-                    background = ContextCompat.getDrawable(context, R.drawable.shape_unchecked)
-                }
-            }
+            binding.btnUntil18.visibility = View.GONE
         }
     }
 }

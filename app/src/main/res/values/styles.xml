@@ -100,7 +100,7 @@
         <item name="android:layout_marginStart">8dp</item>
     </style>
 
-    <!-- style dos radiobuttons -->
+    <!-- Estilo dos radiobuttons -->
     <style name="RadioButtons">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -113,7 +113,14 @@
         <item name="android:elevation">10dp</item>
         <item name="android:padding">12dp</item>
         <item name="android:button">@null</item>
-        <item name="android:background">@drawable/shape_radio_buttons</item>
+        <item name="android:background">@drawable/selector_radio_buttons</item>
+    </style>
+
+    <!-- Estilo das informações no card da CheckDataNfcActivity -->
+    <style name="CardInfos">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <!-- Estilo para o botão da caixa de diálogo -->
