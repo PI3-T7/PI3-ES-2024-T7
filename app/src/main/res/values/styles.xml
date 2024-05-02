@@ -113,7 +113,7 @@
         <item name="android:elevation">10dp</item>
         <item name="android:padding">12dp</item>
         <item name="android:button">@null</item>
-        <item name="android:background">@drawable/shape_radio_buttons</item>
+        <item name="android:background">@drawable/selector_radio_buttons</item>
     </style>
 
     <!-- Estilo das informações no card da CheckDataNfcActivity -->
