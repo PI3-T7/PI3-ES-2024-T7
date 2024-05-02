@@ -41,4 +41,7 @@
     <string name="release_rental">Liberar locação</string>
     <string name="bring_bracelet_close">Aproxime a pulseira NFC do celular.</string>
     <string name="confirm">Confirmar</string>
+    <string name="open_locker">Abrir armário momentâneamente</string>
+    <string name="end_lease">Encerrar locação</string>
+    <string name="select_option">Selecione a opção desejada</string>
 </resources>

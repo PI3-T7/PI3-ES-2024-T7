@@ -17,8 +17,11 @@ class CheckDataNfcActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imgArrow.setOnClickListener {
-            startActivity(Intent(this,ReadNfcActivity::class.java))
             finish()
+        }
+
+        binding.btnConfirm.setOnClickListener {
+            startActivity(Intent(this,OpenLockerActivity::class.java))
         }
     }
 }

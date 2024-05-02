@@ -14,15 +14,13 @@ class ReadNfcActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imgArrow.setOnClickListener {
-            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
             finish()
         }
 
+        // dependendo de como for feita a leitura da pulseira nfc deletamos o botao do xml
+        // vou deixar por enquanto para poder navegar entre as paginas do gerente
         binding.btnAbrirArmario.setOnClickListener {
             startActivity(Intent(this,CheckDataNfcActivity::class.java))
         }
     }
-
-    // dependendo de como for feita a leitura da pulseira nfc deletamos o botao do xml
-    // vou deixar por enquanto para poder navegar entre as paginas do gerente
 }
