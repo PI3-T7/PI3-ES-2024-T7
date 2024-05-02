@@ -17,9 +17,13 @@
         android:theme="@style/Theme.Projeto_Smart_Locker"
         tools:targetApi="31">
         <activity
-            android:name=".EndLeaseActivity"
+            android:name=".RentedLockerActivity"
             android:theme="@style/AppTheme"
             android:exported="false" />
+        <activity
+            android:name=".EndLeaseActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ConfirmOpenActivity"
             android:exported="false"
