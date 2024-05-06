@@ -1,0 +1,17 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado quando o botão de rádio está selecionado -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#AFC62C" />
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+
+    <!-- Estado padrão -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+</selector>

@@ -23,9 +23,6 @@ class QRcodeActivity : AppCompatActivity() {
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_qrcode)
 
         imgQRcode = findViewById(R.id.img_qr_code)
         buttonHome2 = findViewById(R.id.buttonHome2)
