@@ -123,6 +123,14 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!-- Estilo das informações no card da CheckDataNfcActivity -->
+    <style name="CardInfos">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
     <!-- Estilo para o botão da caixa de diálogo -->
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/shape_alert_dialog</item>
