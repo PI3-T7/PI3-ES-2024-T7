@@ -90,7 +90,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView2"
         style="@style/IconsOptions"
-        android:background="@drawable/icon_camera"
+        android:background="@drawable/icon_camera_nfc"
         app:layout_constraintBottom_toBottomOf="@id/view_read_nfc"
         app:layout_constraintEnd_toEndOf="@id/view_read_nfc"
         app:layout_constraintStart_toStartOf="@id/view_read_nfc"

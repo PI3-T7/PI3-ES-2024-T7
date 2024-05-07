@@ -19,6 +19,11 @@ class TakePicActivity: AppCompatActivity() {
         binding.imgArrow.setOnClickListener {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
             startActivity(intent)
+            finish()
+        }
+
+        binding.buttonTakePic.setOnClickListener {
+            startActivity(Intent(this,PersonPicActivity::class.java))
         }
     }
 }
