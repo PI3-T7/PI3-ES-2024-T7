@@ -8,11 +8,12 @@
     android:background="@color/background"
     tools:context=".ClosetReleasedActivity">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageSucess"
-        android:layout_width="136dp"
-        android:layout_height="118dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
         android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@id/textSucess"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,13 +21,15 @@
 
     <TextView
         android:id="@+id/textSucess"
-        android:layout_width="260dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Seu armário foi alugado com sucesso."
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageSucess" />
@@ -39,6 +42,7 @@
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
         app:contentPadding="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textSucess">
@@ -169,7 +173,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/buttonHome2"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -178,7 +182,5 @@
         app:layout_constraintStart_toStartOf="@+id/container"
         app:layout_constraintTop_toTopOf="@+id/container"
         app:srcCompat="@drawable/icon_home" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

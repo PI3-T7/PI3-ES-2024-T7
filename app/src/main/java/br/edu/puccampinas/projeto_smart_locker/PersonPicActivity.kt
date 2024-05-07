@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityPersonPicBinding
 
-class PersonPicActivity: AppCompatActivity() {
+class PersonPicActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonPicBinding
 
@@ -18,12 +18,13 @@ class PersonPicActivity: AppCompatActivity() {
         binding.buttonFinish.setOnClickListener {
             val intent = Intent(this, ClosetReleasedActivity::class.java)
             startActivity(intent)
+            finish()
         }
         // Listener para seta de voltar, redirecionando o usuário a tela anterior
         binding.imgArrow.setOnClickListener {
-            val intent = Intent(this, SelectPeopleNumActivity::class.java)
+            val intent = Intent(this, TakePicActivity::class.java)
             startActivity(intent)
+            finish()
         }
-
     }
 }

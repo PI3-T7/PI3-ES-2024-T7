@@ -16,5 +16,9 @@ class ManagerMainScreenActivity : AppCompatActivity() {
         binding.viewReadNfc.setOnClickListener{
             startActivity(Intent(this,ReadNfcActivity::class.java))
         }
+
+        binding.viewReleaseRental.setOnClickListener{
+            startActivity(Intent(this,QRcodeManagerActivity::class.java))
+        }
     }
 }
