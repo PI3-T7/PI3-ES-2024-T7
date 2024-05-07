@@ -16,5 +16,10 @@ class QRcodeManagerActivity: AppCompatActivity() {
         binding.imgArrow.setOnClickListener {
             startActivity(Intent(this,ManagerMainScreenActivity::class.java))
         }
+
+        binding.btnExcluir.setOnClickListener {
+            startActivity(Intent(this,SelectPeopleNumActivity::class.java))
+        }
+
     }
 }
