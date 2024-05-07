@@ -14,7 +14,6 @@ class TakePicActivity: AppCompatActivity() {
         binding = ActivityTakePicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         // Listener para seta de voltar, redirecionando o usuário a tela anterior
         binding.imgArrow.setOnClickListener {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
