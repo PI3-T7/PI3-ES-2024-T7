@@ -70,6 +70,9 @@ dependencies {
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // API QRcode Scanner
+    implementation("com.github.yuriy-budiyev:code-scanner:2.3.0")
+
     // https://github.com/santalu/maskara - biblioteca mascaras
     implementation("com.github.santalu:maskara:1.0.0")
 
