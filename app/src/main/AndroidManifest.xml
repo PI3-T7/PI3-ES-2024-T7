@@ -38,7 +38,7 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".OpeningActivity"
+            android:name=".QRcodeManagerActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
@@ -119,7 +119,7 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".QRcodeManagerActivity"
+            android:name=".OpeningActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
