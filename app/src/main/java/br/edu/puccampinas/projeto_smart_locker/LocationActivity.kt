@@ -123,7 +123,7 @@ class LocationActivity : AppCompatActivity() {
     private fun mandarDadosQrcode(){
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
-        var dados = DadosCliente("", "", "", 0.0)
+        val dados = DadosCliente("", "", "", "", "", "", 0.0)
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
             binding.btn30min.isChecked -> "30 minutos"
@@ -138,15 +138,18 @@ class LocationActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
         val valorRecuperado = sharedPreferences.getString("uid", null)
+        // Recuperando o id do usuário logado no momento
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
 
+        // Recuperando dados da locação para passar para o QRCode, junto com os dados do usuário
         if (!valorRecuperado.isNullOrEmpty()) {
             val documentReference = db.collection("Unidades de Locação").document(valorRecuperado)
             documentReference.get()
                 .addOnSuccessListener { document ->
                     val pricesArray2 = document.get("prices") as? List<*>
                     val unidade = document.getString("uid")
+                    val endereco = document.getString("address")
                     // Verifica qual é o preço associado à opção selecionada
                     val selectedPrice = when (selectedOption) {
                         "30 minutos" -> pricesArray2?.get(0)?.toString()
@@ -156,7 +159,33 @@ class LocationActivity : AppCompatActivity() {
                         "Até às 18 horas" -> pricesArray2?.get(4)?.toString()
                         else -> ""
                     }
+                    // Utilizando o id do usuário para buscar seu nome e celular, para passar junto com os
+                    // outros dados no QRCode.
+                    userId?.let {
+                        val userDocRef = db.collection("Pessoas").document(it)
+                        userDocRef.get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    val userName = document.getString("nome_completo")
+                                    val userPhone = document.getString("celular")
+                                    if (userName != null && userPhone != null) {
+                                        Log.d(TAG, "Nome do usuário: $userName, Celular: $userPhone")
+                                        // passando os dados do usuario para o qrcode
+                                        dados.nome = userName
+                                        dados.telefone = userPhone
+                                    } else {
+                                        Log.d(TAG, "Nome do usuário e celular não encontrados no Firestore")
+                                    }
+                                } else {
+                                    Log.d(TAG, "Documento do usuário não encontrado no Firestore")
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Erro ao recuperar o nome do usuário do Firestore", e)
+                            }
+                    }
 
+                    // juntando todos os outros dados para passar no QRCode
                     if (selectedOption.isNotEmpty()) {
                         // Verifica se o preço não é nulo ou vazio antes de converter para Double
                         if (!selectedPrice.isNullOrEmpty()) {
@@ -167,6 +196,9 @@ class LocationActivity : AppCompatActivity() {
                             }
                             if (userId != null) {
                                 dados.nome = userId
+                            }
+                            if (endereco != null) {
+                                dados.endereco = endereco
                             }
                             Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Nome: $userId")
                         }
@@ -409,10 +441,13 @@ class LocationActivity : AppCompatActivity() {
     }
 }
 
-// Classe apenas para testar a passagem de dados do cliente para o QRcode
+// Classe que faz a passagem de dados do cliente para o QRcode
 data class DadosCliente(
+    var id: String,
     var nome: String,
+    var telefone: String,
     var unidade: String,
     var opcao: String,
+    var endereco: String,
     var preco: Double
 )
