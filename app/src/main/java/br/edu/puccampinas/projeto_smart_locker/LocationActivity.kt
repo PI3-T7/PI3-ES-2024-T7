@@ -425,18 +425,22 @@ class LocationActivity : AppCompatActivity() {
         val minutoAtual: Int = calendario.get(Calendar.MINUTE)      // Obtém os minutos atuais
 
         // Converte os valores para Double antes de realizar a operação de divisão
-        val horaAtualDouble: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
+        val hora: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
 
         // Log da hora atual
-        Log.d(TAG, "Hora atual: $horaAtualDouble")
+        Log.d(TAG, "Hora atual: $hora")
 
         // Verificar se está entre 7 e 8 horas
-        if (horaAtualDouble >= 7.0 && horaAtualDouble <= 8.0) {
+        if (hora >= 7.0 && hora <= 8.0) {
             Log.d(TAG, "Hora está entre 7 e 8 horas.")
             binding.btnUntil18.visibility = View.VISIBLE
         } else {
             Log.d(TAG, "Hora não está entre 7 e 8 horas.")
             binding.btnUntil18.visibility = View.GONE
+        }
+        // Verificar se é mais de 14h
+        if (hora > 14.0) {
+
         }
     }
 }

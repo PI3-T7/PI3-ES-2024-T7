@@ -21,19 +21,23 @@
         <RadioButton
             android:id="@+id/btn30min"
             style="@style/RadioButtons"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:visibility="visible"/>
 
         <RadioButton
             android:id="@+id/btn1hour"
-            style="@style/RadioButtons" />
+            style="@style/RadioButtons"
+            android:visibility="visible"/>
 
         <RadioButton
             android:id="@+id/btn2hours"
-            style="@style/RadioButtons" />
+            style="@style/RadioButtons"
+            android:visibility="visible"/>
 
         <RadioButton
             android:id="@+id/btn4hours"
-            style="@style/RadioButtons" />
+            style="@style/RadioButtons"
+            android:visibility="visible"/>
 
         <RadioButton
             android:id="@+id/btnUntil18"
