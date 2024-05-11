@@ -432,15 +432,33 @@ class LocationActivity : AppCompatActivity() {
 
         // Verificar se está entre 7 e 8 horas
         if (hora >= 7.0 && hora <= 8.0) {
-            Log.d(TAG, "Hora está entre 7 e 8 horas.")
             binding.btnUntil18.visibility = View.VISIBLE
         } else {
-            Log.d(TAG, "Hora não está entre 7 e 8 horas.")
             binding.btnUntil18.visibility = View.GONE
         }
         // Verificar se é mais de 14h
         if (hora > 14.0) {
-
+            binding.btn4hours.visibility = View.GONE
+        } else {
+            binding.btn4hours.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 16h
+        if (hora > 16.0) {
+            binding.btn2hours.visibility = View.GONE
+        } else {
+            binding.btn2hours.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 17h
+        if (hora > 17.0) {
+            binding.btn1hour.visibility = View.GONE
+        } else {
+            binding.btn1hour.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 17h30
+        if (hora > 17.5) {
+            binding.btn30min.visibility = View.GONE
+        } else {
+            binding.btn30min.visibility = View.VISIBLE
         }
     }
 }
