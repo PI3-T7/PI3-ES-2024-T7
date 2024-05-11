@@ -160,12 +160,14 @@ class QRcodeActivity : AppCompatActivity() {
 
     // Função que gera um QRcode
     private fun generateQRCode(text: String) {
+        val prefixo = "SMARTLOCKER_"
+        val dadosComPrefixo = prefixo + text // Adiciona o prefixo aos dados
         val width = 500
         val height = 500
         val bitMatrix: BitMatrix
         try {
             val barcodeEncoder = BarcodeEncoder()
-            bitMatrix = barcodeEncoder.encode(text, BarcodeFormat.QR_CODE, width, height)
+            bitMatrix = barcodeEncoder.encode(dadosComPrefixo, BarcodeFormat.QR_CODE, width, height)
             val bitmap = toBitmap(bitMatrix)
             qrCodeBitmap = bitmap // Atribui o bitmap gerado à variável qrCodeBitmap
             imgQRcode.setImageBitmap(bitmap)

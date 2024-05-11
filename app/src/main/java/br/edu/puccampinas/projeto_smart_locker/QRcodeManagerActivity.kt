@@ -5,7 +5,9 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityQrcodeManagerBinding
@@ -16,6 +18,7 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 
+
 class QRcodeManagerActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityQrcodeManagerBinding.inflate(layoutInflater) }
@@ -24,6 +27,9 @@ class QRcodeManagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val scannerLineAnimation = AnimationUtils.loadAnimation(this, R.anim.scanner_line_animation)
+        binding.scannerLine.startAnimation(scannerLineAnimation)
 
         binding.imgArrow.setOnClickListener {
             startActivity(Intent(this, ManagerMainScreenActivity::class.java))
@@ -38,6 +44,8 @@ class QRcodeManagerActivity : AppCompatActivity() {
         } else {
             startScanning()
         }
+
+
     }
 
     private fun startScanning() {
@@ -49,24 +57,38 @@ class QRcodeManagerActivity : AppCompatActivity() {
             scanMode = ScanMode.SINGLE
             isAutoFocusEnabled = true
             isFlashEnabled = false
-            decodeCallback = DecodeCallback {
+            decodeCallback = DecodeCallback { result ->
                 runOnUiThread {
-                    Toast.makeText(this@QRcodeManagerActivity, "Scan Result: ${it.text}", Toast.LENGTH_SHORT).show()
+                    val textoLido = result.text
+                    if (textoLido.startsWith("SMARTLOCKER_")) {
+                        val dadosReais = textoLido.removePrefix("MYAPP_")
+                        val intent =
+                            Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        showInvalidQRCodeDialog()
+                        binding.scannerLine.clearAnimation()
+                    }
                 }
             }
             errorCallback = ErrorCallback {
                 runOnUiThread {
-                    Toast.makeText(this@QRcodeManagerActivity, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@QRcodeManagerActivity,
+                        "Error: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        }
 
-        scannerView.setOnClickListener {
-            codescanner.startPreview()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 123) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -86,9 +108,42 @@ class QRcodeManagerActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        super.onPause()
         if (::codescanner.isInitialized) {
             codescanner.releaseResources()
         }
-        super.onPause()
     }
+
+    private fun showInvalidQRCodeDialog() {
+        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
+        builder.setTitle("QR Code Inválido")
+        builder.setMessage("O QR code não foi gerado pelo seu aplicativo. Deseja tentar novamente?")
+        builder.setPositiveButton("Ler Novamente") { dialog, _ ->
+            dialog.dismiss()
+            codescanner.startPreview()
+            binding.scannerLine.startAnimation(
+                AnimationUtils.loadAnimation(
+                    this,
+                    R.anim.scanner_line_animation
+                )
+            )
+        }
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+            startActivity(Intent(this@QRcodeManagerActivity, ManagerMainScreenActivity::class.java))
+        }
+        builder.setCancelable(false) // Impede que a caixa de diálogo seja fechada ao tocar fora dela
+        val dialog = builder.create()
+        dialog.setOnDismissListener {
+            // Reinicia a animação da linha do scanner quando a caixa de diálogo é fechada
+            binding.scannerLine.startAnimation(
+                AnimationUtils.loadAnimation(
+                    this,
+                    R.anim.scanner_line_animation
+                )
+            )
+        }
+        dialog.show()
+    }
+
 }
