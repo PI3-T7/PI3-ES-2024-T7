@@ -18,7 +18,9 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 
-
+/**
+ * Activity responsável pela leitura do QR code.
+ */
 class QRcodeManagerActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityQrcodeManagerBinding.inflate(layoutInflater) }
@@ -28,6 +30,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Inicia a animação da linha do scanner
         val scannerLineAnimation = AnimationUtils.loadAnimation(this, R.anim.scanner_line_animation)
         binding.scannerLine.startAnimation(scannerLineAnimation)
 
@@ -35,19 +38,23 @@ class QRcodeManagerActivity : AppCompatActivity() {
             startActivity(Intent(this, ManagerMainScreenActivity::class.java))
         }
 
+        // Verifica se a permissão da câmera foi concedida
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_DENIED
         ) {
+            // Solicita permissão da câmera se não foi concedida
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 123)
         } else {
+            // Inicia a função de escaneamento se a permissão foi concedida
             startScanning()
         }
-
-
     }
 
+    /**
+     * Inicia a função de escaneamento do QR code.
+     */
     private fun startScanning() {
         val scannerView: CodeScannerView = findViewById(R.id.scanner_view)
         codescanner = CodeScanner(this, scannerView).apply {
@@ -61,12 +68,16 @@ class QRcodeManagerActivity : AppCompatActivity() {
                 runOnUiThread {
                     val textoLido = result.text
                     if (textoLido.startsWith("SMARTLOCKER_")) {
+                        // O QR code foi gerado pelo seu aplicativo
                         val dadosReais = textoLido.removePrefix("MYAPP_")
+
                         val intent =
                             Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
                         startActivity(intent)
                     } else {
+                        // Mostra a caixa de diálogo para QR code inválido
                         showInvalidQRCodeDialog()
+                        // Para a animação da linha do scanner
                         binding.scannerLine.clearAnimation()
                     }
                 }
@@ -84,6 +95,9 @@ class QRcodeManagerActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Função que lida com a resposta da solicitação de permissão da câmera.
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -92,14 +106,19 @@ class QRcodeManagerActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 123) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão da câmera concedida, inicia a função de escaneamento
                 Toast.makeText(this, "Permissão da câmera concedida", Toast.LENGTH_SHORT).show()
                 startScanning()
             } else {
+                // Permissão da câmera não concedida, mostra uma mensagem
                 Toast.makeText(this, "Permissão da câmera não concedida", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    /**
+     * Reinicia a visualização do escâner ao retomar a atividade.
+     */
     override fun onResume() {
         super.onResume()
         if (::codescanner.isInitialized) {
@@ -107,6 +126,9 @@ class QRcodeManagerActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Pausa o escaneamento ao pausar a atividade.
+     */
     override fun onPause() {
         super.onPause()
         if (::codescanner.isInitialized) {
@@ -114,13 +136,18 @@ class QRcodeManagerActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Função que mostra uma caixa de diálogo informando que o QR code é inválido.
+     */
     private fun showInvalidQRCodeDialog() {
         val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
         builder.setTitle("QR Code Inválido")
         builder.setMessage("O QR code não foi gerado pelo seu aplicativo. Deseja tentar novamente?")
         builder.setPositiveButton("Ler Novamente") { dialog, _ ->
             dialog.dismiss()
+            // Reinicia a visualização do escaner
             codescanner.startPreview()
+            // Reinicia a animação da linha do scanner
             binding.scannerLine.startAnimation(
                 AnimationUtils.loadAnimation(
                     this,
@@ -130,9 +157,10 @@ class QRcodeManagerActivity : AppCompatActivity() {
         }
         builder.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
+            // Retorna para a tela inicial do gerente
             startActivity(Intent(this@QRcodeManagerActivity, ManagerMainScreenActivity::class.java))
         }
-        builder.setCancelable(false) // Impede que a caixa de diálogo seja fechada ao tocar fora dela
+        builder.setCancelable(false)
         val dialog = builder.create()
         dialog.setOnDismissListener {
             // Reinicia a animação da linha do scanner quando a caixa de diálogo é fechada
@@ -145,5 +173,4 @@ class QRcodeManagerActivity : AppCompatActivity() {
         }
         dialog.show()
     }
-
 }
