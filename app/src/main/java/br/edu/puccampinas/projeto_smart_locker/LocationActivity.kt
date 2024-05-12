@@ -51,7 +51,6 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +96,9 @@ class LocationActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // Atualiza o layout depois de verificar a hora
-        checkHour()
+        //checkHour()
+
+
     }
 
     override fun onRequestPermissionsResult(
@@ -123,7 +124,7 @@ class LocationActivity : AppCompatActivity() {
     private fun mandarDadosQrcode(){
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
-        val dados = DadosCliente("", "", "", "", "", "", 0.0)
+        val dados = DadosCliente("", "", "", "", "", 0.0)
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
             binding.btn30min.isChecked -> "30 minutos"
@@ -194,13 +195,10 @@ class LocationActivity : AppCompatActivity() {
                             if (unidade != null) {
                                 dados.unidade = unidade
                             }
-                            if (userId != null) {
-                                dados.nome = userId
-                            }
                             if (endereco != null) {
                                 dados.endereco = endereco
                             }
-                            Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Nome: $userId")
+                            Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Id: $userId")
                         }
                         // Para transformar o objeto com os dados a serem passados pelo QRcode em string
                         val gson = Gson()
@@ -460,12 +458,21 @@ class LocationActivity : AppCompatActivity() {
         } else {
             binding.btn30min.visibility = View.VISIBLE
         }
+
+        // Verificar se todas as visibilidades estão definidas como "gone"
+        if (binding.btn4hours.visibility == View.GONE &&
+            binding.btn2hours.visibility == View.GONE &&
+            binding.btn1hour.visibility == View.GONE &&
+            binding.btn30min.visibility == View.GONE) {
+            // Todas as visibilidades estão como "gone", então exiba a mensagem no lugar
+            // de "Selecione a opção desejada"
+            binding.textoAcima.text = "Não é possível fazer uma locação após 17h30. Tente novamente amanhã, a partir das 7h00."
+        }
     }
 }
 
 // Classe que faz a passagem de dados do cliente para o QRcode
 data class DadosCliente(
-    var id: String,
     var nome: String,
     var telefone: String,
     var unidade: String,
