@@ -96,9 +96,7 @@ class LocationActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // Atualiza o layout depois de verificar a hora
-        //checkHour()
-
-
+        checkHour()
     }
 
     override fun onRequestPermissionsResult(
@@ -125,6 +123,7 @@ class LocationActivity : AppCompatActivity() {
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
         val dados = DadosCliente("", "", "", "", "", 0.0)
+
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
             binding.btn30min.isChecked -> "30 minutos"
@@ -142,6 +141,31 @@ class LocationActivity : AppCompatActivity() {
         // Recuperando o id do usuário logado no momento
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
+        // Utilizando o id do usuário para buscar seu nome e celular, para passar junto com os
+        // outros dados no QRCode.
+        userId?.let {
+            val userDocRef = db.collection("Pessoas").document(it)
+            userDocRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userName = document.getString("nome_completo")
+                        val userPhone = document.getString("celular")
+                        if (userName != null && userPhone != null) {
+                            Log.d(TAG, "Nome do usuário: $userName, Celular: $userPhone")
+                            // passando os dados do usuario para o qrcode
+                            dados.nome = userName
+                            dados.telefone = userPhone
+                        } else {
+                            Log.d(TAG, "Nome do usuário e celular não encontrados no Firestore")
+                        }
+                    } else {
+                        Log.d(TAG, "Documento do usuário não encontrado no Firestore")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Erro ao recuperar o nome do usuário do Firestore", e)
+                }
+        }
 
         // Recuperando dados da locação para passar para o QRCode, junto com os dados do usuário
         if (!valorRecuperado.isNullOrEmpty()) {
@@ -159,31 +183,6 @@ class LocationActivity : AppCompatActivity() {
                         "4 horas" -> pricesArray2?.get(3)?.toString()
                         "Até às 18 horas" -> pricesArray2?.get(4)?.toString()
                         else -> ""
-                    }
-                    // Utilizando o id do usuário para buscar seu nome e celular, para passar junto com os
-                    // outros dados no QRCode.
-                    userId?.let {
-                        val userDocRef = db.collection("Pessoas").document(it)
-                        userDocRef.get()
-                            .addOnSuccessListener { document ->
-                                if (document.exists()) {
-                                    val userName = document.getString("nome_completo")
-                                    val userPhone = document.getString("celular")
-                                    if (userName != null && userPhone != null) {
-                                        Log.d(TAG, "Nome do usuário: $userName, Celular: $userPhone")
-                                        // passando os dados do usuario para o qrcode
-                                        dados.nome = userName
-                                        dados.telefone = userPhone
-                                    } else {
-                                        Log.d(TAG, "Nome do usuário e celular não encontrados no Firestore")
-                                    }
-                                } else {
-                                    Log.d(TAG, "Documento do usuário não encontrado no Firestore")
-                                }
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Erro ao recuperar o nome do usuário do Firestore", e)
-                            }
                     }
 
                     // juntando todos os outros dados para passar no QRCode
@@ -224,6 +223,7 @@ class LocationActivity : AppCompatActivity() {
             ).show()
         }
     }
+
 
     private fun obterLocalizacaoAtual() {
 

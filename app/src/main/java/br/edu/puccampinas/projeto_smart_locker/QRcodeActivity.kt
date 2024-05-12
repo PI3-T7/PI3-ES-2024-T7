@@ -14,6 +14,7 @@ import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
 import android.util.Base64
+import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
@@ -34,6 +35,7 @@ class QRcodeActivity : AppCompatActivity() {
 
         // Obtém a string serializada da Intent
         val dados = intent.getStringExtra("dados")
+        Log.d("QRcodeActivity", "Dados recebidos: $dados")
 
         // Verifica se os dados são nulos e chama a função
         if (dados != null) {
