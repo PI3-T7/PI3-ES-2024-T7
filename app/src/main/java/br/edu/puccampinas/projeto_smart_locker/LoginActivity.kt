@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     // Configuração do FirebaseAuth
     private val auth by lazy { FirebaseAuth.getInstance() }
 
-    //
+    // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
     private val networkChecker by lazy {
         NetworkChecker(
             ContextCompat.getSystemService(this, ConnectivityManager::class.java)

@@ -20,8 +20,7 @@
         <activity
             android:name=".NetworkErrorActivity"
             android:exported="false"
-            android:theme="@style/AppTheme"
-            />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ClosetReleasedActivity"
             android:exported="false"

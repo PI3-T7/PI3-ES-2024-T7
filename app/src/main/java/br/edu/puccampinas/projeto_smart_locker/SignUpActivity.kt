@@ -1,6 +1,7 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
 import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,6 +30,14 @@ class SignUpActivity : AppCompatActivity() {
 
     // Criação do mapa para guardar os valores para cadastro
     private val values = mutableMapOf<String, String>()
+
+    // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -247,29 +257,34 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun registerUser() {
-        auth.createUserWithEmailAndPassword(
-            values["email"].toString(), values["senha"].toString()
-        ).addOnSuccessListener { authResult ->
-            authResult.user?.sendEmailVerification()?.addOnCompleteListener {
-                values.remove("senha2")
-                database.collection("Pessoas").document(authResult.user?.uid.toString()).set(values)
-                startActivity(Intent(this, VerifyActivity::class.java))
-                finish()
+        if (networkChecker.hasInternet()) {
+            auth.createUserWithEmailAndPassword(
+                values["email"].toString(), values["senha"].toString()
+            ).addOnSuccessListener { authResult ->
+                authResult.user?.sendEmailVerification()?.addOnCompleteListener {
+                    values.remove("senha2")
+                    database.collection("Pessoas").document(authResult.user?.uid.toString())
+                        .set(values)
+                    startActivity(Intent(this, VerifyActivity::class.java))
+                    finish()
+                }
+            }.addOnFailureListener { exception ->
+                if (exception.message.toString() == "The email address is badly formatted.") {
+                    Toast.makeText(
+                        this,
+                        "Endereço de email inválido!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Endereço de email já registrado!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
-        }.addOnFailureListener { exception ->
-            if (exception.message.toString() == "The email address is badly formatted.") {
-                Toast.makeText(
-                    this,
-                    "Endereço de email inválido!",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Endereço de email já registrado!",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        } else {
+            startActivity(Intent(this, NetworkErrorActivity::class.java))
         }
     }
 }

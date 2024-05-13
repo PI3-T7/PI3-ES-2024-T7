@@ -1,29 +1,23 @@
 package br.edu.puccampinas.projeto_smart_locker
 
-import android.net.ConnectivityManager
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityNetworkErrorBinding
 
+/**
+ * Classe NetworkErrorActivity representa uma Activity que é exibida quando ocorre um erro de rede.
+ * Esta Activity fornece ao usuário a opção de tentar novamente (por meio do botão "Tentar Novamente").
+ * @author isabellatressino
+ */
 class NetworkErrorActivity : AppCompatActivity() {
 
-    private val binding by lazy {ActivityNetworkErrorBinding.inflate(layoutInflater)}
-//    private val networkChecker by lazy {
-//        NetworkChecker(
-//            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
-//                ?: throw IllegalStateException("ConnectivityManager not available")
-//        )
-//    }
+    private val binding by lazy { ActivityNetworkErrorBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.btnTryAgain.setOnClickListener{
+        binding.btnTryAgain.setOnClickListener {
             finish()
         }
     }
