@@ -1,12 +1,14 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -16,6 +18,14 @@ class LoginActivity : AppCompatActivity() {
 
     // Configuração do FirebaseAuth
     private val auth by lazy { FirebaseAuth.getInstance() }
+
+    //
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,22 +54,32 @@ class LoginActivity : AppCompatActivity() {
             InputType.TYPE_CLASS_TEXT
         )
     }
+
     // Função para enviar e-mail de redefinição de senha
     private fun forgotPassword(email: String) {
-        if (email.isBlank()) {   // Verifica se o campo de e-mail está em branco
-            Toast.makeText(this, "Digite um email para a recuperação de senha!", Toast.LENGTH_LONG).show()
-            return
-        }
-        // Envia um e-mail de redefinição de senha para o endereço fornecido
-        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Se a operação for bem-sucedida, redireciona para a tela de redefinição de senha
-                startActivity(Intent(this, ForgetActivity::class.java).putExtra("email", email))
-                finish()
-            } else {
-                // Se a operação falhar, exibe uma mensagem de erro
-                Toast.makeText(this, "Endereço de email inválido!", Toast.LENGTH_LONG).show()
+        if (networkChecker.hasInternet()) {
+            if (email.isBlank()) {   // Verifica se o campo de e-mail está em branco
+                Toast.makeText(
+                    this,
+                    "Digite um email para a recuperação de senha!",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+                return
             }
+            // Envia um e-mail de redefinição de senha para o endereço fornecido
+            auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Se a operação for bem-sucedida, redireciona para a tela de redefinição de senha
+                    startActivity(Intent(this, ForgetActivity::class.java).putExtra("email", email))
+                    finish()
+                } else {
+                    // Se a operação falhar, exibe uma mensagem de erro
+                    Toast.makeText(this, "Endereço de email inválido!", Toast.LENGTH_LONG).show()
+                }
+            }
+        } else {
+            startActivity(Intent(this, NetworkErrorActivity::class.java))
         }
     }
 
@@ -92,42 +112,47 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validUser(email: String, password: String) {
-        // Verifica se o email ou a senha estão em branco
-        if (email.isBlank() or password.isBlank()) return
-        // Tenta fazer login com o email e a senha fornecidos
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener { authResult ->
-                // Verifica se o email do usuário foi verificado
-                if (authResult.user?.isEmailVerified == false) {
-                    // Se não estiver verificado, faz logout e exibe mensagem para o usuário
-                    auth.signOut()
-                    Toast.makeText(
-                        this,
-                        "Por favor, ative a conta através do link enviado no email e tente novamente!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@addOnSuccessListener
+        if (networkChecker.hasInternet()) {
+            // Verifica se o email ou a senha estão em branco
+            if (email.isBlank() or password.isBlank()) return
+            // Se houver conexão com a internet, tenta fazer login
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener { authResult ->
+                    // Verifica se o email do usuário foi verificado
+                    if (authResult.user?.isEmailVerified == false) {
+                        // Se não estiver verificado, faz logout e exibe mensagem para o usuário
+                        auth.signOut()
+                        Toast.makeText(
+                            this,
+                            "Por favor, ative a conta através do link enviado no email e tente novamente!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@addOnSuccessListener
+                    }
+                    // Se o login for bem-sucedido e o email estiver verificado, redireciona para a tela principal do cliente
+                    startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                    finish()
                 }
-                // Se o login for bem-sucedido e o email estiver verificado, redireciona para a tela principal do cliente
-                startActivity(Intent(this, ClientMainScreenActivity::class.java))
-                finish()
-            }.addOnFailureListener { exception ->
-                // Trata falhas durante o processo de login
-                if (exception.message.toString() == "The email address is badly formatted.") {
-                    // Verifica se o formato do email está incorreto
-                    Toast.makeText(
-                        this,
-                        "Endereço de email inválido, por favor digite novamente!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    // Se a falha não for relacionada ao formato do email, exibe mensagem de erro genérica
-                    Toast.makeText(
-                        this,
-                        "Email ou senha incorretos, por favor digite novamente!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                .addOnFailureListener { exception ->
+                    // Trata falhas durante o processo de login
+                    if (exception.message.toString() == "The email address is badly formatted.") {
+                        // Verifica se o formato do email está incorreto
+                        Toast.makeText(
+                            this,
+                            "Endereço de email inválido, por favor digite novamente!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        // Se a falha não for relacionada ao formato do email, exibe mensagem de erro genérica
+                        Toast.makeText(
+                            this,
+                            "Email ou senha incorretos, por favor digite novamente!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-            }
+        } else {
+            startActivity(Intent(this, NetworkErrorActivity::class.java))
+        }
     }
 }
