@@ -4,11 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import android.widget.ToggleButton
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
     // Configuração do ViewBinding
@@ -109,8 +111,22 @@ class LoginActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
                 // Se o login for bem-sucedido e o email estiver verificado, redireciona para a tela principal do cliente
-                startActivity(Intent(this, ClientMainScreenActivity::class.java))
-                finish()
+                FirebaseFirestore.getInstance()
+                    .collection("Pessoas")
+                    .document(authResult.user?.uid.toString())
+                    .addSnapshotListener { snapshot, error ->
+                        if (error != null) {
+                            Log.e("Erro no Firebase Firestore", error.message.toString())
+                        }
+                        if (snapshot != null && snapshot.exists()) {
+                            if (snapshot.get("gerente").toString() == "true") {
+                                startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+                            } else {
+                                startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                            }
+                            finish()
+                        }
+                    }
             }.addOnFailureListener { exception ->
                 // Trata falhas durante o processo de login
                 if (exception.message.toString() == "The email address is badly formatted.") {
