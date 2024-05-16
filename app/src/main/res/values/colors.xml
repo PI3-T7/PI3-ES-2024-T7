@@ -12,4 +12,5 @@
     <color name="grey">#B0AAAA</color>
     <color name="blue">#77C2F1</color>
     <color name="light_gray">#CDC8C8</color>
+    <color name="input_invalid">#F44336</color>
 </resources>

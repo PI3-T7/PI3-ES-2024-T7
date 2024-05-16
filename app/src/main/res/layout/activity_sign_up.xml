@@ -68,19 +68,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_container" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_name_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editName"
+            app:layout_constraintStart_toStartOf="@+id/editName"
+            app:layout_constraintTop_toBottomOf="@+id/editName" />
+
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editCpf"
             style="@style/InputsStyle"
+            android:background="@drawable/shape_inputs"
             android:drawableStart="@drawable/icon_cpf"
             android:hint="@string/cpf"
             android:inputType="number"
             android:maxLength="14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editName"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_error"
             app:mask="___.___.___-__"
             app:maskCharacter="_"
             app:maskStyle="normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cpf_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editCpf"
+            app:layout_constraintStart_toStartOf="@+id/editCpf"
+            app:layout_constraintTop_toBottomOf="@+id/editCpf" />
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editBirthDate"
@@ -90,10 +105,17 @@
             android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editCpf"
+            app:layout_constraintTop_toBottomOf="@id/tv_cpf_error"
             app:mask="__/__/____"
             app:maskCharacter="_"
             app:maskStyle="normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_date_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editBirthDate"
+            app:layout_constraintStart_toStartOf="@+id/editBirthDate"
+            app:layout_constraintTop_toBottomOf="@+id/editBirthDate" />
 
         <com.santalu.maskara.widget.MaskEditText
             android:id="@+id/editPhone"
@@ -103,10 +125,17 @@
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editBirthDate"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_error"
             app:mask="(__) _____ ____"
             app:maskCharacter="_"
             app:maskStyle="normal" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_phone_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editPhone"
+            app:layout_constraintStart_toStartOf="@+id/editPhone"
+            app:layout_constraintTop_toBottomOf="@+id/editPhone" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editEmail"
@@ -116,7 +145,14 @@
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editPhone" />
+            app:layout_constraintTop_toBottomOf="@id/tv_phone_error" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_email_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editEmail"
+            app:layout_constraintStart_toStartOf="@+id/editEmail"
+            app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editPassword"
@@ -126,12 +162,20 @@
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editEmail" />
+            app:layout_constraintTop_toBottomOf="@id/tv_email_error" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_password_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editPassword"
+            app:layout_constraintStart_toStartOf="@+id/editPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
         <ToggleButton
             android:id="@+id/togglePasswordVisibility"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/selector_visibility_state"
             android:checked="false"
             android:textOff=""
@@ -145,19 +189,26 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editConfirmPassword"
             style="@style/InputsStyle"
-            android:layout_marginTop="16dp"
             android:drawableStart="@drawable/icon_key"
             android:hint="@string/confirmPasswordSignup"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_password_error" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_confirm_password_error"
+            style="@style/error"
+            app:layout_constraintEnd_toEndOf="@+id/editConfirmPassword"
+            app:layout_constraintStart_toStartOf="@+id/editConfirmPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editConfirmPassword" />
 
         <ToggleButton
             android:id="@+id/togglePasswordVisibility2"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/selector_visibility_state"
             android:checked="false"
             android:textOff=""
@@ -173,11 +224,11 @@
             style="@style/ButtonsStyle"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="40dp"
-            android:text="@string/signup"
             android:backgroundTint="@color/orange"
+            android:text="@string/signup"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editConfirmPassword" />
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_password_error" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
