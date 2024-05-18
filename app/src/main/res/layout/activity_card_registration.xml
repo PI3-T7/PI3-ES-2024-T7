@@ -118,6 +118,13 @@
                 app:maskCharacter="_"
                 app:maskStyle="normal" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_error_number"
+                style="@style/error"
+                app:layout_constraintEnd_toEndOf="@+id/editNumCartao"
+                app:layout_constraintStart_toStartOf="@+id/editNumCartao"
+                app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editName"
                 style="@style/EditTextCard"
@@ -127,6 +134,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_error_name"
+                style="@style/error"
+                app:layout_constraintEnd_toEndOf="@+id/editName"
+                app:layout_constraintStart_toStartOf="@+id/editName"
+                app:layout_constraintTop_toBottomOf="@+id/editName" />
 
             <com.santalu.maskara.widget.MaskEditText
                 android:id="@+id/editDataValidade"
@@ -145,6 +159,14 @@
                 app:maskCharacter="_"
                 app:maskStyle="normal" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_error_date"
+                style="@style/error"
+                app:layout_constraintEnd_toEndOf="@+id/editDataValidade"
+                app:layout_constraintStart_toStartOf="@+id/editDataValidade"
+                app:layout_constraintTop_toBottomOf="@+id/editDataValidade" />
+
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/editCVV"
                 style="@style/EditTextCard"
@@ -159,18 +181,24 @@
                 app:layout_constraintStart_toEndOf="@id/editDataValidade"
                 app:layout_constraintTop_toBottomOf="@id/textView13" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_error_cvv"
+                style="@style/error"
+                app:layout_constraintEnd_toEndOf="@+id/editCVV"
+                app:layout_constraintStart_toStartOf="@+id/editCVV"
+                app:layout_constraintTop_toBottomOf="@+id/editCVV" />
+
             <CheckBox
                 android:id="@+id/checkBoxCiente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/str_checkbox"
-                app:layout_constraintTop_toBottomOf="@id/editDataValidade"
+                app:layout_constraintTop_toBottomOf="@+id/tv_error_date"
                 tools:layout_editor_absoluteX="40dp" />
 
             <!-- Label dos inputs -->
-
             <TextView
                 android:id="@+id/textView11"
                 style="@style/TextViewCard"
@@ -184,21 +212,21 @@
                 style="@style/TextViewCard"
                 android:text="@string/label_card_name"
                 app:layout_constraintStart_toStartOf="@+id/editName"
-                app:layout_constraintTop_toBottomOf="@+id/editNumCartao" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_error_number" />
 
             <TextView
                 android:id="@+id/textView13"
                 style="@style/TextViewCard"
                 android:text="@string/label_card_cvv"
                 app:layout_constraintStart_toStartOf="@+id/editCVV"
-                app:layout_constraintTop_toBottomOf="@+id/editName" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_error_name" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextViewCard"
                 android:text="@string/label_card_expiration"
                 app:layout_constraintStart_toStartOf="@+id/editDataValidade"
-                app:layout_constraintTop_toBottomOf="@+id/editName" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_error_name" />
 
             <Button
                 android:id="@+id/btnCadastrar"
