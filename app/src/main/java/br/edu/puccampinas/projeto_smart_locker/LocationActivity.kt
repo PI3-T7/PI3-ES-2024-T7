@@ -122,7 +122,7 @@ class LocationActivity : AppCompatActivity() {
     private fun mandarDadosQrcode(){
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
-        val dados = DadosCliente("", "", "", "", "", 0.0)
+        val dados = DadosCliente("", "", "", "", "", "", 0.0)
 
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
@@ -155,6 +155,7 @@ class LocationActivity : AppCompatActivity() {
                             // passando os dados do usuario para o qrcode
                             dados.nome = userName
                             dados.telefone = userPhone
+                            dados.id = userId
                         } else {
                             Log.d(TAG, "Nome do usuário e celular não encontrados no Firestore")
                         }
@@ -473,6 +474,7 @@ class LocationActivity : AppCompatActivity() {
 
 // Classe que faz a passagem de dados do cliente para o QRcode
 data class DadosCliente(
+    var id: String,
     var nome: String,
     var telefone: String,
     var unidade: String,
