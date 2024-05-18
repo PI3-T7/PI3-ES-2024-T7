@@ -6,6 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -59,15 +66,16 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".CheckDataNfcActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ReadNfcActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
+            android:exported="true"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ManagerMainScreenActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".QRcodeActivity"

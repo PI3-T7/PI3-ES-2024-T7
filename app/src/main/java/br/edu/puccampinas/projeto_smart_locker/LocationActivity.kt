@@ -51,7 +51,6 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private val db = FirebaseFirestore.getInstance()
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,7 +122,8 @@ class LocationActivity : AppCompatActivity() {
     private fun mandarDadosQrcode(){
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
-        var dados = DadosCliente("", "", "", 0.0)
+        val dados = DadosCliente("", "", "", "", "", 0.0)
+
         // Verifica qual RadioButton está selecionado e atribui a opção correspondente ao objeto 'dados'
         val selectedOption = when {
             binding.btn30min.isChecked -> "30 minutos"
@@ -138,15 +138,43 @@ class LocationActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
         val valorRecuperado = sharedPreferences.getString("uid", null)
+        // Recuperando o id do usuário logado no momento
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
+        // Utilizando o id do usuário para buscar seu nome e celular, para passar junto com os
+        // outros dados no QRCode.
+        userId?.let {
+            val userDocRef = db.collection("Pessoas").document(it)
+            userDocRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userName = document.getString("nome_completo")
+                        val userPhone = document.getString("celular")
+                        if (userName != null && userPhone != null) {
+                            Log.d(TAG, "Nome do usuário: $userName, Celular: $userPhone")
+                            // passando os dados do usuario para o qrcode
+                            dados.nome = userName
+                            dados.telefone = userPhone
+                        } else {
+                            Log.d(TAG, "Nome do usuário e celular não encontrados no Firestore")
+                        }
+                    } else {
+                        Log.d(TAG, "Documento do usuário não encontrado no Firestore")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Erro ao recuperar o nome do usuário do Firestore", e)
+                }
+        }
 
+        // Recuperando dados da locação para passar para o QRCode, junto com os dados do usuário
         if (!valorRecuperado.isNullOrEmpty()) {
             val documentReference = db.collection("Unidades de Locação").document(valorRecuperado)
             documentReference.get()
                 .addOnSuccessListener { document ->
                     val pricesArray2 = document.get("prices") as? List<*>
                     val unidade = document.getString("uid")
+                    val endereco = document.getString("address")
                     // Verifica qual é o preço associado à opção selecionada
                     val selectedPrice = when (selectedOption) {
                         "30 minutos" -> pricesArray2?.get(0)?.toString()
@@ -157,6 +185,7 @@ class LocationActivity : AppCompatActivity() {
                         else -> ""
                     }
 
+                    // juntando todos os outros dados para passar no QRCode
                     if (selectedOption.isNotEmpty()) {
                         // Verifica se o preço não é nulo ou vazio antes de converter para Double
                         if (!selectedPrice.isNullOrEmpty()) {
@@ -165,10 +194,10 @@ class LocationActivity : AppCompatActivity() {
                             if (unidade != null) {
                                 dados.unidade = unidade
                             }
-                            if (userId != null) {
-                                dados.nome = userId
+                            if (endereco != null) {
+                                dados.endereco = endereco
                             }
-                            Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Nome: $userId")
+                            Log.d(TAG, "preço: $selectedPrice, Unidade: $unidade, Id: $userId")
                         }
                         // Para transformar o objeto com os dados a serem passados pelo QRcode em string
                         val gson = Gson()
@@ -194,6 +223,7 @@ class LocationActivity : AppCompatActivity() {
             ).show()
         }
     }
+
 
     private fun obterLocalizacaoAtual() {
 
@@ -393,26 +423,60 @@ class LocationActivity : AppCompatActivity() {
         val minutoAtual: Int = calendario.get(Calendar.MINUTE)      // Obtém os minutos atuais
 
         // Converte os valores para Double antes de realizar a operação de divisão
-        val horaAtualDouble: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
+        val hora: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
 
         // Log da hora atual
-        Log.d(TAG, "Hora atual: $horaAtualDouble")
+        Log.d(TAG, "Hora atual: $hora")
 
         // Verificar se está entre 7 e 8 horas
-        if (horaAtualDouble >= 7.0 && horaAtualDouble <= 8.0) {
-            Log.d(TAG, "Hora está entre 7 e 8 horas.")
+        if (hora >= 7.0 && hora <= 8.0) {
             binding.btnUntil18.visibility = View.VISIBLE
         } else {
-            Log.d(TAG, "Hora não está entre 7 e 8 horas.")
             binding.btnUntil18.visibility = View.GONE
+        }
+        // Verificar se é mais de 14h
+        if (hora > 14.0) {
+            binding.btn4hours.visibility = View.GONE
+        } else {
+            binding.btn4hours.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 16h
+        if (hora > 16.0) {
+            binding.btn2hours.visibility = View.GONE
+        } else {
+            binding.btn2hours.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 17h
+        if (hora > 17.0) {
+            binding.btn1hour.visibility = View.GONE
+        } else {
+            binding.btn1hour.visibility = View.VISIBLE
+        }
+        // Verificar se é mais de 17h30
+        if (hora > 17.5) {
+            binding.btn30min.visibility = View.GONE
+        } else {
+            binding.btn30min.visibility = View.VISIBLE
+        }
+
+        // Verificar se todas as visibilidades estão definidas como "gone"
+        if (binding.btn4hours.visibility == View.GONE &&
+            binding.btn2hours.visibility == View.GONE &&
+            binding.btn1hour.visibility == View.GONE &&
+            binding.btn30min.visibility == View.GONE) {
+            // Todas as visibilidades estão como "gone", então exiba a mensagem no lugar
+            // de "Selecione a opção desejada"
+            binding.textoAcima.text = "Não é possível fazer uma locação após 17h30. Tente novamente amanhã, a partir das 7h00."
         }
     }
 }
 
-// Classe apenas para testar a passagem de dados do cliente para o QRcode
+// Classe que faz a passagem de dados do cliente para o QRcode
 data class DadosCliente(
     var nome: String,
+    var telefone: String,
     var unidade: String,
     var opcao: String,
+    var endereco: String,
     var preco: Double
 )

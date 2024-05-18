@@ -5,10 +5,12 @@ import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OpeningActivity : AppCompatActivity() {
@@ -50,7 +52,22 @@ class OpeningActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) startActivity(Intent(this, ClientMainScreenActivity::class.java))
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                .collection("Pessoas")
+                .document(user.uid).addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e("Erro no Firebase Firestore", error.message.toString())
+                    }
+                    if (snapshot != null && snapshot.exists()) {
+                        if (snapshot.get("gerente").toString() == "true") {
+                            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                        }
+                    }
+                }
+        }
     }
     // Função responsável por solicitar permissão de localização
     private fun requestLocationPermission() {
