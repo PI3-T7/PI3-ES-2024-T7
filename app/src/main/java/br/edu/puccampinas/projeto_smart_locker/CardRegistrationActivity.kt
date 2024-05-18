@@ -1,46 +1,48 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCardRegistrationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDate
+import android.util.Log
 
+/**
+ * Activity responsável pelo registro de cartões.
+ */
 class CardRegistrationActivity : AppCompatActivity() {
     private val binding by lazy { ActivityCardRegistrationBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
 
-    // onCreate: atividade criada + configuração do layout
+    /**
+     * Método chamado quando a atividade é criada.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        // Configuração dos listeners para os botões e campos de entrada
         with(binding) {
 
             btnCadastrar.setOnClickListener {
-                if (isInputValid()) {
-                    if (checkBoxCiente.isChecked) {
-                        // Realizar o cadastro ou ação desejada quando a checkbox está marcada
-                        cadastrarCartao()
-                    } else {
-                        // Exibir mensagem de erro se a checkbox não estiver marcada
-                        exibirErroCheckBox()
-                    }
-                } else {
-                    // Exibir mensagem de erro se os campos não estiverem preenchidos
-                    exibirErroCampos()
-                }
+                isInputsValid()
             }
 
-            // Chamando os eventos do input
             editNumCartao.addTextChangedListener(
                 createTextWatcher(
                     tvCardNumberDetail,
@@ -61,21 +63,20 @@ class CardRegistrationActivity : AppCompatActivity() {
                     tvCvvDetail,
                 )
             )
-            // Aqui é atribuido o botão de home do navbar, onde primeiro é finalizada a
-            // CartoesActivity e depois essa activity
+
             nav.buttonHome.setOnClickListener {
-                LocalBroadcastManager.getInstance(this@CardRegistrationActivity)
-                    .sendBroadcast(Intent("meuFiltro"))
-                finish()
+                showAlertCancel("home")
             }
-            // Aqui é atribuido o botão voltar do navbar, onde é finalizado somente essa activity
+
             nav.buttonVoltar.setOnClickListener {
-                finish()
+                showAlertCancel("arrow")
             }
         }
     }
 
-    // Função para realizar o cadastro do cartão
+    /**
+     * Função que realiza o cadastro de um novo cartão.
+     */
     private fun cadastrarCartao() {
         val cartaoInfo = mapOf(
             "validade" to binding.editDataValidade.masked,
@@ -87,54 +88,114 @@ class CardRegistrationActivity : AppCompatActivity() {
             .document(auth.currentUser?.uid.toString())
             .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
             .addOnSuccessListener {
-                exibirMensagem("Cartão cadastrado com êxito!")
+                showAlert("Cartão cadastrado com êxito!")
             }.addOnFailureListener {
-                exibirMensagem("Falha ao cadastrar cartão!")
+                showAlert("Falha ao cadastrar cartão!")
             }
 
-        // Depois que o cartão foi cadastrado no banco de dados é preciso primeiro finalizar a
-        // activity que está funcionando por trás dessa (CartoesActivity)
         LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
-        // Despois o usuário é redirecionado para a CartoesActvity (agora com os dados no novo
-        // cartão incluidos
         startActivity(Intent(this, CardsActivity::class.java))
-        // Depois é finalizada essa activity
         finish()
     }
 
-    // Função para exibir mensagem de erro se a checkbox não estiver marcada
-    private fun exibirErroCheckBox() {
-        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-        alertDialogBuilder.setTitle("Erro")
-        alertDialogBuilder.setMessage("Você precisa concordar com os termos para continuar.")
-        alertDialogBuilder.setPositiveButton("OK", null)
-        alertDialogBuilder.show()
+    /**
+     * Função responsável por fazer a validação dos campos de input do cartão
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun isInputsValid() {
+        with(binding) {
+
+            // Verifica se os campos são nulos
+            if (editNumCartao.text.isNullOrEmpty() ||
+                editName.text.isNullOrEmpty() ||
+                editDataValidade.text.isNullOrEmpty() ||
+                editCVV.text.isNullOrEmpty()
+            ) {
+                showAlert("Erro: Preencha todos os campos para continuar")
+                return
+            }
+
+            // Verifica se o checkbox está check
+            if (!(checkBoxCiente.isChecked)) {
+                showAlert("Erro: Você precisa concordar com os termos para continuar.")
+                return
+            }
+
+            // Faz a validação de cada input altera seu estado
+            val isCardNumberValid = isCardNumberValid(editNumCartao.masked)
+            updateInputState(
+                editNumCartao,
+                tvErrorNumber,
+                "Número de cartão inválido",
+                isCardNumberValid
+            )
+
+            val isExpirationDateValid = isExpirationDateValid(editDataValidade.masked)
+            Log.d("MinhaTag", "datavalidade $isExpirationDateValid")
+            updateInputState(editDataValidade, tvErrorDate, "Data inválida", isExpirationDateValid)
+
+            val isCardCvvValid = isCardCvvValid(editCVV.text.toString())
+            updateInputState(editCVV, tvErrorCvv, "Cvv inválido", isCardCvvValid)
+
+            // Se tudo estiver válido, realiza o cadastro do cartão
+            if (isCardCvvValid && isExpirationDateValid && isCardNumberValid) cadastrarCartao()
+        }
     }
 
-    // Função para exibir mensagem de erro se os campos não estiverem preenchidos
-    private fun exibirErroCampos() {
-        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-        alertDialogBuilder.setTitle("Erro")
-        alertDialogBuilder.setMessage("Preencha todos os campos para continuar.")
-        alertDialogBuilder.setPositiveButton("OK", null)
-        alertDialogBuilder.show()
+    /**
+     * Função que faz a validação do numero do cartão
+     * @param cardNumber - o número do cartão
+     * @return true se o numero do cartão for válido, false caso contrário.
+     */
+    private fun isCardNumberValid(cardNumber: String): Boolean {
+        return cardNumber.length >= 16
     }
 
-    // Função que verifica se os campos estão preenchidos
-    private fun isInputValid(): Boolean {
-        val etCardNumber = findViewById<EditText>(R.id.editNumCartao)
-        val etName = findViewById<EditText>(R.id.editName)
-        val etExpirationDate = findViewById<EditText>(R.id.editDataValidade)
-        val etCvv = findViewById<EditText>(R.id.editCVV)
+    /**
+     * Verifica se a data de validade do cartão é válida.
+     *
+     * @param date A data de validade do cartão no formato "MM/YY".
+     * @return true se a data de validade for válida, false caso contrário.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun isExpirationDateValid(date: String): Boolean {
 
-        return etCardNumber.text.isNotEmpty() &&
-                etName.text.isNotEmpty() &&
-                etExpirationDate.text.isNotEmpty() &&
-                etCvv.text.isNotEmpty()
+        // Obtém a data atual
+        val currentDate = LocalDate.now()
+        val currentYear = currentDate.year % 100
+        val currentMonth = currentDate.monthValue
+
+        // Divide a data de validade em mês e ano
+        val (expirationMonth, expirationYear) = date.split("/")
+
+        // Verifica se o ano de expiração é menor que o ano atual ou se é o mesmo ano, mas o mês de expiração é menor
+        if (expirationYear.toInt() < currentYear || (expirationYear.toInt() == currentYear && expirationMonth.toInt() < currentMonth)) {
+            return false
+        }
+
+        // Verifica se o mês de expiração está dentro do intervalo de 1 a 12
+        if (expirationMonth.toInt() !in 1..12) return false
+
+        return true
+    }
+
+    /**
+     * Verifica se o cvv é válido
+     *
+     * @param cvv O cvv do cartão.
+     * @return true se o cvv for válido, false caso contrário.
+     */
+    private fun isCardCvvValid(cvv: String): Boolean {
+        return cvv.length == 3
     }
 
 
-    // Função que cria um TextWatcher com formatação e validação customizadas
+    /**
+     * Cria um TextWatcher com formatação e validação customizadas.
+     * Este TextWatcher atualiza o texto de um TextView com o conteúdo atualizado de um EditText.
+     * @param textView O TextView associado que exibirá o texto atualizado.
+     * @return Um TextWatcher configurado para atualizar o textView conforme o texto do EditText é alterado.
+     */
     private fun createTextWatcher(
         textView: TextView,
     ): TextWatcher {
@@ -149,11 +210,73 @@ class CardRegistrationActivity : AppCompatActivity() {
         }
     }
 
-    // Função para exibir uma mensagem simples com um botão "OK"
-    private fun exibirMensagem(mensagem: String) {
-        val alertDialogBuilder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-        alertDialogBuilder.setMessage(mensagem)
-        alertDialogBuilder.setPositiveButton("OK", null)
-        alertDialogBuilder.show()
+    /**
+     * Exibe um diálogo de alerta com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+    private fun showAlert(message: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Atenção")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    /**
+     * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
+     * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
+     * @param button O identificador do botão que acionou o diálogo de cancelamento.
+     */
+    private fun showAlertCancel(button: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Atenção")
+            .setMessage("Deseja mesmo cancelar essa operação?")
+            .setPositiveButton("SIM") { dialog, _ ->
+                dialog.dismiss()
+                if (button == "home") startActivity(
+                    Intent(
+                        this@CardRegistrationActivity,
+                        ClientMainScreenActivity::class.java
+                    )
+                )
+                finish()
+            }
+            .setNegativeButton("NÃO") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    /**
+     * Atualiza o estado visual de um campo de entrada de texto com base no status fornecido.
+     * @param editText O campo de entrada de texto a ser atualizado.
+     * @param textView O textView associado que exibirá mensagens de erro.
+     * @param text A mensagem de erro a ser exibida.
+     * @param status O status que indica se há um erro (true) ou não (false).
+     */
+    private fun updateInputState(
+        editText: EditText,
+        textView: TextView,
+        text: String,
+        status: Boolean
+    ) {
+        val errorIcon: Drawable?
+
+        if (status) {
+            editText.setBackgroundResource(R.drawable.shape_inputs)
+            textView.text = ""
+            errorIcon = null
+        } else {
+            editText.setBackgroundResource(R.drawable.shape_input_invalid)
+            textView.text = text
+            errorIcon = ContextCompat.getDrawable(this, R.drawable.icon_error)
+        }
+
+        // Adiciona o ícone de erro no final, mantendo o ícone original no início
+        editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            null,
+            null,
+            errorIcon,
+            null
+        )
     }
 }

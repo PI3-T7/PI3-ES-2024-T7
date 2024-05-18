@@ -1,17 +1,30 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OpeningActivity : AppCompatActivity() {
     private val REQUEST_LOCATION_PERMISSION = 1001 // Defina um código de solicitação para a permissão de localização
     private val binding by lazy { ActivityOpeningBinding.inflate(layoutInflater) }
+
+    // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
+
     // no onCreate serão colocados os clickListeners dos botões da tela inicial
     // levando para as respectivas telas
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +32,13 @@ class OpeningActivity : AppCompatActivity() {
         setContentView(binding.root)
         with(binding){
             imgBtnMap.setOnClickListener {
-                // Quando o botão for clicado, solicite a permissão de localização
-                requestLocationPermission()
+                // Verifica se há conexão com a internet antes de abrir a tela do mapa
+                if (networkChecker.hasInternet()) {
+                    // Quando o botão for clicado, solicite a permissão de localização
+                    requestLocationPermission()
+                } else {
+                    startActivity(Intent(this@OpeningActivity, NetworkErrorActivity::class.java))
+                }
             }
             btnBegin.setOnClickListener {
                 startActivity(Intent(this@OpeningActivity, SignUpActivity::class.java))
@@ -34,7 +52,22 @@ class OpeningActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) startActivity(Intent(this, ClientMainScreenActivity::class.java))
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                .collection("Pessoas")
+                .document(user.uid).addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e("Erro no Firebase Firestore", error.message.toString())
+                    }
+                    if (snapshot != null && snapshot.exists()) {
+                        if (snapshot.get("gerente").toString() == "true") {
+                            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                        }
+                    }
+                }
+        }
     }
     // Função responsável por solicitar permissão de localização
     private fun requestLocationPermission() {

@@ -17,6 +17,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Build
 import android.util.Log
 import android.widget.Button
@@ -24,6 +25,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
@@ -34,6 +36,14 @@ class MapActivity : AppCompatActivity() {
     private lateinit var googleMap: GoogleMap
     private var selectedPlace: Place? = null
     private lateinit var botaoAberturaVoltar: ImageView
+
+    // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
@@ -61,17 +71,22 @@ class MapActivity : AppCompatActivity() {
         }
         // Lida com o clique no botão para mapeamento de rotas
         botaoRota.setOnClickListener {
-            if (selectedPlace != null) {
-                val intent = Intent(this, RouteMappingActivity::class.java)
-                intent.putExtra("placeName", selectedPlace!!.name)
-                intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
-                intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
-                intent.putExtra("placeAddress", selectedPlace!!.address)
-                intent.putExtra("placeUid", selectedPlace!!.uid)
-                startActivity(intent)
+            if(networkChecker.hasInternet()){
+                if (selectedPlace != null) {
+                    val intent = Intent(this, RouteMappingActivity::class.java)
+                    intent.putExtra("placeName", selectedPlace!!.name)
+                    intent.putExtra("placeLatitude", selectedPlace!!.latLng?.latitude)
+                    intent.putExtra("placeLongitude", selectedPlace!!.latLng?.longitude)
+                    intent.putExtra("placeAddress", selectedPlace!!.address)
+                    intent.putExtra("placeUid", selectedPlace!!.uid)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Selecione um lugar primeiro", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "Selecione um lugar primeiro", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this,NetworkErrorActivity::class.java))
             }
+
         }
         val vindoDaOpeningActivity = intent.getBooleanExtra("vindo_da_opening_activity", true)
         val vindoDaTeladoUsuario = intent.getBooleanExtra("vindo_da_tela_usuário", false)

@@ -14,6 +14,7 @@ import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
 import android.util.Base64
+import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
@@ -34,6 +35,7 @@ class QRcodeActivity : AppCompatActivity() {
 
         // Obtém a string serializada da Intent
         val dados = intent.getStringExtra("dados")
+        Log.d("QRcodeActivity", "Dados recebidos: $dados")
 
         // Verifica se os dados são nulos e chama a função
         if (dados != null) {
@@ -160,12 +162,14 @@ class QRcodeActivity : AppCompatActivity() {
 
     // Função que gera um QRcode
     private fun generateQRCode(text: String) {
+        val prefixo = "SMARTLOCKER_"
+        val dadosComPrefixo = prefixo + text // Adiciona o prefixo aos dados
         val width = 500
         val height = 500
         val bitMatrix: BitMatrix
         try {
             val barcodeEncoder = BarcodeEncoder()
-            bitMatrix = barcodeEncoder.encode(text, BarcodeFormat.QR_CODE, width, height)
+            bitMatrix = barcodeEncoder.encode(dadosComPrefixo, BarcodeFormat.QR_CODE, width, height)
             val bitmap = toBitmap(bitMatrix)
             qrCodeBitmap = bitmap // Atribui o bitmap gerado à variável qrCodeBitmap
             imgQRcode.setImageBitmap(bitmap)

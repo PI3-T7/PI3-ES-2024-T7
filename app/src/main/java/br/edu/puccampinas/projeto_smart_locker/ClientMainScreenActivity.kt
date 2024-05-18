@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,8 @@ class ClientMainScreenActivity : AppCompatActivity() {
     // chaves para SharedPreferences
     private val sharedPref = "Locacao"
     private val qrCodeBitMapKey = "locacaoPendente"
+
+    private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -49,8 +52,8 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
             // Container do mapa
             containerMap.setOnClickListener {
-                intent.putExtra("vindo_da_tela_usuario", true)
-                startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
+                // Quando o botão for clicado, solicite a permissão de localização
+                requestLocationPermission()
             }
 
             // Container dos cartões
@@ -175,6 +178,37 @@ class ClientMainScreenActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+        }
+    }
+
+    // Função responsável por solicitar permissão de localização
+    private fun requestLocationPermission() {
+        // Verifica se a versão do Android é igual ou superior a Marshmallow (API 23)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Solicita permissão de acesso à localização fina
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    // Função chamada quando a resposta à solicitação de permissão é recebida
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        // Chama a implementação padrão do método
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // Verifica se o código da solicitação de permissão é para localização
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            // Verifica se a permissão foi concedida
+            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                // Se a permissão foi concedida, inicie a activity do mapa
+                intent.putExtra("vindo_da_tela_usuario", true)
+                startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
+            }
         }
     }
 
