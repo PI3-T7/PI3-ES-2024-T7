@@ -1,6 +1,7 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
@@ -94,6 +95,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validUser(email: String, password: String) {
+
         // Verifica se o email ou a senha estão em branco
         if (email.isBlank() or password.isBlank()) return
         // Tenta fazer login com o email e a senha fornecidos
