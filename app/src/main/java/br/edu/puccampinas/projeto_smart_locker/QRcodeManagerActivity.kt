@@ -17,6 +17,9 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.gson.Gson
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 
 /**
  * Activity responsável pela leitura do QR code.
@@ -69,10 +72,10 @@ class QRcodeManagerActivity : AppCompatActivity() {
                     val textoLido = result.text
                     if (textoLido.startsWith("SMARTLOCKER_")) {
                         // O QR code foi gerado pelo seu aplicativo
-                        val dadosReais = textoLido.removePrefix("MYAPP_")
+                        val dadosReais = textoLido.removePrefix("SMARTLOCKER_")
 
-                        val intent =
-                            Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
+                        val intent = Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
+                        intent.putExtra("dadosCliente", dadosReais)
                         startActivity(intent)
                     } else {
                         // Mostra a caixa de diálogo para QR code inválido
@@ -91,8 +94,8 @@ class QRcodeManagerActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-
         }
+        codescanner.startPreview()
     }
 
     /**
@@ -172,5 +175,30 @@ class QRcodeManagerActivity : AppCompatActivity() {
             )
         }
         dialog.show()
+    }
+
+    /**
+     * Função que lida com a resposta do IntentIntegrator para escaneamento de QR code.
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                // Escaneamento cancelado
+                Toast.makeText(this, "Escaneamento cancelado", Toast.LENGTH_LONG).show()
+            } else {
+                // Obtem o conteúdo do QR code (string JSON)
+                val dadosJson = result.contents
+                // Desserializa a string JSON para um objeto DadosCliente
+                val dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
+
+                // Envia os dados do cliente para a próxima atividade
+                val intent = Intent(this, SelectPeopleNumActivity::class.java)
+                intent.putExtra("dadosCliente", dadosJson)
+                startActivity(intent)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 }
