@@ -53,7 +53,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
                 }
             }
             viewReleaseRental.setOnClickListener{
-                startActivity(Intent(this@ManagerMainScreenActivity, OpenLockerActivity::class.java))
+                startActivity(Intent(this@ManagerMainScreenActivity, QRcodeManagerActivity::class.java))
             }
         }
     }
