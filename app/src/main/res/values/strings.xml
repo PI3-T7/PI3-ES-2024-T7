@@ -46,4 +46,6 @@
     <string name="select_option">Selecione a opção desejada</string>
     <string name="msg_sucess_open">Armário aberto momentâneamente. Peça para o cliente fechar o armário assim que finalizar.</string>
     <string name="end_lease_confirm">Locação encerrada.</string>
+    <string name="cancel_operation">Deseja cancelar essa operação?</string>
+    <string name="question_logout">Tem certeza que deseja sair?</string>
 </resources>

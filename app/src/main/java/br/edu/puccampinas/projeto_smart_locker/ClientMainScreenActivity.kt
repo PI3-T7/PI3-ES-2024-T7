@@ -6,6 +6,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
@@ -46,8 +48,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         with(binding) {
             // Botão de logout
             btLogout.setOnClickListener {
-                auth.signOut()
-                finish()
+                showLogoutDialog()
             }
 
             // Container do mapa
@@ -120,6 +121,41 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
+    private fun showLogoutDialog() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem fazer logout
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            // Realize o logout
+            auth.signOut()
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
+    }
+
+
 
     private fun cancelLocacaoPendente() {
         // Coloque aqui o código para cancelar a locação pendente
