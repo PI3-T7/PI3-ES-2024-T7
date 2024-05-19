@@ -48,4 +48,5 @@
     <string name="end_lease_confirm">Locação encerrada.</string>
     <string name="cancel_operation">Deseja cancelar essa operação?</string>
     <string name="question_logout">Tem certeza que deseja sair?</string>
+    <string name="pendent_rental">Você tem uma locação pendente! Deseja continuar de onde parou?</string>
 </resources>

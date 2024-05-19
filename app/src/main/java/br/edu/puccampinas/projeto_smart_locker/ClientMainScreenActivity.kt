@@ -98,29 +98,41 @@ class ClientMainScreenActivity : AppCompatActivity() {
     }
 
     private fun showLocacaoPendenteDialog() {
-        // Aqui você cria e exibe o diálogo para avisar o usuário sobre a locação pendente
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Locação Pendente")
-            .setMessage("Você tem uma locação pendente. Deseja continuar?")
-            .setPositiveButton("Sim") { dialog, _ ->
-                // Ação a ser executada quando o usuário clicar em "Sim"
-                dialog.dismiss()
-                // Coloque aqui o código para continuar com a locação pendente
-                val intent = Intent(this, QRcodeActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Não") { dialog, _ ->
-                // Ação a ser executada quando o usuário clicar em "Não"
-                dialog.dismiss()
-                // Coloque aqui o código para cancelar a locação pendente
-                cancelLocacaoPendente()
-            }
+        // Inflar o layout do diálogo personalizado
+        val dialogView1 = layoutInflater.inflate(R.layout.custom_dialog_pending_rental, null)
+
+        val customDialog1 = AlertDialog.Builder(this)
+            .setView(dialogView1)
             .setCancelable(false) // Impede que o usuário feche o diálogo ao tocar fora dele
             .create()
 
-        dialog.show()
+        // Defina a altura desejada para o diálogo
+        customDialog1.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo1 = dialogView1.findViewById<Button>(R.id.btnNo1)
+        val btnYes1 = dialogView1.findViewById<Button>(R.id.btnYes1)
+
+        btnNo1.setOnClickListener {
+            // Ação a ser executada quando o usuário clicar em "Não"
+            // Fecha o diálogo
+            customDialog1.dismiss()
+            // Cancela a locação pendente
+            cancelLocacaoPendente()
+        }
+
+        btnYes1.setOnClickListener {
+            // Ação a ser executada quando o usuário clicar em "Sim"
+            customDialog1.dismiss()
+            // Coloque aqui o código para continuar com a locação pendente
+            val intent = Intent(this, QRcodeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        customDialog1.show()
     }
+
 
     private fun showLogoutDialog() {
         // Inflate o layout customizado
@@ -158,8 +170,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
 
     private fun cancelLocacaoPendente() {
-        // Coloque aqui o código para cancelar a locação pendente
-        // Por exemplo, você pode remover o status de locação pendente das SharedPreferences
         val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putBoolean(
