@@ -49,4 +49,9 @@
     <string name="cancel_operation">Deseja cancelar essa operação?</string>
     <string name="question_logout">Tem certeza que deseja sair?</string>
     <string name="pendent_rental">Você tem uma locação pendente! Deseja continuar de onde parou?</string>
+    <string name="question_cancel_operation">Deseja cancelar essa operação?</string>
+    <string name="error_empty_fields">Erro: Preencha todos os campos para continuar.</string>
+    <string name="error_agree_terms">Erro: Você deve concordar com os termos para continuar.</string>
+    <string name="error_select_option">Erro: Selecione uma opção antes de continuar.</string>
+    <string name="card_register_failure">Erro: Falha ao cadastrar cartão. Tente novamente mais tarde.</string>
 </resources>

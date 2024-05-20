@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -103,11 +107,38 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun showAlertMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_error, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
+
     private fun validUser(email: String, password: String) {
 
         if (networkChecker.hasInternet()) {
             // Verifica se o email ou a senha estão em branco
-            if (email.isBlank() or password.isBlank()) return
+            if (email.isBlank() or password.isBlank()) {
+                showAlertMessage("Erro: Preencha os campos com email e senha para fazer login.")
+                return
+            }
             // Tenta fazer login com o email e a senha fornecidos
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener { authResult ->
@@ -150,11 +181,7 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     } else {
                         // Se a falha não for relacionada ao formato do email, exibe mensagem de erro genérica
-                        Toast.makeText(
-                            this,
-                            "Email ou senha incorretos, por favor digite novamente!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showAlertMessage("Erro: Usuário e/ou senha inválidos.")
                     }
                 }
         } else {
