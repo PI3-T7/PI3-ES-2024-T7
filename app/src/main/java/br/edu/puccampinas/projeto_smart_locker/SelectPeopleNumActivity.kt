@@ -9,34 +9,32 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-class SelectPeopleNumActivity: AppCompatActivity() {
+
+class SelectPeopleNumActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySelectPeopleBinding
     private lateinit var dadosCliente: DadosCliente
+    private var numPessoas: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Habilita o modo de borda a borda (tela cheia)
-        binding = ActivitySelectPeopleBinding.inflate(layoutInflater) // Infla o layout da atividade
-        setContentView(binding.root) // Define o layout da atividade como o layout inflado
+        enableEdgeToEdge()
+        binding = ActivitySelectPeopleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Recupera os dados do cliente da Intent
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
 
         binding.buttonConfirm.setOnClickListener {
             if (binding.button1person.isChecked) {
-                // Se o botão abrir armario estiver selecionado
-                cameraProviderResult.launch(android.Manifest.permission.CAMERA)
-
+                numPessoas = 1
             } else if (binding.button2persons.isChecked) {
-                // Se o botão encerrar locação estiver selecionado
-                cameraProviderResult.launch(android.Manifest.permission.CAMERA)
-
+                numPessoas = 2
             } else {
-                // Se nenhum botão estiver selecionado
                 Toast.makeText(this, "Por favor, selecione uma opção", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            startCameraActivity()
         }
 
         binding.buttonHome2.setOnClickListener {
@@ -48,14 +46,13 @@ class SelectPeopleNumActivity: AppCompatActivity() {
             startActivity(Intent(this, QRcodeManagerActivity::class.java))
             finish()
         }
-}
-    // Declaração de uma variável para o resultado do contrato de permissão da câmera
+    }
+
     private val cameraProviderResult =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                abrirTelaDePreview() // Se a permissão for concedida, abre a tela de visualização
+                abrirTelaDePreview()
             } else {
-                // Se a permissão não for concedida, exibe uma mensagem Snackbar
                 Snackbar.make(
                     binding.root,
                     "Favor conceder permissão para abrir a câmera",
@@ -64,11 +61,15 @@ class SelectPeopleNumActivity: AppCompatActivity() {
             }
         }
 
-    // Função para abrir a tela de visualização
+    private fun startCameraActivity() {
+        cameraProviderResult.launch(android.Manifest.permission.CAMERA)
+    }
+
     private fun abrirTelaDePreview() {
         val intent = Intent(this, TakePicActivity::class.java)
         val dadosJson = Gson().toJson(dadosCliente)
         intent.putExtra("dadosCliente", dadosJson)
+        intent.putExtra("numPessoas", numPessoas)
         startActivity(intent)
     }
 }
