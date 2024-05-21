@@ -19,6 +19,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
 
 /**
  * Activity responsável pelo registro de cartões.
@@ -111,13 +113,13 @@ class CardRegistrationActivity : AppCompatActivity() {
                 editDataValidade.text.isNullOrEmpty() ||
                 editCVV.text.isNullOrEmpty()
             ) {
-                showAlert("Erro: Preencha todos os campos para continuar")
+                showErrorMessage("Erro: Preencha todos os campos para continuar.")
                 return
             }
 
             // Verifica se o checkbox está check
             if (!(checkBoxCiente.isChecked)) {
-                showAlert("Erro: Você precisa concordar com os termos para continuar.")
+                showErrorMessage("Erro: Você precisa concordar com os termos para continuar.")
                 return
             }
 
@@ -245,6 +247,36 @@ class CardRegistrationActivity : AppCompatActivity() {
             .setNegativeButton("NÃO") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+    /**
+     * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+
+    private fun showErrorMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_error, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
+
 
     /**
      * Atualiza o estado visual de um campo de entrada de texto com base no status fornecido.
