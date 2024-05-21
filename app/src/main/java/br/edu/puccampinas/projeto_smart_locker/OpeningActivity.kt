@@ -14,7 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OpeningActivity : AppCompatActivity() {
-    private val REQUEST_LOCATION_PERMISSION = 1001 // Defina um código de solicitação para a permissão de localização
+    private val REQUEST_LOCATION_PERMISSION =
+        1001 // Defina um código de solicitação para a permissão de localização
     private val binding by lazy { ActivityOpeningBinding.inflate(layoutInflater) }
 
     // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
@@ -30,7 +31,7 @@ class OpeningActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        with(binding){
+        with(binding) {
             imgBtnMap.setOnClickListener {
                 // Verifica se há conexão com a internet antes de abrir a tela do mapa
                 if (networkChecker.hasInternet()) {
@@ -48,6 +49,7 @@ class OpeningActivity : AppCompatActivity() {
             }
         }
     }
+
     // o onStart levará o usuário para a tela principal do app caso ele já esteja logado
     override fun onStart() {
         super.onStart()
@@ -55,20 +57,49 @@ class OpeningActivity : AppCompatActivity() {
         if (user != null) {
             FirebaseFirestore.getInstance()
                 .collection("Pessoas")
-                .document(user.uid).addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        Log.e("Erro no Firebase Firestore", error.message.toString())
-                    }
+                .document(user.uid).get().addOnSuccessListener { snapshot ->
                     if (snapshot != null && snapshot.exists()) {
                         if (snapshot.get("gerente").toString() == "true") {
                             startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+                            finish()
                         } else {
                             startActivity(Intent(this, ClientMainScreenActivity::class.java))
+                            finish()
                         }
                     }
                 }
+                .addOnFailureListener { error ->
+                    Log.e("Erro no Firebase Firestore", error.message.toString())
+                }
         }
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        val user = FirebaseAuth.getInstance().currentUser
+//        if (user != null) {
+//            FirebaseFirestore.getInstance()
+//                .collection("Pessoas")
+//                .document(user.uid)
+//                .get()  // Usa get() ao invés de addSnapshotListener
+//                .addOnSuccessListener { snapshot ->
+//                    if (snapshot != null && snapshot.exists()) {
+//                        val isManager = snapshot.getBoolean("gerente") ?: false
+//                        val targetActivity = if (isManager) {
+//                            ManagerMainScreenActivity::class.java
+//                        } else {
+//                            ClientMainScreenActivity::class.java
+//                        }
+//                        startActivity(Intent(this, targetActivity))
+//                        finish()  // Adiciona finish para evitar retornar a esta atividade
+//                    }
+//                }
+//                .addOnFailureListener { error ->
+//                    Log.e("Erro no Firebase Firestore", error.message.toString())
+//                }
+//        }
+//    }
+
     // Função responsável por solicitar permissão de localização
     private fun requestLocationPermission() {
         // Verifica se a versão do Android é igual ou superior a Marshmallow (API 23)

@@ -6,7 +6,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityManagerMainScreenBinding
 import android.nfc.NfcAdapter
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -16,6 +18,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
     private lateinit var database: FirebaseFirestore
     private var nfcAdapter: NfcAdapter? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityManagerMainScreenBinding.inflate(layoutInflater)
@@ -38,6 +41,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
                 }
             btLogout.setOnClickListener{
                 auth.signOut()
+                startActivity(Intent(this@ManagerMainScreenActivity,OpeningActivity::class.java))
                 finish()
             }
             viewReadNfc.setOnClickListener{

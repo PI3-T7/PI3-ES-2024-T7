@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +33,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -51,7 +53,9 @@ class ClientMainScreenActivity : AppCompatActivity() {
         with(binding) {
             // Botão de logout
             btLogout.setOnClickListener {
-                showLogoutDialog()
+                auth.signOut()
+                startActivity(Intent(this@ClientMainScreenActivity,OpeningActivity::class.java))
+                finish()
             }
 
             // Container do mapa
@@ -210,6 +214,8 @@ class ClientMainScreenActivity : AppCompatActivity() {
     }
 
     private fun cancelLocacaoPendente() {
+        // Coloque aqui o código para cancelar a locação pendente
+        // Por exemplo, você pode remover o status de locação pendente das SharedPreferences
         val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putBoolean(
@@ -242,7 +248,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
                                 showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                             }
                         } else {
-                            // Se o campo "cartoes" não existir, exibe uma mensagem ao usuário
+                            // Se não houver cartões, exibe uma mensagem ao usuário
                             showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                         }
                     }
