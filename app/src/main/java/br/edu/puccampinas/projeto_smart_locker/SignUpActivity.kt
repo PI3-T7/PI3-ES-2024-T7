@@ -8,6 +8,8 @@ import java.time.LocalDate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -152,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
 
             // Se houver valores em branco, retornar
             if (values.values.any { it.isBlank() }) {
-                showAlert("Erro: Preencha todos os campos para continuar")
+                showErrorMessage("Erro: Preencha todos os campos para continuar")
                 return
             }
 
@@ -212,15 +214,31 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     /**
-     * Exibe um alerta de diálogo com uma mensagem específica.
-     * @param message A mensagem a ser exibida no alerta.
+     * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
      */
-    private fun showAlert(message: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Atenção")
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
+    private fun showErrorMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_error, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
     }
 
     /**
@@ -349,9 +367,9 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }.addOnFailureListener { exception ->
                 if (exception.message.toString() == "The email address is badly formatted.") {
-                    showAlert("Endereço de email inválido.")
+                    showErrorMessage("Erro: Endereço de email inválido.")
                 } else {
-                    showAlert("Endereço de email já registrado!")
+                    showErrorMessage("Erro: Endereço de email já registrado!")
                 }
             }
         } else {

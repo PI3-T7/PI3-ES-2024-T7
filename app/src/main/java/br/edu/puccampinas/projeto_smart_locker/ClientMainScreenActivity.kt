@@ -6,12 +6,18 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
+import java.util.Calendar
 import java.util.HashMap
 
 class ClientMainScreenActivity : AppCompatActivity() {
@@ -27,6 +33,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -47,6 +54,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Botão de logout
             btLogout.setOnClickListener {
                 auth.signOut()
+                startActivity(Intent(this@ClientMainScreenActivity,OpeningActivity::class.java))
                 finish()
             }
 
@@ -96,29 +104,113 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Exibe um diálogo de Locação Pendente customizado com uma mensagem simples e botões "SIM" e "NÃO".
+     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
+     * cancelar a pendência de locação
+     */
+
     private fun showLocacaoPendenteDialog() {
-        // Aqui você cria e exibe o diálogo para avisar o usuário sobre a locação pendente
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Locação Pendente")
-            .setMessage("Você tem uma locação pendente. Deseja continuar?")
-            .setPositiveButton("Sim") { dialog, _ ->
-                // Ação a ser executada quando o usuário clicar em "Sim"
-                dialog.dismiss()
-                // Coloque aqui o código para continuar com a locação pendente
-                val intent = Intent(this, QRcodeActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Não") { dialog, _ ->
-                // Ação a ser executada quando o usuário clicar em "Não"
-                dialog.dismiss()
-                // Coloque aqui o código para cancelar a locação pendente
-                cancelLocacaoPendente()
-            }
+        // Inflar o layout do diálogo personalizado
+        val dialogView1 = layoutInflater.inflate(R.layout.custom_dialog_pending_rental, null)
+
+        val customDialog1 = AlertDialog.Builder(this)
+            .setView(dialogView1)
             .setCancelable(false) // Impede que o usuário feche o diálogo ao tocar fora dele
             .create()
 
-        dialog.show()
+        // Defina a altura desejada para o diálogo
+        customDialog1.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo1 = dialogView1.findViewById<Button>(R.id.btnNo1)
+        val btnYes1 = dialogView1.findViewById<Button>(R.id.btnYes1)
+
+        btnNo1.setOnClickListener {
+            // Ação a ser executada quando o usuário clicar em "Não"
+            // Fecha o diálogo
+            customDialog1.dismiss()
+            // Cancela a locação pendente
+            cancelLocacaoPendente()
+        }
+
+        btnYes1.setOnClickListener {
+            // Ação a ser executada quando o usuário clicar em "Sim"
+            customDialog1.dismiss()
+            // Coloque aqui o código para continuar com a locação pendente
+            val intent = Intent(this, QRcodeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        customDialog1.show()
+    }
+
+    /**
+     * Exibe um diálogo de Logout customizado com uma mensagem simples e botões "SIM" e "NÃO".
+     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
+     * logout do sistema.
+     */
+    private fun showLogoutDialog() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem fazer logout
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            // Realize o logout
+            auth.signOut()
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
+    }
+
+    /**
+     * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+
+    private fun showAlertMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_warning, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
     }
 
     private fun cancelLocacaoPendente() {
@@ -150,23 +242,14 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
                             // Verifica se o array não é nulo ou vazio
                             if (!cartoes.isNullOrEmpty()) {
-                                // Se houver cartões, inicia a LocationActivity
-                                startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
+                                checkHour()
                             } else {
                                 // Se não houver cartões, exibe uma mensagem ao usuário
-                                Toast.makeText(
-                                    this@ClientMainScreenActivity,
-                                    "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                             }
                         } else {
-                            // Se o campo "cartoes" não existir, exibe uma mensagem ao usuário
-                            Toast.makeText(
-                                this@ClientMainScreenActivity,
-                                "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            // Se não houver cartões, exibe uma mensagem ao usuário
+                            showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                         }
                     }
                 }
@@ -209,6 +292,26 @@ class ClientMainScreenActivity : AppCompatActivity() {
                 intent.putExtra("vindo_da_tela_usuario", true)
                 startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
             }
+        }
+    }
+
+    private fun checkHour() {
+        // Obter a hora atual
+        val calendario = Calendar.getInstance()
+        val horaAtual: Int =
+            calendario.get(Calendar.HOUR_OF_DAY)  // Obtém a hora atual como um inteiro
+        val minutoAtual: Int = calendario.get(Calendar.MINUTE)      // Obtém os minutos atuais
+
+        // Converte os valores para Double antes de realizar a operação de divisão
+        val hora: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
+
+        // Verificar se está entre 7 e 8 horas
+        if (hora < 7 || hora > 17.5) {
+            val intent2 = Intent(this, ClosedEstablishmentActivity::class.java)
+            startActivity(intent2)
+        } else {
+            // Se for entre 7h e 17h30:
+            startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
         }
     }
 
