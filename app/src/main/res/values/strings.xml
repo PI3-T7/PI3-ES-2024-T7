@@ -54,4 +54,6 @@
     <string name="error_agree_terms">Erro: Você deve concordar com os termos para continuar.</string>
     <string name="error_select_option">Erro: Selecione uma opção antes de continuar.</string>
     <string name="card_register_failure">Erro: Falha ao cadastrar cartão. Tente novamente mais tarde.</string>
+    <string name="closed_establishment">Não é possível fazer uma locação nesse horário.</string>
+    <string name="closed_establishment2">Por favor, tente novamente amanhã a partir das 7h00.</string>
 </resources>

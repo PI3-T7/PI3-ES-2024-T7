@@ -500,16 +500,6 @@ class LocationActivity : AppCompatActivity() {
         } else {
             binding.btn30min.visibility = View.VISIBLE
         }
-
-        // Verificar se todas as visibilidades estão definidas como "gone"
-        if (binding.btn4hours.visibility == View.GONE &&
-            binding.btn2hours.visibility == View.GONE &&
-            binding.btn1hour.visibility == View.GONE &&
-            binding.btn30min.visibility == View.GONE) {
-            // Todas as visibilidades estão como "gone", então exiba a mensagem no lugar
-            // de "Selecione a opção desejada"
-            binding.textoAcima.text = "Não é possível fazer uma locação após 17h30. Tente novamente amanhã, a partir das 7h00."
-        }
     }
 }
 

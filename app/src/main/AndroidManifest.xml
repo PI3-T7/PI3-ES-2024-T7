@@ -7,14 +7,15 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- Requisito de hardware -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Requisito de hardware -->
     <uses-feature android:name="android.hardware.camera.any" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -29,6 +30,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projeto_Smart_Locker"
         tools:targetApi="31">
+        <activity
+            android:name=".ClosedEstablishmentActivity"
+            android:theme="@style/AppTheme"
+            android:exported="false" />
         <activity
             android:name=".NetworkErrorActivity"
             android:exported="false"
@@ -76,8 +81,8 @@
         <activity
             android:name=".ReadNfcActivity"
             android:exported="true"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ManagerMainScreenActivity"
             android:exported="true"

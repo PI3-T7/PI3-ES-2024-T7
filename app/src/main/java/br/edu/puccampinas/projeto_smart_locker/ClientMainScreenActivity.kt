@@ -16,6 +16,7 @@ import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScr
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
+import java.util.Calendar
 import java.util.HashMap
 
 class ClientMainScreenActivity : AppCompatActivity() {
@@ -235,8 +236,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
                             // Verifica se o array não é nulo ou vazio
                             if (!cartoes.isNullOrEmpty()) {
-                                // Se houver cartões, inicia a LocationActivity
-                                startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
+                                checkHour()
                             } else {
                                 // Se não houver cartões, exibe uma mensagem ao usuário
                                 showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
@@ -286,6 +286,26 @@ class ClientMainScreenActivity : AppCompatActivity() {
                 intent.putExtra("vindo_da_tela_usuario", true)
                 startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
             }
+        }
+    }
+
+    private fun checkHour() {
+        // Obter a hora atual
+        val calendario = Calendar.getInstance()
+        val horaAtual: Int =
+            calendario.get(Calendar.HOUR_OF_DAY)  // Obtém a hora atual como um inteiro
+        val minutoAtual: Int = calendario.get(Calendar.MINUTE)      // Obtém os minutos atuais
+
+        // Converte os valores para Double antes de realizar a operação de divisão
+        val hora: Double = horaAtual.toDouble() + minutoAtual.toDouble() / 60.0
+
+        // Verificar se está entre 7 e 8 horas
+        if (hora < 7 || hora > 17.5) {
+            val intent2 = Intent(this, ClosedEstablishmentActivity::class.java)
+            startActivity(intent2)
+        } else {
+            // Se for entre 7h e 17h30:
+            startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
         }
     }
 
