@@ -11,12 +11,14 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -211,10 +213,7 @@ class LocationActivity : AppCompatActivity() {
                         startActivity(intent)
                     } else {
                         // Nenhuma opção selecionada, mostra uma mensagem para o usuário
-                        Toast.makeText(this,
-                            "Por favor, selecione uma opção antes de confirmar a locação.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showErrorMessage("Erro: Selecione uma opção antes de continuar.")
                     }
                 }
         } else {
@@ -225,6 +224,34 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+
+    private fun showErrorMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_error, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
 
     private fun obterLocalizacaoAtual() {
 
@@ -334,19 +361,7 @@ class LocationActivity : AppCompatActivity() {
 
                             } else {
                                 // A localização não está próxima do ponto de locação
-                                val toast = Toast.makeText(
-                                    applicationContext,
-                                    "\"Você não está próximo(a) de nenhuma Unidade SmartLocker. Esteja a pelo menos 100 metros de uma e tente novamente.\"",
-                                    Toast.LENGTH_LONG
-                                )
-                                val view = layoutInflater.inflate(R.layout.custom_toast_layout, null)
-                                val text = view.findViewById<TextView>(R.id.text)
-                                text.text =
-                                    "Você deve estar a pelo menos 1000 metros do último pin selecionado no mapa."
-                                toast.view = view
-                                toast.show()
-
-                                finish()
+                                showAlertMessage("Aviso: Você deve estar a, no máximo, 1000 metros do último pin selecionado no mapa para alugar um armário.")
                             }
 
                         } else {
@@ -355,7 +370,6 @@ class LocationActivity : AppCompatActivity() {
                                 "Localização não permitida ou encontrada, tente novamente.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            finish()
                         }
 
                     } else {
@@ -366,11 +380,7 @@ class LocationActivity : AppCompatActivity() {
                     Log.e(TAG, "Erro ao pegar o documento", exception)
                 }
         } else {
-            Toast.makeText(
-                this@LocationActivity,
-                "Por favor, selecione um pin no mapa antes de tentar alugar um armário.",
-                Toast.LENGTH_LONG
-            ).show()
+            showAlertMessage("Aviso: Selecione o pin da unidade desejada no mapa antes de tentar alugar um armário.")
             finish()
         }
     }
@@ -401,6 +411,37 @@ class LocationActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+
+    private fun showAlertMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_warning, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+            finish()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
+
     // cálculo da distância
     private fun calcularDistancia(
         lat1: Double, lon1: Double, lat2: Double, lon2: Double

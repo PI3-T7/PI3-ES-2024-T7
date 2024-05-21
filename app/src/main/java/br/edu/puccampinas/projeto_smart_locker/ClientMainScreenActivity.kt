@@ -6,8 +6,10 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
@@ -97,6 +99,12 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Exibe um diálogo de Locação Pendente customizado com uma mensagem simples e botões "SIM" e "NÃO".
+     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
+     * cancelar a pendência de locação
+     */
+
     private fun showLocacaoPendenteDialog() {
         // Inflar o layout do diálogo personalizado
         val dialogView1 = layoutInflater.inflate(R.layout.custom_dialog_pending_rental, null)
@@ -133,7 +141,11 @@ class ClientMainScreenActivity : AppCompatActivity() {
         customDialog1.show()
     }
 
-
+    /**
+     * Exibe um diálogo de Logout customizado com uma mensagem simples e botões "SIM" e "NÃO".
+     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
+     * logout do sistema.
+     */
     private fun showLogoutDialog() {
         // Inflate o layout customizado
         val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
@@ -167,7 +179,34 @@ class ClientMainScreenActivity : AppCompatActivity() {
         customDialog.show()
     }
 
+    /**
+     * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
 
+    private fun showAlertMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_warning, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
 
     private fun cancelLocacaoPendente() {
         val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
@@ -200,19 +239,11 @@ class ClientMainScreenActivity : AppCompatActivity() {
                                 startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
                             } else {
                                 // Se não houver cartões, exibe uma mensagem ao usuário
-                                Toast.makeText(
-                                    this@ClientMainScreenActivity,
-                                    "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                             }
                         } else {
                             // Se o campo "cartoes" não existir, exibe uma mensagem ao usuário
-                            Toast.makeText(
-                                this@ClientMainScreenActivity,
-                                "Nenhum cartão cadastrado, cadastre um antes de realizar uma locação.",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
                         }
                     }
                 }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/icon_dialog_error"
         android:layout_gravity="center"
-        android:contentDescription="@string/error_empty_fields" />
+        android:contentDescription="Erro" />
 
     <TextView
         android:id="@+id/tvMessage"

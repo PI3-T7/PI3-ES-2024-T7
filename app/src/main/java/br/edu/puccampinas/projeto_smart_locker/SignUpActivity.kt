@@ -154,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
 
             // Se houver valores em branco, retornar
             if (values.values.any { it.isBlank() }) {
-                showAlertMessage("Erro: Preencha todos os campos para continuar")
+                showErrorMessage("Erro: Preencha todos os campos para continuar")
                 return
             }
 
@@ -214,10 +214,10 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     /**
-     * Exibe um alerta de diálogo com uma mensagem específica.
-     * @param message A mensagem a ser exibida no alerta.
+     * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
      */
-    private fun showAlertMessage(message: String) {
+    private fun showErrorMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_error, null)
@@ -367,9 +367,9 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }.addOnFailureListener { exception ->
                 if (exception.message.toString() == "The email address is badly formatted.") {
-                    showAlertMessage("Erro: Endereço de email inválido.")
+                    showErrorMessage("Erro: Endereço de email inválido.")
                 } else {
-                    showAlertMessage("Erro: Endereço de email já registrado!")
+                    showErrorMessage("Erro: Endereço de email já registrado!")
                 }
             }
         } else {
