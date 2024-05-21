@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="250dp"
+    android:orientation="vertical"
+    android:padding="23dp"
+    android:background="@drawable/shape_alert_dialog"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_question_mark"
+        android:layout_gravity="center"
+        android:contentDescription="@string/question_logout" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="@string/question_logout"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_width="208dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnNo"
+            android:background="@drawable/shape_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginEnd="55dp"
+            android:layout_weight="2"
+            android:text="NÃO" />
+
+        <Button
+            android:id="@+id/btnYes"
+            android:background="@drawable/shape_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="2"
+            android:text="SIM" />
+    </LinearLayout>
+</LinearLayout>
