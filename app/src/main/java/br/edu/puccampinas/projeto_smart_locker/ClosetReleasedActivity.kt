@@ -123,6 +123,14 @@ class ClosetReleasedActivity : AppCompatActivity() {
      * @param document O documento do Firestore contendo os dados da locação.
      */
     private fun updateUIWithDocumentData(document: DocumentSnapshot) {
+
+        /**
+         *****APAGAR COMENTARIO*****
+         * Isabella
+         * Como comentei o intent do qrcode alguns dados estão estáticos
+         * Os dados que estou puxando do banco é de um documento Locação criado para teste de id PQyQaoogCooC4twNk262
+         */
+
         // Atualiza os elementos da UI com os dados do documento
         with(binding) {
             tvUnit.text = "Terminal Rodoviário de Campinas"
