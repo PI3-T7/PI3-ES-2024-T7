@@ -28,6 +28,7 @@ class TakePicActivity : AppCompatActivity() {
     private lateinit var dadosCliente: DadosCliente
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
+    private lateinit var imagePaths: ArrayList<String>  // Altere para armazenar a lista de caminhos de fotos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,8 @@ class TakePicActivity : AppCompatActivity() {
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
         numPessoas = intent.getIntExtra("numPessoas", 1)
-        fotosTiradas = intent.getIntExtra("fotosTiradas", 0) // Pegue o valor de fotosTiradas do Intent
+        fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
+        imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
 
         binding.imgArrow.setOnClickListener {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
@@ -57,7 +59,7 @@ class TakePicActivity : AppCompatActivity() {
             blinkPreview()
         }
 
-        updateTextTakeThePhoto()  // Chama a função para atualizar o texto inicialmente
+        updateTextTakeThePhoto()
     }
 
     private fun startCamera() {
@@ -91,14 +93,15 @@ class TakePicActivity : AppCompatActivity() {
                         val msg = "Foto salva com sucesso: $savedUri"
                         Log.d("CameraPreview", msg)
 
-                        fotosTiradas++  // Incrementa o número de fotos tiradas
+                        fotosTiradas++
+                        imagePaths.add(file.absolutePath)  // Adicione o caminho da foto à lista
 
                         val intent = Intent(this@TakePicActivity, PersonPicActivity::class.java)
                         val dadosJson = Gson().toJson(dadosCliente)
                         intent.putExtra("dadosCliente", dadosJson)
-                        intent.putExtra("image_path", file.absolutePath)
+                        intent.putExtra("imagePaths", imagePaths)  // Passe a lista de caminhos de fotos
                         intent.putExtra("numPessoas", numPessoas)
-                        intent.putExtra("fotosTiradas", fotosTiradas) // Adiciona fotosTiradas ao Intent
+                        intent.putExtra("fotosTiradas", fotosTiradas)
                         startActivity(intent)
                     }
 

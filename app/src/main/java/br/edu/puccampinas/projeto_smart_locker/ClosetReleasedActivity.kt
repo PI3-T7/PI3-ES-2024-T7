@@ -27,7 +27,7 @@ import java.util.Locale
 class ClosetReleasedActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val storage = FirebaseStorage.getInstance()
-    private lateinit var dadosCliente: DadosCliente
+    private lateinit var locacaoId: String
     private val binding by lazy { ActivityClosetReleasedBinding.inflate(layoutInflater) }
 
     private var totalFotos = 0 // Contador total de fotos a serem carregadas
@@ -59,21 +59,8 @@ class ClosetReleasedActivity : AppCompatActivity() {
             }
         }
 
-        /**
-         * *****APAGAR COMENTARIO*******
-         * Isabella
-         * Obs: Comentei essa parte para não dar erro já que estou testando apenas puxar a foto do banco,
-         * então não está vindo nada do intent nesse momento
-         */
-        // Obtém os dados do cliente da Intent
-        //val dadosJson = intent.getStringExtra("dadosCliente")
-        //dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
-
-        // Carrega os dados do usuário utilizando o ID do cliente
-        //loadUserData(dadosCliente.id)
-
-        val locacaoId =
-            "8AzYdy1i9CTFa1rxQVF5" // ID do documento de teste
+        // puxa o intent passado da atividade passada com o id da nova locação
+        locacaoId = intent.getStringExtra("locacaoId") ?: ""
         loadLocacaoData(locacaoId)
 
     }
@@ -123,49 +110,91 @@ class ClosetReleasedActivity : AppCompatActivity() {
      * @param document O documento do Firestore contendo os dados da locação.
      */
     private fun updateUIWithDocumentData(document: DocumentSnapshot) {
+        val uidUsuario = document.getString("uid_usuario")
+        val uidUnidade = document.getString("uid_unidade")
 
-        /**
-         *****APAGAR COMENTARIO*****
-         * Isabella
-         * Como comentei o intent do qrcode alguns dados estão estáticos
-         * Os dados que estou puxando do banco é de um documento Locação criado para teste de id PQyQaoogCooC4twNk262
-         */
+        // Consulta para obter os dados da pessoa com base no UID do usuário
+        if (!uidUsuario.isNullOrEmpty()) {
+            db.collection("Pessoas")
+                .document(uidUsuario)
+                .get()
+                .addOnSuccessListener { pessoaDocument ->
+                    if (pessoaDocument.exists()) {
+                        // Aqui você pode acessar os dados da pessoa e atualizar sua interface do usuário conforme necessário
+                        val nome = pessoaDocument.getString("nome_completo")
+                        val telefone = pessoaDocument.getString("celular")
+                        with(binding) {
+                            tvName.text = nome
+                            tvPhone.text = telefone
+                        }
+                    } else {
+                        // Trate o caso em que a pessoa não foi encontrada
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Trate o erro ao acessar os dados da pessoa
+                }
+        }
+
+        // Consulta para obter os dados da unidade de locação com base no UID da unidade
+        if (!uidUnidade.isNullOrEmpty()) {
+            db.collection("Unidades de Locação")
+                .document(uidUnidade)
+                .get()
+                .addOnSuccessListener { unidadeDocument ->
+                    if (unidadeDocument.exists()) {
+                        // Aqui você pode acessar os dados da unidade de locação e atualizar sua interface do usuário conforme necessário
+                        val nomeUnidade = unidadeDocument.getString("name")
+                        val endereco = unidadeDocument.getString("address")
+                        with(binding) {
+                            tvUnit.text = nomeUnidade
+                            tvAddress.text = endereco
+                        }
+                    } else {
+                        // Trate o caso em que a unidade de locação não foi encontrada
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Trate o erro ao acessar os dados da unidade de locação
+                }
+        }
 
         // Atualiza os elementos da UI com os dados do documento
         with(binding) {
-            tvUnit.text = "Terminal Rodoviário de Campinas"
-            tvAddress.text = "R. Dr. Pereira Lima, 85 - Vila Industrial, Campinas - SP, 13035-505"
-            tvName.text = "Isabella Maria T Bruno"
-            tvPhone.text = "(19) 98913 3737"
             tvNumber.text = "Armário: ${document.getString("numero_armario")}"
-            tvStartLocation.text =
-                "Início: ${document.getString("data_locacao")} ${document.getString("hora_locacao")}"
 
             val dateLocacao = document.getString("data_locacao")
             val horaLocacao = document.getString("hora_locacao")
-            val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
-            val tempoEscolhido: Int =
-                // Extrai apenas os caracteres numéricos da string e converte para inteiro
-                tempoEscolhidoString?.replace("\\D".toRegex(), "")?.toInt()
-                    ?: // Define um valor padrão (0) se a string for nula
-                    0
 
-            val dateTimeFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
-            val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
-            if (startDate != null) {
-                val calendar = Calendar.getInstance().apply {
-                    time = startDate
-                    add(Calendar.HOUR_OF_DAY, tempoEscolhido)
+            if (!dateLocacao.isNullOrEmpty() && !horaLocacao.isNullOrEmpty()) {
+                val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
+                if (startDate != null) {
+                    val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
+                    val tempoEscolhido: Int =
+                        // Extrai apenas os caracteres numéricos da string e converte para inteiro
+                        tempoEscolhidoString?.replace("\\D".toRegex(), "")?.toInt()
+                            ?: // Define um valor padrão (0) se a string for nula
+                            0
+
+                    val calendar = Calendar.getInstance().apply {
+                        time = startDate
+                        add(Calendar.HOUR_OF_DAY, tempoEscolhido)
+                    }
+                    val endDate = calendar.time
+                    val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
+                    val endDateString = endDateFormat.format(endDate)
+                    tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
+                    tvEndLocation.text = "Fim: $endDateString"
+                    tvTime.text = "${tempoEscolhido} hora(s)"
+                } else {
+                    tvEndLocation.text = "Fim: Não foi possível calcular"
                 }
-                val endDate = calendar.time
-                val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
-                val endDateString = endDateFormat.format(endDate)
-                tvEndLocation.text = "Fim: $endDateString"
             } else {
-                tvEndLocation.text = "Fim: Não foi possível calcular"
+                tvStartLocation.text = "Início: Dados inválidos"
+                tvEndLocation.text = "Fim: Dados inválidos"
             }
 
-            tvTime.text = "${tempoEscolhido} hora(s)"
             val preco = document.getLong("preco")?.toDouble() ?: 0.0
             val precoFormatado = String.format("R$ %.2f", preco).replace('.', ',')
             tvPrice.text = precoFormatado

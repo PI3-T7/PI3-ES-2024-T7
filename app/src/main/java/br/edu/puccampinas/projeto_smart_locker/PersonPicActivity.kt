@@ -24,10 +24,9 @@ class PersonPicActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var firestore: FirebaseFirestore
     private lateinit var dadosCliente: DadosCliente
-    private lateinit var imagePath: String
+    private lateinit var imagePaths: ArrayList<String>  // Alterado para armazenar a lista de caminhos de fotos
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
-    private val imagePaths = mutableListOf<String>()  // Lista para armazenar os caminhos das fotos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +38,17 @@ class PersonPicActivity : AppCompatActivity() {
 
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
-        imagePath = intent.getStringExtra("image_path") ?: ""
+        imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
         numPessoas = intent.getIntExtra("numPessoas", 1)
         fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
 
         Log.d(TAG, "numPessoas: $numPessoas")
         Log.d(TAG, "fotosTiradas: $fotosTiradas")
-        Log.d("PersonPicActivity", "Caminho da imagem: $imagePath")
+        Log.d("PersonPicActivity", "Caminhos das imagens: $imagePaths")
 
-        // Certifique-se de que imagePath não esteja vazio e adicione-o à lista
-        if (imagePath.isNotEmpty()) {
-            imagePaths.add(imagePath)
+        // Exiba a última foto tirada
+        if (imagePaths.isNotEmpty()) {
+            val imagePath = imagePaths.last()
             val imageFile = File(imagePath)
             if (imageFile.exists()) {
                 val imageView: ImageView = findViewById(R.id.picture_person)
@@ -67,6 +66,8 @@ class PersonPicActivity : AppCompatActivity() {
             finish()
         }
 
+        updateButtonText() // Atualiza o texto do botão ao carregar a activity
+
         binding.buttonFinish.setOnClickListener {
             if (fotosTiradas < numPessoas) {
                 // Se ainda não tirou fotos suficientes, volta para tirar mais fotos
@@ -74,7 +75,8 @@ class PersonPicActivity : AppCompatActivity() {
                 val dadosJson = Gson().toJson(dadosCliente)
                 intent.putExtra("dadosCliente", dadosJson)
                 intent.putExtra("numPessoas", numPessoas)
-                intent.putExtra("fotosTiradas", fotosTiradas) // Passa fotosTiradas de volta para a TakePicActivity
+                intent.putExtra("fotosTiradas", fotosTiradas)
+                intent.putStringArrayListExtra("imagePaths", imagePaths)  // Passe a lista de caminhos de fotos de volta
                 startActivity(intent)
             } else {
                 // Se tirou todas as fotos necessárias, procede com o upload e salvamento
@@ -111,6 +113,16 @@ class PersonPicActivity : AppCompatActivity() {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun updateButtonText() {
+        val btnText = when {
+            numPessoas == 1 -> "Finalizar"
+            numPessoas == 2 && fotosTiradas < numPessoas -> "Continuar"
+            numPessoas == 2 && fotosTiradas == numPessoas -> "Finalizar"
+            else -> binding.buttonFinish.text.toString()
+        }
+        binding.buttonFinish.text = btnText
     }
 
     private fun uploadPhotosToFirebase(
@@ -174,8 +186,7 @@ class PersonPicActivity : AppCompatActivity() {
                 Log.d("Firestore", "Locação salva com ID: ${documentReference.id}")
                 updateArmarioStatus(locacaoData.numeroArmario.toInt())
                 val intent = Intent(this, ClosetReleasedActivity::class.java)
-                val dadosJson = Gson().toJson(dadosCliente)
-                intent.putExtra("dadosCliente", dadosJson)
+                intent.putExtra("locacaoId", documentReference.id) // Envia o ID da locação para a próxima activity
                 startActivity(intent)
             }.addOnFailureListener { e ->
                 Log.e("Firestore", "Erro ao salvar locação no Firestore: ${e.message}", e)
