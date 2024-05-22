@@ -18,8 +18,12 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+/**
+ * Activity responsável por capturar uma foto da pessoa ou pessoas que irão acessar o armário.
+ */
 class TakePicActivity : AppCompatActivity() {
 
+    // Declaração das variáveis
     private lateinit var binding: ActivityTakePicBinding
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraSelector: CameraSelector
@@ -28,40 +32,51 @@ class TakePicActivity : AppCompatActivity() {
     private lateinit var dadosCliente: DadosCliente
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
-    private lateinit var imagePaths: ArrayList<String>  // Altere para armazenar a lista de caminhos de fotos
+    private lateinit var imagePaths: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTakePicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Recebe os dados do cliente e informações sobre a quantidade de pessoas e fotos tiradas
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
         numPessoas = intent.getIntExtra("numPessoas", 1)
         fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
         imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
 
+        // Configura o clique no botão de voltar
         binding.imgArrow.setOnClickListener {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
             intent.putExtra("dadosCliente", dadosJson)
             startActivity(intent)
         }
 
+        // Habilita a funcionalidade de "Edge-to-Edge" para estender a UI até as bordas da tela
         enableEdgeToEdge()
+
+        // Inicializa as variáveis relacionadas à câmera
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
+        // Inicia a câmera
         startCamera()
 
+        // Configura o clique no botão de capturar foto
         binding.buttonTakePic.setOnClickListener {
             takePhoto()
             blinkPreview()
         }
 
+        // Atualiza o texto informativo sobre a captura de fotos
         updateTextTakeThePhoto()
     }
 
+    /**
+     * Inicia a câmera e configura os casos de uso (Preview e ImageCapture).
+     */
     private fun startCamera() {
         cameraProviderFuture.addListener({
             imageCapture = ImageCapture.Builder().build()
@@ -78,6 +93,9 @@ class TakePicActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    /**
+     * Captura uma foto utilizando o ImageCapture e salva o arquivo da imagem.
+     */
     private fun takePhoto() {
         imageCapture?.let {
             val fileName = "FOTO_JPEG_${System.currentTimeMillis()}.jpg"
@@ -93,13 +111,15 @@ class TakePicActivity : AppCompatActivity() {
                         val msg = "Foto salva com sucesso: $savedUri"
                         Log.d("CameraPreview", msg)
 
+                        // Incrementa o contador de fotos tiradas e adiciona o caminho da foto à lista
                         fotosTiradas++
-                        imagePaths.add(file.absolutePath)  // Adicione o caminho da foto à lista
+                        imagePaths.add(file.absolutePath)
 
+                        // Navega para a próxima atividade, passando os dados necessários
                         val intent = Intent(this@TakePicActivity, PersonPicActivity::class.java)
                         val dadosJson = Gson().toJson(dadosCliente)
                         intent.putExtra("dadosCliente", dadosJson)
-                        intent.putExtra("imagePaths", imagePaths)  // Passe a lista de caminhos de fotos
+                        intent.putExtra("imagePaths", imagePaths)
                         intent.putExtra("numPessoas", numPessoas)
                         intent.putExtra("fotosTiradas", fotosTiradas)
                         startActivity(intent)
@@ -113,6 +133,9 @@ class TakePicActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Realiza um breve efeito de "blink" na visualização da câmera.
+     */
     private fun blinkPreview() {
         binding.root.postDelayed({
             binding.root.foreground = ColorDrawable(Color.WHITE)
@@ -122,6 +145,9 @@ class TakePicActivity : AppCompatActivity() {
         }, 100)
     }
 
+    /**
+     * Atualiza o texto informativo sobre a captura de fotos com base na quantidade de pessoas e fotos tiradas.
+     */
     private fun updateTextTakeThePhoto() {
         val msg = when {
             numPessoas == 1 -> "Tire uma foto da pessoa"

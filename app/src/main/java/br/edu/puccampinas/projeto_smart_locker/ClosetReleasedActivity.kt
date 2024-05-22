@@ -109,7 +109,13 @@ class ClosetReleasedActivity : AppCompatActivity() {
      *
      * @param document O documento do Firestore contendo os dados da locação.
      */
+    /**
+     * Atualiza a interface do usuário com os dados do documento.
+     *
+     * @param document O documento do Firestore contendo os dados da locação.
+     */
     private fun updateUIWithDocumentData(document: DocumentSnapshot) {
+        // Obtém o ID do usuário e da unidade relacionada à locação
         val uidUsuario = document.getString("uid_usuario")
         val uidUnidade = document.getString("uid_unidade")
 
@@ -120,7 +126,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { pessoaDocument ->
                     if (pessoaDocument.exists()) {
-                        // Aqui você pode acessar os dados da pessoa e atualizar sua interface do usuário conforme necessário
+                        // Se a pessoa existir, atualiza a interface com os dados da pessoa
                         val nome = pessoaDocument.getString("nome_completo")
                         val telefone = pessoaDocument.getString("celular")
                         with(binding) {
@@ -128,11 +134,13 @@ class ClosetReleasedActivity : AppCompatActivity() {
                             tvPhone.text = telefone
                         }
                     } else {
-                        // Trate o caso em que a pessoa não foi encontrada
+                        // Caso a pessoa não seja encontrada, exibe uma mensagem de erro
+                        Toast.makeText(this, "Pessoa não encontrada", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
-                    // Trate o erro ao acessar os dados da pessoa
+                    // Trata o erro ao acessar os dados da pessoa
+                    Toast.makeText(this, "Erro ao acessar os dados da pessoa", Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -143,26 +151,26 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { unidadeDocument ->
                     if (unidadeDocument.exists()) {
-                        // Aqui você pode acessar os dados da unidade de locação e atualizar sua interface do usuário conforme necessário
+                        // Se a unidade existir, atualiza a interface com os dados da unidade de locação
                         val nomeUnidade = unidadeDocument.getString("name")
                         val endereco = unidadeDocument.getString("address")
                         with(binding) {
                             tvUnit.text = nomeUnidade
                             tvAddress.text = endereco
                         }
-                    } else {
-                        // Trate o caso em que a unidade de locação não foi encontrada
                     }
                 }
                 .addOnFailureListener { e ->
-                    // Trate o erro ao acessar os dados da unidade de locação
+                    // Trata o erro ao acessar os dados da unidade de locação
                 }
         }
 
         // Atualiza os elementos da UI com os dados do documento
         with(binding) {
+            // Atualiza o número do armário na interface
             tvNumber.text = "Armário: ${document.getString("numero_armario")}"
 
+            // Obtém e formata a data e hora de início da locação
             val dateLocacao = document.getString("data_locacao")
             val horaLocacao = document.getString("hora_locacao")
 
@@ -170,6 +178,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                 val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
                 if (startDate != null) {
+                    // Calcula a data e hora de término da locação
                     val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
                     val tempoEscolhido: Int =
                         // Extrai apenas os caracteres numéricos da string e converte para inteiro
@@ -184,19 +193,24 @@ class ClosetReleasedActivity : AppCompatActivity() {
                     val endDate = calendar.time
                     val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
                     val endDateString = endDateFormat.format(endDate)
+                    // Atualiza a interface com a data e hora de início, de término e o tempo de locação
                     tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
                     tvEndLocation.text = "Fim: $endDateString"
                     tvTime.text = "${tempoEscolhido} hora(s)"
                 } else {
+                    // Se não for possível calcular a data e hora de término, exibe uma mensagem
                     tvEndLocation.text = "Fim: Não foi possível calcular"
                 }
             } else {
+                // Se os dados de data e hora forem inválidos, exibe uma mensagem
                 tvStartLocation.text = "Início: Dados inválidos"
                 tvEndLocation.text = "Fim: Dados inválidos"
             }
 
+            // Obtém e formata o preço da locação
             val preco = document.getLong("preco")?.toDouble() ?: 0.0
             val precoFormatado = String.format("R$ %.2f", preco).replace('.', ',')
+            // Atualiza a interface com o preço formatado
             tvPrice.text = precoFormatado
         }
     }

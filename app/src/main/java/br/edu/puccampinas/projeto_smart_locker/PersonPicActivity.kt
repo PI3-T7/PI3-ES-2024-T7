@@ -115,6 +115,9 @@ class PersonPicActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Atualiza o texto do botão com base na quantidade de pessoas e fotos tiradas.
+     */
     private fun updateButtonText() {
         val btnText = when {
             numPessoas == 1 -> "Finalizar"
@@ -125,6 +128,13 @@ class PersonPicActivity : AppCompatActivity() {
         binding.buttonFinish.text = btnText
     }
 
+    /**
+     * Realiza o upload das fotos para o Firebase Storage.
+     *
+     * @param imagePaths Lista de caminhos das fotos.
+     * @param clientId ID do cliente.
+     * @param locacaoData Dados da locação.
+     */
     private fun uploadPhotosToFirebase(
         imagePaths: List<String>,
         clientId: String,
@@ -163,6 +173,12 @@ class PersonPicActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Salva os dados da locação no Firestore.
+     *
+     * @param photoUrls Lista de URLs das fotos.
+     * @param locacaoData Dados da locação.
+     */
     private fun saveLocacaoToFirestore(
         photoUrls: List<String>,
         locacaoData: LocacaoData
@@ -193,6 +209,11 @@ class PersonPicActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Obtém o número do armário livre.
+     *
+     * @param callback Função de retorno que recebe o número do armário livre.
+     */
     private fun obterNumeroArmarioLivre(callback: (String?) -> Unit) {
         val nomeDocumento = dadosCliente.unidade
         firestore.collection("Unidades de Locação")
@@ -215,6 +236,11 @@ class PersonPicActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Atualiza o status do armário no Firestore.
+     *
+     * @param numeroArmario Número do armário a ser atualizado.
+     */
     private fun updateArmarioStatus(numeroArmario: Int) {
         val nomeDocumento = dadosCliente.unidade
         val lockersCollection = FirebaseFirestore.getInstance().collection("Unidades de Locação")
@@ -230,6 +256,9 @@ class PersonPicActivity : AppCompatActivity() {
     }
 }
 
+/**
+ * Data class para representar os dados da locação.
+ */
 data class LocacaoData(
     val status: Boolean,
     val uidUsuario: String,
