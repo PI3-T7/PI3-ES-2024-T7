@@ -53,9 +53,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         with(binding) {
             // Botão de logout
             btLogout.setOnClickListener {
-                auth.signOut()
-                startActivity(Intent(this@ClientMainScreenActivity,OpeningActivity::class.java))
-                finish()
+                showLogoutDialog()
             }
 
             // Container do mapa
