@@ -37,6 +37,7 @@ class TakePicActivity : AppCompatActivity() {
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
         numPessoas = intent.getIntExtra("numPessoas", 1)
+        fotosTiradas = intent.getIntExtra("fotosTiradas", 0) // Pegue o valor de fotosTiradas do Intent
 
         binding.imgArrow.setOnClickListener {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
@@ -97,7 +98,7 @@ class TakePicActivity : AppCompatActivity() {
                         intent.putExtra("dadosCliente", dadosJson)
                         intent.putExtra("image_path", file.absolutePath)
                         intent.putExtra("numPessoas", numPessoas)
-                        intent.putExtra("fotosTiradas", fotosTiradas)
+                        intent.putExtra("fotosTiradas", fotosTiradas) // Adiciona fotosTiradas ao Intent
                         startActivity(intent)
                     }
 
@@ -120,9 +121,9 @@ class TakePicActivity : AppCompatActivity() {
 
     private fun updateTextTakeThePhoto() {
         val msg = when {
-            numPessoas == 1 -> "Tira a foto da pessoa"
-            numPessoas == 2 && fotosTiradas == 0 -> "Tira a foto da primeira pessoa"
-            numPessoas == 2 && fotosTiradas == 1 -> "Tira a foto da segunda pessoa"
+            numPessoas == 1 -> "Tire uma foto da pessoa"
+            numPessoas == 2 && fotosTiradas == 0 -> "Tire uma foto da primeira pessoa"
+            numPessoas == 2 && fotosTiradas == 1 -> "Tire uma foto da segunda pessoa"
             else -> ""
         }
         binding.textTakeThePic.text = msg

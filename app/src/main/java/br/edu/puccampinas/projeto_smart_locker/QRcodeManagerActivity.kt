@@ -110,7 +110,6 @@ class QRcodeManagerActivity : AppCompatActivity() {
         if (requestCode == 123) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissão da câmera concedida, inicia a função de escaneamento
-                Toast.makeText(this, "Permissão da câmera concedida", Toast.LENGTH_SHORT).show()
                 startScanning()
             } else {
                 // Permissão da câmera não concedida, mostra uma mensagem

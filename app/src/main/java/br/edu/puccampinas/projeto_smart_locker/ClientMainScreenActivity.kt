@@ -149,6 +149,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
      * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
      * logout do sistema.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showLogoutDialog() {
         // Inflate o layout customizado
         val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
@@ -174,6 +175,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         btnYes.setOnClickListener {
             // Realize o logout
             auth.signOut()
+            startActivity(Intent(this,OpeningActivity::class.java))
             finish()
             customDialog.dismiss()
         }

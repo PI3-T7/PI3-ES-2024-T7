@@ -73,7 +73,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
         //loadUserData(dadosCliente.id)
 
         val locacaoId =
-            "PQyQaoogCooC4twNk262" // ID do documento de teste
+            "8AzYdy1i9CTFa1rxQVF5" // ID do documento de teste
         loadLocacaoData(locacaoId)
 
     }
@@ -89,7 +89,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 // Obtém o documento da locação do Firestore
-                val document = db.collection("Locação").document(locacaoId).get().await()
+                val document = db.collection("Locações").document(locacaoId).get().await()
                 if (document.exists()) {
                     // Atualiza a UI com os dados do documento
                     updateUIWithDocumentData(document)
@@ -137,13 +137,18 @@ class ClosetReleasedActivity : AppCompatActivity() {
             tvAddress.text = "R. Dr. Pereira Lima, 85 - Vila Industrial, Campinas - SP, 13035-505"
             tvName.text = "Isabella Maria T Bruno"
             tvPhone.text = "(19) 98913 3737"
-            tvNumber.text = "Armário: ${document.getLong("numero").toString()}"
+            tvNumber.text = "Armário: ${document.getString("numero_armario")}"
             tvStartLocation.text =
-                "Início: ${document.getString("data_locação")} ${document.getString("hora_locação")}"
+                "Início: ${document.getString("data_locacao")} ${document.getString("hora_locacao")}"
 
-            val dateLocacao = document.getString("data_locação")
-            val horaLocacao = document.getString("hora_locação")
-            val tempoEscolhido = document.getLong("tempo_escolhido")?.toInt() ?: 0
+            val dateLocacao = document.getString("data_locacao")
+            val horaLocacao = document.getString("hora_locacao")
+            val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
+            val tempoEscolhido: Int =
+                // Extrai apenas os caracteres numéricos da string e converte para inteiro
+                tempoEscolhidoString?.replace("\\D".toRegex(), "")?.toInt()
+                    ?: // Define um valor padrão (0) se a string for nula
+                    0
 
             val dateTimeFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
             val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
@@ -161,7 +166,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
             }
 
             tvTime.text = "${tempoEscolhido} hora(s)"
-            val preco = document.getLong("preço")?.toDouble() ?: 0.0
+            val preco = document.getLong("preco")?.toDouble() ?: 0.0
             val precoFormatado = String.format("R$ %.2f", preco).replace('.', ',')
             tvPrice.text = precoFormatado
         }

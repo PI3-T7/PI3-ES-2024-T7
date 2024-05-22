@@ -27,6 +27,7 @@ class PersonPicActivity : AppCompatActivity() {
     private lateinit var imagePath: String
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
+    private val imagePaths = mutableListOf<String>()  // Lista para armazenar os caminhos das fotos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,9 @@ class PersonPicActivity : AppCompatActivity() {
         Log.d(TAG, "fotosTiradas: $fotosTiradas")
         Log.d("PersonPicActivity", "Caminho da imagem: $imagePath")
 
+        // Certifique-se de que imagePath não esteja vazio e adicione-o à lista
         if (imagePath.isNotEmpty()) {
+            imagePaths.add(imagePath)
             val imageFile = File(imagePath)
             if (imageFile.exists()) {
                 val imageView: ImageView = findViewById(R.id.picture_person)
@@ -66,14 +69,15 @@ class PersonPicActivity : AppCompatActivity() {
 
         binding.buttonFinish.setOnClickListener {
             if (fotosTiradas < numPessoas) {
+                // Se ainda não tirou fotos suficientes, volta para tirar mais fotos
                 val intent = Intent(this, TakePicActivity::class.java)
                 val dadosJson = Gson().toJson(dadosCliente)
                 intent.putExtra("dadosCliente", dadosJson)
                 intent.putExtra("numPessoas", numPessoas)
-                intent.putExtra("fotosTiradas", fotosTiradas)
+                intent.putExtra("fotosTiradas", fotosTiradas) // Passa fotosTiradas de volta para a TakePicActivity
                 startActivity(intent)
             } else {
-                // obtendo data e hora do sistema para cadastrar a locação
+                // Se tirou todas as fotos necessárias, procede com o upload e salvamento
                 val calendar = Calendar.getInstance()
                 val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, Locale.getDefault())
                 val timeFormat = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, Locale.getDefault())
@@ -83,7 +87,6 @@ class PersonPicActivity : AppCompatActivity() {
 
                 obterNumeroArmarioLivre { numeroArmario ->
                     numeroArmario?.let {
-                        // Número do armário livre disponível
                         val locacaoData = LocacaoData(
                             status = true,
                             uidUsuario = dadosCliente.id,
@@ -95,9 +98,8 @@ class PersonPicActivity : AppCompatActivity() {
                             horaLocacao = horaLocacao,
                             caucao = 0.0
                         )
-                        uploadPhotosToFirebase(listOf(imagePath), dadosCliente.id, locacaoData)
+                        uploadPhotosToFirebase(imagePaths, dadosCliente.id, locacaoData)
                     } ?: run {
-                        // Nenhum armário livre encontrado, trate de acordo com sua lógica de negócios
                         Log.e("Firestore", "Nenhum armário livre encontrado.")
                         Toast.makeText(this, "Nenhum armário livre encontrado.", Toast.LENGTH_SHORT).show()
                     }
@@ -117,8 +119,8 @@ class PersonPicActivity : AppCompatActivity() {
         locacaoData: LocacaoData
     ) {
         val photoUrls = mutableListOf<String>()
+        var uploadCount = 0 // Contador para rastrear o número de uploads bem-sucedidos
 
-        // Realiza o upload de cada foto individualmente
         imagePaths.forEachIndexed { index, imagePath ->
             val file = File(imagePath)
             val storageRef = storage.reference
@@ -131,13 +133,20 @@ class PersonPicActivity : AppCompatActivity() {
                 clientPhotoRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                     photoUrls.add(downloadUrl.toString())
 
-                    // Quando todas as fotos forem enviadas com sucesso, salva os dados da locação
-                    if (photoUrls.size == imagePaths.size) {
+                    // Verifica se todas as fotos foram carregadas
+                    if (++uploadCount == imagePaths.size) {
+                        // Todas as fotos foram carregadas, então salva no Firestore
                         saveLocacaoToFirestore(photoUrls, locacaoData)
                     }
                 }
             }.addOnFailureListener { e ->
                 Log.e("FirebaseStorage", "Erro ao fazer upload da foto $index: ${e.message}", e)
+
+                // Em caso de falha, verifica se todas as fotos foram carregadas
+                if (++uploadCount == imagePaths.size) {
+                    // Todas as fotos foram carregadas, então salva no Firestore
+                    saveLocacaoToFirestore(photoUrls, locacaoData)
+                }
             }
         }
     }
@@ -159,7 +168,7 @@ class PersonPicActivity : AppCompatActivity() {
             "caucao" to locacaoData.caucao
         )
 
-        firestore.collection("Locação")
+        firestore.collection("Locações")
             .add(locacao)
             .addOnSuccessListener { documentReference ->
                 Log.d("Firestore", "Locação salva com ID: ${documentReference.id}")
@@ -173,8 +182,6 @@ class PersonPicActivity : AppCompatActivity() {
             }
     }
 
-
-
     private fun obterNumeroArmarioLivre(callback: (String?) -> Unit) {
         val nomeDocumento = dadosCliente.unidade
         firestore.collection("Unidades de Locação")
@@ -183,13 +190,10 @@ class PersonPicActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 val lockers = documentSnapshot.data?.get("lockers") as Map<String, Boolean>?
 
-                // Filtrar os armários livres
                 val armariosLivres = lockers?.filterValues { it }
 
-                // Ordenar as chaves do Map (números dos armários)
                 val armariosOrdenados = armariosLivres?.keys?.sorted()
 
-                // Obter o primeiro armário livre (menor número)
                 val primeiroArmarioLivre = armariosOrdenados?.firstOrNull()
 
                 callback(primeiroArmarioLivre)
@@ -200,7 +204,6 @@ class PersonPicActivity : AppCompatActivity() {
             }
     }
 
-
     private fun updateArmarioStatus(numeroArmario: Int) {
         val nomeDocumento = dadosCliente.unidade
         val lockersCollection = FirebaseFirestore.getInstance().collection("Unidades de Locação")
@@ -208,11 +211,9 @@ class PersonPicActivity : AppCompatActivity() {
 
         lockerDocument.update("lockers.$numeroArmario", false)
             .addOnSuccessListener {
-                // Atualização bem-sucedida
                 Log.d(TAG, "Status do armário $numeroArmario atualizado para false")
             }
             .addOnFailureListener { e ->
-                // Falha ao atualizar o status do armário
                 Log.e(TAG, "Erro ao atualizar status do armário $numeroArmario: $e")
             }
     }

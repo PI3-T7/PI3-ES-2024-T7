@@ -90,14 +90,14 @@ class CardRegistrationActivity : AppCompatActivity() {
             .document(auth.currentUser?.uid.toString())
             .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
             .addOnSuccessListener {
-                showAlert("Cartão cadastrado com êxito!")
+                // Inicia a CardsActivity após o cadastro bem-sucedido
+                startActivity(Intent(this, CardsActivity::class.java))
+                finish() // Finaliza a CardRegistrationActivity
             }.addOnFailureListener {
                 showAlert("Falha ao cadastrar cartão!")
             }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
-        startActivity(Intent(this, CardsActivity::class.java))
-        finish()
     }
 
     /**
