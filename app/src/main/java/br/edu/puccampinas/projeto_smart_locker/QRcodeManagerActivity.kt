@@ -5,7 +5,10 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -17,6 +20,7 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -74,9 +78,9 @@ class QRcodeManagerActivity : AppCompatActivity() {
                         // O QR code foi gerado pelo seu aplicativo
                         val dadosReais = textoLido.removePrefix("SMARTLOCKER_")
 
-                        val intent = Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
-                        intent.putExtra("dadosCliente", dadosReais)
-                        startActivity(intent)
+                        // Verifica a disponibilidade de armários na unidade de locação
+                        verificarDisponibilidadeArmarios(dadosReais)
+
                     } else {
                         // Mostra a caixa de diálogo para QR code inválido
                         showInvalidQRCodeDialog()
@@ -200,4 +204,72 @@ class QRcodeManagerActivity : AppCompatActivity() {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
+    /**
+    * Esta função verifica a disponibilidade de armários na unidade de locação fornecida pelo QR code.
+    * Ela extrai os dados da unidade de locação do JSON recebido, realiza uma consulta ao Firestore
+    * para obter os dados da unidade de locação e verifica a disponibilidade de armários.
+    * Se houver armários disponíveis, avança para a tela de seleção do número de pessoas.
+    * Caso contrário, exibe um diálogo de aviso informando que não há mais armários disponíveis na
+    * unidade de locação. Em caso de falha ao obter os dados da unidade de locação, exibe um Toast com uma mensagem de erro.
+    */
+    private fun verificarDisponibilidadeArmarios(dadosReais: String) {
+        // Extrai os dados da unidade de locação do QR code
+        val dadosCliente = Gson().fromJson(dadosReais, DadosCliente::class.java)
+
+        // Verifica a disponibilidade de armários na unidade de locação
+        val nomeDocumento = dadosCliente.unidade
+        FirebaseFirestore.getInstance().collection("Unidades de Locação")
+            .document(nomeDocumento)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val lockers = documentSnapshot.data?.get("lockers") as Map<String, Boolean>?
+
+                // Verifica se há armários disponíveis
+                if (lockers != null && lockers.containsValue(true)) {
+                    // Há armários disponíveis, avança para a seleção do número de pessoas
+                    val intent = Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
+                    intent.putExtra("dadosCliente", dadosReais)
+                    startActivity(intent)
+                } else {
+                    // Não há armários disponíveis na unidade de locação
+                    showAlertMessage("Aviso: Não há mais armários disponíveis nessa unidade!")
+                }
+            }
+            .addOnFailureListener { e ->
+                // Trata o erro ao obter os dados da unidade de locação
+                Toast.makeText(this@QRcodeManagerActivity, "Erro ao verificar armários diponíveis: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    /**
+     * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
+     * @param message A mensagem a ser exibida no diálogo de alerta.
+     */
+
+    private fun showAlertMessage(message: String) {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_warning, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo e voltar para a tela anterior
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+            // Adicione um Intent para voltar para a tela anterior
+            onBackPressed()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = message
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
+
 }
