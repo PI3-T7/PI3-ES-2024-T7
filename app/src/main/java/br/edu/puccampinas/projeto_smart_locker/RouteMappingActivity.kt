@@ -73,6 +73,7 @@ class RouteMappingActivity : AppCompatActivity() {
         tv_address = findViewById(R.id.tv_address)
         botaoVoltarMapa = findViewById(R.id.btnVoltar)
 
+        // declarando o nome e endereço da unidade para printar respectivamente no layout
         tvName.text = placeName
         tv_address.text = placeAddress
 
