@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Transição de ida -->
+    <Transition
+        app:constraintSetStart="@id/start"
+        app:constraintSetEnd="@id/end"
+        app:duration="3000"
+        app:autoTransition="animateToEnd">
+        <OnSwipe
+            app:touchAnchorId="@id/img_phone"
+            app:touchAnchorSide="right"
+            app:dragDirection="dragRight" />
+    </Transition>
+
+    <!-- Transição de volta -->
+    <Transition
+        app:constraintSetStart="@id/end"
+        app:constraintSetEnd="@id/start"
+        app:duration="3000"
+        app:autoTransition="animateToEnd" />
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@id/img_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="-25"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@id/img_bracelet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/img_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_phone"
+            app:layout_constraintHorizontal_bias="0.2" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/img_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="-25"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.65" />
+
+        <Constraint
+            android:id="@id/img_bracelet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/img_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_phone"
+            app:layout_constraintHorizontal_bias="0.45" />
+    </ConstraintSet>
+</MotionScene>
