@@ -230,6 +230,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
                     val intent = Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
                     intent.putExtra("dadosCliente", dadosReais)
                     startActivity(intent)
+                    finish()
                 } else {
                     // Não há armários disponíveis na unidade de locação
                     showAlertMessage("Aviso: Não há mais armários disponíveis nessa unidade!")
