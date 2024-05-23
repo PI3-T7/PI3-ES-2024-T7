@@ -1,5 +1,6 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,11 @@ class RentedLockerActivity : AppCompatActivity() {
             updateUIWithDocumentData(dados, locacaoID!!)
         } else {
             Log.e("RentedLockerActivity", "Dados do cliente ou ID da locação são nulos")
+        }
+
+        binding.btnConfirm.setOnClickListener {
+            startActivity(Intent(this,ClientMainScreenActivity::class.java))
+            finish()
         }
     }
 
