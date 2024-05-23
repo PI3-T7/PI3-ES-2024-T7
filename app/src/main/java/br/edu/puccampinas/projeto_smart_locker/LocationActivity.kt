@@ -133,7 +133,7 @@ class LocationActivity : AppCompatActivity() {
             binding.btn1hour.isChecked -> "1 hora"
             binding.btn2hours.isChecked -> "2 horas"
             binding.btn4hours.isChecked -> "4 horas"
-            binding.btnUntil18.isChecked -> "Até às 18 horas"
+            binding.btnUntil18.isChecked -> "Ate 18 horas"
             else -> ""
         }
 
@@ -185,7 +185,7 @@ class LocationActivity : AppCompatActivity() {
                         "1 hora" -> pricesArray2?.get(1)?.toString()
                         "2 horas" -> pricesArray2?.get(2)?.toString()
                         "4 horas" -> pricesArray2?.get(3)?.toString()
-                        "Até às 18 horas" -> pricesArray2?.get(4)?.toString()
+                        "Ate 18 horas" -> pricesArray2?.get(4)?.toString()
                         else -> ""
                     }
 
@@ -401,11 +401,11 @@ class LocationActivity : AppCompatActivity() {
         if (prices != null) {
             if (prices.size >= 5) {
                 // Definir os preços nos RadioButtons
-                binding.btn30min.text = "30 minutos - ${prices[0]},00"
-                binding.btn1hour.text = "1 hora - ${prices[1]},00"
-                binding.btn2hours.text = "2 horas - ${prices[2]},00"
-                binding.btn4hours.text = "4 horas - ${prices[3]},00"
-                binding.btnUntil18.text = "Do momento até 18h - ${prices[4]},00"
+                binding.btn30min.text = "30 minutos - R$ ${prices[0]},00"
+                binding.btn1hour.text = "1 hora - R$ ${prices[1]},00"
+                binding.btn2hours.text = "2 horas - R$ ${prices[2]},00"
+                binding.btn4hours.text = "4 horas - R$ ${prices[3]},00"
+                binding.btnUntil18.text = "Do momento até 18h - R$ ${prices[4]},00"
             } else {
                 // Não há preços suficientes
                 Toast.makeText(this, "Não há preços suficientes", Toast.LENGTH_SHORT).show()
