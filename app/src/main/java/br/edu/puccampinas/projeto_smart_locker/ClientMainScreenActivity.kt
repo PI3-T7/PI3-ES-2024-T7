@@ -34,6 +34,9 @@ class ClientMainScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Checando se tem locação pendente
+        checkPendingRental()
+
         database.collection("Pessoas")
             .document(auth.currentUser?.uid.toString()).addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -99,6 +102,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Fecha o diálogo
             customDialog1.dismiss()
             // Cancela a locação pendente
+            clearPendingRental()
 
         }
 
@@ -253,6 +257,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
+    // Função que verifica a hora para ver se o estabelecimento está fechado ou não
     private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
@@ -271,6 +276,23 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Se for entre 7h e 17h30:
             startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
         }
+    }
+
+    // Função para verificar se há uma locação pendente
+    private fun checkPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
+        if (pendingRental) {
+            showLocacaoPendenteDialog()
+        }
+    }
+
+    // Função para limpar o estado de locação pendente
+    private fun clearPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", false)
+        editor.apply()
     }
 
 }

@@ -5,18 +5,18 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import java.io.ByteArrayOutputStream
-import android.util.Base64
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import java.io.ByteArrayOutputStream
 
 
 class QRcodeActivity : AppCompatActivity() {
@@ -34,20 +34,39 @@ class QRcodeActivity : AppCompatActivity() {
         cancelLocation = findViewById(R.id.cancelLocation)
         buttonVoltar2 = findViewById(R.id.buttonVoltar2)
 
-        // Obtém a string serializada da Intent
-        val dados = intent.getStringExtra("dados")
-        Log.d("QRcodeActivity", "Dados recebidos: $dados")
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
 
-        // Verifica se os dados são nulos e chama a função
-        if (dados != null) {
-            generateQRCode(dados)
+        if (pendingRental) {
+            // Carregar QR code de SharedPreferences
+            val qrCodeString = sharedPreferences.getString("qr_code_bitmap", null)
+            if (qrCodeString != null) {
+                val bitmap = decodeBase64(qrCodeString)
+                imgQRcode.setImageBitmap(bitmap)
+                imgQRcode.visibility = ImageView.VISIBLE
+                qrCodeBitmap = bitmap
+            }
+        } else {
+            // Obtém a string serializada da Intent
+            val dados = intent.getStringExtra("dados")
+            Log.d("QRcodeActivity", "Dados recebidos: $dados")
+
+            // Verifica se os dados são nulos e chama a função
+            if (dados != null) {
+                generateQRCode(dados)
+                savePendingRental()
+                saveQRCodeToSharedPreferences(qrCodeBitmap)
+            }
         }
 
         buttonVoltar2.setOnClickListener {
+            clearPendingRental()
+            startActivity(Intent(this@QRcodeActivity, LocationActivity::class.java))
             finish()
         }
 
         cancelLocation.setOnClickListener {
+            clearPendingRental()
             showAlertCancel()
         }
     }
@@ -113,12 +132,54 @@ class QRcodeActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,ClientMainScreenActivity::class.java))
+            clearPendingRental()
+            startActivity(Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java))
             finish()
             customDialog.dismiss()
         }
 
         // Mostre o diálogo
         customDialog.show()
+    }
+
+    // Função para salvar o estado de locação pendente
+    private fun savePendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", true)
+        editor.apply()
+    }
+
+    // Função para limpar o estado de locação pendente
+    private fun clearPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", false)
+        editor.apply()
+    }
+
+    // Função para salvar o QR code em SharedPreferences
+    private fun saveQRCodeToSharedPreferences(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            val qrCodeString = encodeToBase64(bitmap)
+            editor.putString("qr_code_bitmap", qrCodeString)
+            editor.apply()
+        }
+    }
+
+    // Função para codificar Bitmap em Base64
+    private fun encodeToBase64(image: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    // Função para decodificar string Base64 em Bitmap
+    private fun decodeBase64(input: String): Bitmap {
+        val decodedByte = Base64.decode(input, 0)
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.size)
     }
 }

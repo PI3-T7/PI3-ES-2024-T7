@@ -61,8 +61,6 @@ class LocationActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
 
-        //verificarCartaoCadastrado()
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Verifique e solicite permissão de acesso à localização
@@ -82,11 +80,14 @@ class LocationActivity : AppCompatActivity() {
         }
 
         binding.buttonHome1.setOnClickListener {
+            startActivity(Intent(this@LocationActivity, ClientMainScreenActivity::class.java))
             finish()
         }
 
         binding.buttonVoltar1.setOnClickListener {
             finish()
+            startActivity(Intent(this@LocationActivity, ClientMainScreenActivity::class.java))
+
         }
 
         // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
