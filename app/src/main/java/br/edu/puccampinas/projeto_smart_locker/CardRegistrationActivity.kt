@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Button
 
 /**
@@ -67,11 +68,11 @@ class CardRegistrationActivity : AppCompatActivity() {
             )
 
             nav.buttonHome.setOnClickListener {
-                showAlertCancel("home")
+                showAlertCancel()
             }
 
             nav.buttonVoltar.setOnClickListener {
-                showAlertCancel("arrow")
+                showAlertCancel()
             }
         }
     }
@@ -230,22 +231,36 @@ class CardRegistrationActivity : AppCompatActivity() {
      * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
      * @param button O identificador do botão que acionou o diálogo de cancelamento.
      */
-    private fun showAlertCancel(button: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Atenção")
-            .setMessage("Deseja mesmo cancelar essa operação?")
-            .setPositiveButton("SIM") { dialog, _ ->
-                dialog.dismiss()
-                if (button == "home") startActivity(
-                    Intent(
-                        this@CardRegistrationActivity,
-                        ClientMainScreenActivity::class.java
-                    )
-                )
-                finish()
-            }
-            .setNegativeButton("NÃO") { dialog, _ -> dialog.dismiss() }
-            .show()
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem fazer logout
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            startActivity(Intent(this,CardsActivity::class.java))
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
     }
 
     /**

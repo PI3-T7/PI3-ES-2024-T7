@@ -21,7 +21,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 class QRcodeActivity : AppCompatActivity() {
 
     private lateinit var imgQRcode: ImageView
-    private lateinit var buttonHome2: ImageView
+    private lateinit var cancelLocation: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
 
@@ -30,7 +30,7 @@ class QRcodeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_qrcode)
 
         imgQRcode = findViewById(R.id.img_qr_code)
-        buttonHome2 = findViewById(R.id.buttonHome2)
+        cancelLocation = findViewById(R.id.cancelLocation)
         buttonVoltar2 = findViewById(R.id.buttonVoltar2)
 
         // Obtém a string serializada da Intent
@@ -46,10 +46,8 @@ class QRcodeActivity : AppCompatActivity() {
             finish()
         }
 
-        buttonHome2.setOnClickListener {
-            LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(Intent("meuFiltro"))
-            finish()
+        cancelLocation.setOnClickListener {
+
         }
     }
 
