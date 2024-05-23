@@ -214,8 +214,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
     }
 
     private fun cancelLocacaoPendente() {
-        // Coloque aqui o código para cancelar a locação pendente
-        // Por exemplo, você pode remover o status de locação pendente das SharedPreferences
+        // Cancelando locação pendente
         val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putBoolean(

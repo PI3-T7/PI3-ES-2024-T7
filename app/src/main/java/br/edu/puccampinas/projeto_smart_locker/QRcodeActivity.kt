@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
@@ -15,7 +14,9 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.view.WindowManager
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 
 
 class QRcodeActivity : AppCompatActivity() {
@@ -24,6 +25,9 @@ class QRcodeActivity : AppCompatActivity() {
     private lateinit var cancelLocation: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
+    // chaves para SharedPreferences
+    private val sharedPref = "Locacao"
+    private val qrCodeBitMapKey = "locacaoPendente"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,7 @@ class QRcodeActivity : AppCompatActivity() {
         }
 
         cancelLocation.setOnClickListener {
-
+            showAlertCancel()
         }
     }
 
@@ -188,5 +192,55 @@ class QRcodeActivity : AppCompatActivity() {
             }
         }
         return bmp
+    }
+
+    /**
+     * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
+     * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
+     * @param button O identificador do botão que acionou o diálogo de cancelamento.
+     */
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem cancelar a operação
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            cancelLocacaoPendente()
+            startActivity(Intent(this,ClientMainScreenActivity::class.java))
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
+    }
+
+    private fun cancelLocacaoPendente() {
+        // Cancelando locação pendente
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean(
+            qrCodeBitMapKey,
+            false
+        ) // Define como false para cancelar a locação pendente
+        editor.apply()
     }
 }
