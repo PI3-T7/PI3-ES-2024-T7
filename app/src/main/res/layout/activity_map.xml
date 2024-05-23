@@ -33,7 +33,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="32dp"
         android:drawableEnd="@drawable/icon_custom_pin"
         android:drawablePadding="20dp"
         android:elevation="2dp"
@@ -45,7 +45,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintEnd_toEndOf="@id/view"
-        app:layout_constraintStart_toEndOf="@id/voltarOpening"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/view" />
 
 
@@ -94,7 +94,6 @@
         app:layout_constraintEnd_toEndOf="@id/tv_name"
         app:layout_constraintStart_toStartOf="@id/tv_name"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
-
         />
 
     <TextView

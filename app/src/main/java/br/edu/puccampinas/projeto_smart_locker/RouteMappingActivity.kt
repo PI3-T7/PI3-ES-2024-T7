@@ -17,7 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +31,7 @@ import com.google.maps.model.DirectionsResult
 import com.google.maps.model.TravelMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 
 class RouteMappingActivity : AppCompatActivity() {
     // declaração do banco e das variaveis que serão usadas para representar as localizações/unidades
@@ -37,7 +40,10 @@ class RouteMappingActivity : AppCompatActivity() {
     private lateinit var googleMap: GoogleMap
     private lateinit var userLatLng: LatLng
     private lateinit var places: List<Place>
-    private lateinit var tvDestino: TextView
+    private lateinit var tv_address: TextView
+    private lateinit var tvInfo: TextView
+    private lateinit var tvName: TextView
+    private lateinit var btnAction: Button
     private lateinit var placeName: String
     private var placeLatitude: Double = 0.0
     private var placeLongitude: Double = 0.0
@@ -61,12 +67,17 @@ class RouteMappingActivity : AppCompatActivity() {
         placeName = intent.getStringExtra("placeName") ?: ""
         placeAddress = intent.getStringExtra("placeAddress") ?: ""
 
-        tvDestino = findViewById(R.id.textLocalLocacao)
-        botaoVoltarMapa = findViewById(R.id.voltarMapa)
+        tvInfo = findViewById(R.id.textInfo)
+        btnAction = findViewById(R.id.button)
+        tvName = findViewById(R.id.tv_name)
+        tv_address = findViewById(R.id.tv_address)
+        botaoVoltarMapa = findViewById(R.id.btnVoltar)
 
-        // Concatenando o nome do local e o endereço
-        val destinationText = "$placeName - $placeAddress"
-        tvDestino.text = destinationText
+        // declarando o nome e endereço da unidade para printar respectivamente no layout
+        tvName.text = placeName
+        tv_address.text = placeAddress
+
+        updateUIForUserState()
 
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -80,8 +91,34 @@ class RouteMappingActivity : AppCompatActivity() {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
-    }
 
+        btnAction.setOnClickListener {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null) {
+                // Usuário está logado
+                val intent = Intent(this, ClientMainScreenActivity::class.java)
+                startActivity(intent)
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Usuário não está logado
+                    val intent = Intent(this, OpeningActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+    private fun updateUIForUserState() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            // Usuário está logado
+            btnAction.text = " Voltar ao menu"
+            tvInfo.text = "Para alugar um armário no local selecionado, volte ao menu inicial e clique em 'Alugar Armário'."
+        } else {
+            // Usuário não está logado
+            btnAction.text = " Voltar à página inicial"
+            tvInfo.text = "Para alugar um armário no local selecionado, você precisa estar conectado."
+        }
+    }
     private fun setupMap() {
         // define um adaptador para as janelas de informações dos marcadores
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
