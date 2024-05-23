@@ -85,6 +85,7 @@ class PersonPicActivity : AppCompatActivity() {
                 )  // Passe a lista de caminhos de fotos de volta
                 startActivity(intent)
             } else {
+                binding.buttonFinish.isEnabled = false
                 // Se tirou todas as fotos necessárias, procede com o upload e salvamento
                 val calendar = Calendar.getInstance()
                 val dateFormat =

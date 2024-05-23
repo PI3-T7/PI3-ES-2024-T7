@@ -206,12 +206,6 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 tvStartLocation.text = "Início: Dados inválidos"
                 tvEndLocation.text = "Fim: Dados inválidos"
             }
-
-            // Obtém e formata o preço da locação
-            val preco = document.getLong("preco")?.toDouble() ?: 0.0
-            val precoFormatado = String.format("R$ %.2f", preco).replace('.', ',')
-            // Atualiza a interface com o preço formatado
-            tvPrice.text = precoFormatado
         }
     }
 
