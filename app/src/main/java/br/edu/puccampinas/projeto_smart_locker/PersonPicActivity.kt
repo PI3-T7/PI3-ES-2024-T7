@@ -5,8 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
@@ -76,13 +79,18 @@ class PersonPicActivity : AppCompatActivity() {
                 intent.putExtra("dadosCliente", dadosJson)
                 intent.putExtra("numPessoas", numPessoas)
                 intent.putExtra("fotosTiradas", fotosTiradas)
-                intent.putStringArrayListExtra("imagePaths", imagePaths)  // Passe a lista de caminhos de fotos de volta
+                intent.putStringArrayListExtra(
+                    "imagePaths",
+                    imagePaths
+                )  // Passe a lista de caminhos de fotos de volta
                 startActivity(intent)
             } else {
                 // Se tirou todas as fotos necessárias, procede com o upload e salvamento
                 val calendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, Locale.getDefault())
-                val timeFormat = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, Locale.getDefault())
+                val dateFormat =
+                    SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, Locale.getDefault())
+                val timeFormat =
+                    SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, Locale.getDefault())
 
                 val dataLocacao = dateFormat.format(calendar.time)
                 val horaLocacao = timeFormat.format(calendar.time)
@@ -103,7 +111,8 @@ class PersonPicActivity : AppCompatActivity() {
                         uploadPhotosToFirebase(imagePaths, dadosCliente.id, locacaoData)
                     } ?: run {
                         Log.e("Firestore", "Nenhum armário livre encontrado.")
-                        Toast.makeText(this, "Nenhum armário livre encontrado.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Nenhum armário livre encontrado.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -128,6 +137,10 @@ class PersonPicActivity : AppCompatActivity() {
             intent.putStringArrayListExtra("imagePaths", imagePaths)
             startActivity(intent)
             finish()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            showAlertCancel()
         }
     }
 
@@ -218,7 +231,10 @@ class PersonPicActivity : AppCompatActivity() {
                 Log.d("Firestore", "Locação salva com ID: ${documentReference.id}")
                 updateArmarioStatus(locacaoData.numeroArmario.toInt())
                 val intent = Intent(this, ClosetReleasedActivity::class.java)
-                intent.putExtra("locacaoId", documentReference.id) // Envia o ID da locação para a próxima activity
+                intent.putExtra(
+                    "locacaoId",
+                    documentReference.id
+                ) // Envia o ID da locação para a próxima activity
                 startActivity(intent)
             }.addOnFailureListener { e ->
                 Log.e("Firestore", "Erro ao salvar locação no Firestore: ${e.message}", e)
@@ -270,6 +286,45 @@ class PersonPicActivity : AppCompatActivity() {
                 Log.e(TAG, "Erro ao atualizar status do armário $numeroArmario: $e")
             }
     }
+
+    /**
+     * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
+     * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
+     * @param button O identificador do botão que acionou o diálogo de cancelamento.
+     */
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem fazer logout
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
+    }
+
 }
 
 /**
