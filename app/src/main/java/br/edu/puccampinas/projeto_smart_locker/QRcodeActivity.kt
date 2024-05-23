@@ -25,9 +25,6 @@ class QRcodeActivity : AppCompatActivity() {
     private lateinit var cancelLocation: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
-    // chaves para SharedPreferences
-    private val sharedPref = "Locacao"
-    private val qrCodeBitMapKey = "locacaoPendente"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,113 +51,6 @@ class QRcodeActivity : AppCompatActivity() {
             showAlertCancel()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
-        }
-    }
-
 
     // Função que gera um QRcode
     private fun generateQRCode(text: String) {
@@ -223,7 +113,6 @@ class QRcodeActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            cancelLocacaoPendente()
             startActivity(Intent(this,ClientMainScreenActivity::class.java))
             finish()
             customDialog.dismiss()
@@ -231,16 +120,5 @@ class QRcodeActivity : AppCompatActivity() {
 
         // Mostre o diálogo
         customDialog.show()
-    }
-
-    private fun cancelLocacaoPendente() {
-        // Cancelando locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(
-            qrCodeBitMapKey,
-            false
-        ) // Define como false para cancelar a locação pendente
-        editor.apply()
     }
 }

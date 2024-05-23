@@ -25,10 +25,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
     private val binding by lazy { ActivityClientMainScreenBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
-    // chaves para SharedPreferences
-    private val sharedPref = "Locacao"
-    private val qrCodeBitMapKey = "locacaoPendente"
-
     private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
 
     private val db = FirebaseFirestore.getInstance()
@@ -76,32 +72,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        // Verifica se há uma locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val locacaoPendente = prefs.getBoolean(qrCodeBitMapKey, false)
-
-        if (locacaoPendente) {
-            // Se houver uma locação pendente, exibe o diálogo
-            showLocacaoPendenteDialog()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        // Verifica se há uma locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val locacaoPendente = prefs.getBoolean(qrCodeBitMapKey, false)
-
-        if (locacaoPendente) {
-            // Se houver uma locação pendente, exibe o diálogo
-            showLocacaoPendenteDialog()
-        }
-    }
-
     /**
      * Exibe um diálogo de Locação Pendente customizado com uma mensagem simples e botões "SIM" e "NÃO".
      * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
@@ -129,7 +99,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Fecha o diálogo
             customDialog1.dismiss()
             // Cancela a locação pendente
-            cancelLocacaoPendente()
+
         }
 
         btnYes1.setOnClickListener {
@@ -211,17 +181,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
         // Mostre o diálogo
         alertDialog.show()
-    }
-
-    private fun cancelLocacaoPendente() {
-        // Cancelando locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(
-            qrCodeBitMapKey,
-            false
-        ) // Define como false para cancelar a locação pendente
-        editor.apply()
     }
 
     private fun verificarCartaoCadastrado() {
