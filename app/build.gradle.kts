@@ -89,6 +89,9 @@ dependencies {
     // https://github.com/ybq/Android-SpinKit - Biblioteca de animações de loading
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
 
+    // Biblioteca de animações LottieAnimation
+    implementation("com.airbnb.android:lottie:6.0.0")
+
     implementation ("com.google.maps:google-maps-services:0.18.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
