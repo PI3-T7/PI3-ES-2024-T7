@@ -18,6 +18,9 @@ import java.util.Calendar
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * Activity responsável por capturar a foto da pessoa.
+ */
 class PersonPicActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonPicBinding
@@ -27,6 +30,7 @@ class PersonPicActivity : AppCompatActivity() {
     private lateinit var imagePaths: ArrayList<String>  // Alterado para armazenar a lista de caminhos de fotos
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
+    private var pendenciaId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +40,19 @@ class PersonPicActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+        // Recupera os dados do cliente e outras informações da Intent
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
         imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
         numPessoas = intent.getIntExtra("numPessoas", 1)
         fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
+        pendenciaId = intent.getStringExtra("pendenciaId")
 
         Log.d(TAG, "numPessoas: $numPessoas")
         Log.d(TAG, "fotosTiradas: $fotosTiradas")
         Log.d("PersonPicActivity", "Caminhos das imagens: $imagePaths")
 
-        // Exiba a última foto tirada
+        // Carrega a última foto tirada, se houver
         if (imagePaths.isNotEmpty()) {
             val imagePath = imagePaths.last()
             val imageFile = File(imagePath)
@@ -76,6 +82,7 @@ class PersonPicActivity : AppCompatActivity() {
                 intent.putExtra("dadosCliente", dadosJson)
                 intent.putExtra("numPessoas", numPessoas)
                 intent.putExtra("fotosTiradas", fotosTiradas)
+                intent.putExtra("pendenciaId", pendenciaId)
                 intent.putStringArrayListExtra("imagePaths", imagePaths)  // Passe a lista de caminhos de fotos de volta
                 startActivity(intent)
             } else {
@@ -201,11 +208,33 @@ class PersonPicActivity : AppCompatActivity() {
             .addOnSuccessListener { documentReference ->
                 Log.d("Firestore", "Locação salva com ID: ${documentReference.id}")
                 updateArmarioStatus(locacaoData.numeroArmario.toInt())
+                pendenciaId?.let { updatePendencias(it, documentReference.id) }
                 val intent = Intent(this, ClosetReleasedActivity::class.java)
                 intent.putExtra("locacaoId", documentReference.id) // Envia o ID da locação para a próxima activity
                 startActivity(intent)
             }.addOnFailureListener { e ->
                 Log.e("Firestore", "Erro ao salvar locação no Firestore: ${e.message}", e)
+            }
+    }
+
+    /**
+     * Atualiza o status de uma pendência para "concluído" e associa a pendência a uma locação específica.
+     *
+     * @param pendenciaId O ID da pendência a ser atualizada.
+     * @param locacaoId O ID da locação associada à pendência.
+     */
+    private fun updatePendencias(pendenciaId: String, locacaoId: String) {
+        firestore.collection("Pendencias")
+            .document(pendenciaId)
+            .update(mapOf(
+                "status" to "concluido",
+                "uid_locacao" to locacaoId
+            ))
+            .addOnSuccessListener {
+                Log.d("Firestore", "Pendência $pendenciaId atualizada com sucesso")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Erro ao atualizar pendência $pendenciaId: ${e.message}", e)
             }
     }
 

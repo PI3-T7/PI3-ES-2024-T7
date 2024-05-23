@@ -33,6 +33,7 @@ class TakePicActivity : AppCompatActivity() {
     private var numPessoas: Int = 1
     private var fotosTiradas: Int = 0
     private lateinit var imagePaths: ArrayList<String>
+    private var pendenciaId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class TakePicActivity : AppCompatActivity() {
         numPessoas = intent.getIntExtra("numPessoas", 1)
         fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
         imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
+        pendenciaId = intent.getStringExtra("pendenciaId")
 
         // Configura o clique no botão de voltar
         binding.imgArrow.setOnClickListener {
@@ -122,11 +124,16 @@ class TakePicActivity : AppCompatActivity() {
                         intent.putExtra("imagePaths", imagePaths)
                         intent.putExtra("numPessoas", numPessoas)
                         intent.putExtra("fotosTiradas", fotosTiradas)
+                        intent.putExtra("pendenciaId", pendenciaId)
                         startActivity(intent)
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Log.e("CameraPreview", "Erro ao capturar imagem: ${exception.message}", exception)
+                        Log.e(
+                            "CameraPreview",
+                            "Erro ao capturar imagem: ${exception.message}",
+                            exception
+                        )
                     }
                 }
             )

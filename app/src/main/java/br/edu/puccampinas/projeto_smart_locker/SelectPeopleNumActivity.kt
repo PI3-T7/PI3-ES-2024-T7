@@ -10,20 +10,26 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
+
+/**
+ * Activity responsável por permitir ao usuário selecionar o número de pessoas para alugar armários.
+ */
 class SelectPeopleNumActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySelectPeopleBinding
     private lateinit var dadosCliente: DadosCliente
     private var numPessoas: Int = 0
-
+    private var pendenciaId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySelectPeopleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Recupera os dados do cliente passados da activity anterior
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
+        pendenciaId = intent.getStringExtra("pendenciaId")
 
         binding.buttonConfirm.setOnClickListener {
             if (binding.button1person.isChecked) {
@@ -48,10 +54,11 @@ class SelectPeopleNumActivity : AppCompatActivity() {
         }
     }
 
+    // Resultado da solicitação de permissão da câmera
     private val cameraProviderResult =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                abrirTelaDePreview()
+                abrirTelaDePreview() // Abre a tela de visualização da câmera
             } else {
                 Snackbar.make(
                     binding.root,
@@ -61,15 +68,18 @@ class SelectPeopleNumActivity : AppCompatActivity() {
             }
         }
 
+    // Inicia a atividade da câmera
     private fun startCameraActivity() {
         cameraProviderResult.launch(android.Manifest.permission.CAMERA)
     }
 
+    // Abre a tela de pré-visualização da câmera
     private fun abrirTelaDePreview() {
         val intent = Intent(this, TakePicActivity::class.java)
         val dadosJson = Gson().toJson(dadosCliente)
         intent.putExtra("dadosCliente", dadosJson)
         intent.putExtra("numPessoas", numPessoas)
+        intent.putExtra("pendenciaId", pendenciaId)
         startActivity(intent)
     }
 }

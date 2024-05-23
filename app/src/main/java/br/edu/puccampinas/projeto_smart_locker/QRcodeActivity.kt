@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
@@ -15,15 +14,24 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import org.json.JSONException
+import org.json.JSONObject
 
-
+/**
+ * Activity responsável por gerar e exibir um QR code com base nos dados fornecidos.
+ * Também monitora o status de locação no Firestore.
+ */
 class QRcodeActivity : AppCompatActivity() {
 
     private lateinit var imgQRcode: ImageView
     private lateinit var buttonHome2: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
+    private var firestoreListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +48,7 @@ class QRcodeActivity : AppCompatActivity() {
         // Verifica se os dados são nulos e chama a função
         if (dados != null) {
             generateQRCode(dados)
+            monitorarLocacao(dados)
         }
 
         buttonVoltar2.setOnClickListener {
@@ -55,112 +64,76 @@ class QRcodeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
+        saveQRCodeState()
+        firestoreListener?.remove()
     }
 
     override fun onStop() {
         super.onStop()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
+        saveQRCodeState()
     }
 
     override fun onResume() {
         super.onResume()
-
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
-        }
+        restoreQRCodeState()
     }
 
     override fun onStart() {
         super.onStart()
+        restoreQRCodeState()
+    }
 
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+    /**
+     * Monitora o status da locação no Firestore e redireciona para a tela de espera se o status for "em processamento".
+     *
+     * @param dadosJson Dados do cliente em formato JSON.
+     */
+    private fun monitorarLocacao(dadosJson: String) {
+        try {
+            val jsonObject = JSONObject(dadosJson)
+            val clienteId = jsonObject.getString("id")
+            val unidade = jsonObject.getString("unidade")
 
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
+            val db = FirebaseFirestore.getInstance()
+            firestoreListener = db.collection("Pendencias")
+                .whereEqualTo("uid_cliente", clienteId)
+                .whereEqualTo("uid_unidade", unidade)
+                .addSnapshotListener { snapshots, e ->
+                    if (e != null) {
+                        Log.e("QRcodeActivity", "Erro ao monitorar locação: ${e.message}")
+                        Toast.makeText(
+                            this,
+                            "Erro ao monitorar locação: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@addSnapshotListener
+                    }
+                    if (snapshots != null && !snapshots.isEmpty) {
+                        for (doc in snapshots.documents) {
+                            val status = doc.getString("status")
+                            Log.d("QRcodeActivity", "Status atual: $status")
+                            if (status == "em processamento") {
+                                // Mostra a tela de espera
+                                val intent = Intent(this@QRcodeActivity, WaitingActivity::class.java)
+                                intent.putExtra("dadosCliente", dadosJson)
+                                startActivity(intent)
+                            }
+                        }
+                    } else {
+                        Log.d("QRcodeActivity", "Nenhum documento encontrado.")
+                    }
+                }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erro ao processar os dados do QR code", Toast.LENGTH_LONG).show()
         }
     }
 
-
-    // Função que gera um QRcode
+    /**
+     * Gera um QR code com base no texto fornecido e o exibe na ImageView.
+     *
+     * @param text Texto a ser codificado no QR code.
+     */
     private fun generateQRCode(text: String) {
         val prefixo = "SMARTLOCKER_"
         val dadosComPrefixo = prefixo + text // Adiciona o prefixo aos dados
@@ -179,7 +152,12 @@ class QRcodeActivity : AppCompatActivity() {
         }
     }
 
-    // Função que faz a conversão uma matriz de bits (BitMatrix) em um objeto Bitmap
+    /**
+     * Converte uma matriz de bits (BitMatrix) em um objeto Bitmap.
+     *
+     * @param matrix Matriz de bits a ser convertida.
+     * @return Bitmap gerado a partir da matriz de bits.
+     */
     private fun toBitmap(matrix: BitMatrix): Bitmap {
         val width = matrix.width
         val height = matrix.height
@@ -190,5 +168,61 @@ class QRcodeActivity : AppCompatActivity() {
             }
         }
         return bmp
+    }
+
+    /**
+     * Salva o estado atual do QR code bitmap e o status de locação pendente nas SharedPreferences.
+     */
+    private fun saveQRCodeState() {
+        // Define o nome das SharedPreferences e as chaves corretas
+        val sharedPref = "Locacao"
+        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
+        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+
+        // Salva o status de locação pendente nas SharedPreferences
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
+        editor.apply()
+
+        // Verifica se há um QR code bitmap para salvar
+        qrCodeBitmap?.let { bitmap ->
+            // Salva o QR code bitmap nas SharedPreferences
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+            editor.putString(qrCodeBitMapKey, encodedBitmap)
+            editor.apply()
+        }
+    }
+
+    /**
+     * Recupera o estado salvo do QR code bitmap e o status de locação pendente das SharedPreferences.
+     */
+    private fun restoreQRCodeState() {
+        // Define o nome das SharedPreferences e as chaves corretas
+        val sharedPref = "Locacao"
+        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
+        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
+
+        // Recupera o QR code bitmap das SharedPreferences
+        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
+
+        // Recupera o status de locação pendente das SharedPreferences
+        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
+
+        // Verifica se o QR code bitmap está disponível
+        if (encodedBitmap != null) {
+            // Decodifica o bitmap do Base64
+            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
+            val decodedBitmap =
+                BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
+
+            // Define o bitmap na ImageView
+            imgQRcode.setImageBitmap(decodedBitmap)
+            imgQRcode.visibility = ImageView.VISIBLE
+        }
     }
 }
