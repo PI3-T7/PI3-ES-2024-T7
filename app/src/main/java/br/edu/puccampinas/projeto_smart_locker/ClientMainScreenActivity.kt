@@ -25,10 +25,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
     private val binding by lazy { ActivityClientMainScreenBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
-    // chaves para SharedPreferences
-    private val sharedPref = "Locacao"
-    private val qrCodeBitMapKey = "locacaoPendente"
-
     private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
 
     private val db = FirebaseFirestore.getInstance()
@@ -37,6 +33,9 @@ class ClientMainScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        // Checando se tem locação pendente
+        checkPendingRental()
 
         database.collection("Pessoas")
             .document(auth.currentUser?.uid.toString()).addSnapshotListener { snapshot, error ->
@@ -76,32 +75,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        // Verifica se há uma locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val locacaoPendente = prefs.getBoolean(qrCodeBitMapKey, false)
-
-        if (locacaoPendente) {
-            // Se houver uma locação pendente, exibe o diálogo
-            showLocacaoPendenteDialog()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        // Verifica se há uma locação pendente
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val locacaoPendente = prefs.getBoolean(qrCodeBitMapKey, false)
-
-        if (locacaoPendente) {
-            // Se houver uma locação pendente, exibe o diálogo
-            showLocacaoPendenteDialog()
-        }
-    }
-
     /**
      * Exibe um diálogo de Locação Pendente customizado com uma mensagem simples e botões "SIM" e "NÃO".
      * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
@@ -129,7 +102,8 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Fecha o diálogo
             customDialog1.dismiss()
             // Cancela a locação pendente
-            cancelLocacaoPendente()
+            clearPendingRental()
+
         }
 
         btnYes1.setOnClickListener {
@@ -149,6 +123,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
      * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
      * logout do sistema.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showLogoutDialog() {
         // Inflate o layout customizado
         val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
@@ -174,6 +149,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         btnYes.setOnClickListener {
             // Realize o logout
             auth.signOut()
+            startActivity(Intent(this,OpeningActivity::class.java))
             finish()
             customDialog.dismiss()
         }
@@ -209,18 +185,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
         // Mostre o diálogo
         alertDialog.show()
-    }
-
-    private fun cancelLocacaoPendente() {
-        // Coloque aqui o código para cancelar a locação pendente
-        // Por exemplo, você pode remover o status de locação pendente das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(
-            qrCodeBitMapKey,
-            false
-        ) // Define como false para cancelar a locação pendente
-        editor.apply()
     }
 
     private fun verificarCartaoCadastrado() {
@@ -293,6 +257,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
+    // Função que verifica a hora para ver se o estabelecimento está fechado ou não
     private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
@@ -311,6 +276,23 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Se for entre 7h e 17h30:
             startActivity(Intent(this@ClientMainScreenActivity, LocationActivity::class.java))
         }
+    }
+
+    // Função para verificar se há uma locação pendente
+    private fun checkPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
+        if (pendingRental) {
+            showLocacaoPendenteDialog()
+        }
+    }
+
+    // Função para limpar o estado de locação pendente
+    private fun clearPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", false)
+        editor.apply()
     }
 
 }

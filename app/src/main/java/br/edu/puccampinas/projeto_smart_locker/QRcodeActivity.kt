@@ -5,23 +5,24 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.util.Base64
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import java.io.ByteArrayOutputStream
-import android.util.Base64
 import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.view.WindowManager
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import java.io.ByteArrayOutputStream
 
 
 class QRcodeActivity : AppCompatActivity() {
 
     private lateinit var imgQRcode: ImageView
-    private lateinit var buttonHome2: ImageView
+    private lateinit var cancelLocation: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
 
@@ -30,135 +31,45 @@ class QRcodeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_qrcode)
 
         imgQRcode = findViewById(R.id.img_qr_code)
-        buttonHome2 = findViewById(R.id.buttonHome2)
+        cancelLocation = findViewById(R.id.cancelLocation)
         buttonVoltar2 = findViewById(R.id.buttonVoltar2)
 
-        // Obtém a string serializada da Intent
-        val dados = intent.getStringExtra("dados")
-        Log.d("QRcodeActivity", "Dados recebidos: $dados")
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
 
-        // Verifica se os dados são nulos e chama a função
-        if (dados != null) {
-            generateQRCode(dados)
+        if (pendingRental) {
+            // Carregar QR code de SharedPreferences
+            val qrCodeString = sharedPreferences.getString("qr_code_bitmap", null)
+            if (qrCodeString != null) {
+                val bitmap = decodeBase64(qrCodeString)
+                imgQRcode.setImageBitmap(bitmap)
+                imgQRcode.visibility = ImageView.VISIBLE
+                qrCodeBitmap = bitmap
+            }
+        } else {
+            // Obtém a string serializada da Intent
+            val dados = intent.getStringExtra("dados")
+            Log.d("QRcodeActivity", "Dados recebidos: $dados")
+
+            // Verifica se os dados são nulos e chama a função
+            if (dados != null) {
+                generateQRCode(dados)
+                savePendingRental()
+                saveQRCodeToSharedPreferences(qrCodeBitmap)
+            }
         }
 
         buttonVoltar2.setOnClickListener {
+            clearPendingRental()
+            startActivity(Intent(this@QRcodeActivity, LocationActivity::class.java))
             finish()
         }
 
-        buttonHome2.setOnClickListener {
-            LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(Intent("meuFiltro"))
-            finish()
+        cancelLocation.setOnClickListener {
+            clearPendingRental()
+            showAlertCancel()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        // Define o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Salva o status de locação pendente nas SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putBoolean(locacaoPendenteKey, qrCodeBitmap != null)
-        editor.apply()
-
-        // Verifica se há um QR code bitmap para salvar
-        qrCodeBitmap?.let { bitmap ->
-            // Salva o QR code bitmap nas SharedPreferences
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encodedBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-            editor.putString(qrCodeBitMapKey, encodedBitmap)
-            editor.apply()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        // Defina o nome das SharedPreferences e as chaves corretas
-        val sharedPref = "Locacao"
-        val qrCodeBitMapKey = "qrCodeBitmap" // Chave para o bitmap do QR code
-        val locacaoPendenteKey = "locacaoPendente" // Chave para o status de locação pendente
-
-        // Recupera o QR code bitmap das SharedPreferences
-        val prefs = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
-        val encodedBitmap = prefs.getString(qrCodeBitMapKey, null)
-
-        // Recupera o status de locação pendente das SharedPreferences
-        val locacaoPendente = prefs.getBoolean(locacaoPendenteKey, false)
-
-        // Verifica se o QR code bitmap está disponível
-        if (encodedBitmap != null) {
-            // Decodifica o bitmap do Base64
-            val decodedByteArray = Base64.decode(encodedBitmap, Base64.DEFAULT)
-            val decodedBitmap = BitmapFactory.decodeByteArray(decodedByteArray, 0, decodedByteArray.size)
-
-            // Define o bitmap na ImageView
-            imgQRcode.setImageBitmap(decodedBitmap)
-            imgQRcode.visibility = ImageView.VISIBLE
-        }
-    }
-
 
     // Função que gera um QRcode
     private fun generateQRCode(text: String) {
@@ -190,5 +101,85 @@ class QRcodeActivity : AppCompatActivity() {
             }
         }
         return bmp
+    }
+
+    /**
+     * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
+     * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
+     * @param button O identificador do botão que acionou o diálogo de cancelamento.
+     */
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem cancelar a operação
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            clearPendingRental()
+            startActivity(Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java))
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
+    }
+
+    // Função para salvar o estado de locação pendente
+    private fun savePendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", true)
+        editor.apply()
+    }
+
+    // Função para limpar o estado de locação pendente
+    private fun clearPendingRental() {
+        val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("pending_rental", false)
+        editor.apply()
+    }
+
+    // Função para salvar o QR code em SharedPreferences
+    private fun saveQRCodeToSharedPreferences(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            val qrCodeString = encodeToBase64(bitmap)
+            editor.putString("qr_code_bitmap", qrCodeString)
+            editor.apply()
+        }
+    }
+
+    // Função para codificar Bitmap em Base64
+    private fun encodeToBase64(image: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    // Função para decodificar string Base64 em Bitmap
+    private fun decodeBase64(input: String): Bitmap {
+        val decodedByte = Base64.decode(input, 0)
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.size)
     }
 }
