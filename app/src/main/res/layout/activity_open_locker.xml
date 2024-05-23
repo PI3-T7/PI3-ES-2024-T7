@@ -9,13 +9,13 @@
     tools:context=".OpenLockerActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_arrow"
+        android:id="@+id/btn_close"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/icon_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/icon_close"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_arrow">
+        app:layout_constraintTop_toBottomOf="@+id/btn_close">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextView6"
@@ -42,10 +42,12 @@
         <RadioButton
             android:id="@+id/btn_open"
             style="@style/RadioButtons"
+            android:layout_height="60dp"
             android:text="@string/open_locker" />
 
         <RadioButton
             android:id="@+id/btn_finish"
+            android:layout_height="60dp"
             style="@style/RadioButtons"
             android:text="@string/end_lease" />
 
