@@ -3,19 +3,23 @@ package br.edu.puccampinas.projeto_smart_locker
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityNfcBinding
 
-class ReadNfcActivity : AppCompatActivity() {
+class EraseNfcActivity : AppCompatActivity() {
     private val binding by lazy { ActivityNfcBinding.inflate( layoutInflater ) }
     private val nfcAdapter by lazy { NfcAdapter.getDefaultAdapter(this) }
     private val pendingIntent by lazy { PendingIntent.getActivity(
@@ -34,14 +38,13 @@ class ReadNfcActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         // Verifica se o NFC está habilitado
         if (!nfcAdapter.isEnabled) {
-            showAlertMessage("Aviso: A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC.")
+            showAlertMessage("A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC.")
         }
 
         // Aplica o filtro NDEF
-        val intentFilter = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
+        val intentFilterNdef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
             try {
                 addDataType("text/plain")
@@ -49,7 +52,12 @@ class ReadNfcActivity : AppCompatActivity() {
                 throw RuntimeException("Failed to add MIME type.", e)
             }
         }
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, arrayOf(intentFilter), null)
+
+        val intentFilterTag = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, arrayOf(intentFilterNdef, intentFilterTag), null)
     }
 
     override fun onPause() {
@@ -59,32 +67,31 @@ class ReadNfcActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-        tag?.let {
-            readNfcTag(it)
-        }
-    }
-    private fun readNfcTag(tag: Tag) {
-        val ndef = Ndef.get(tag)
-        ndef?.let { ndefTag ->
-            val ndefMessage = ndefTag.cachedNdefMessage
-            ndefMessage?.let { message ->
-                val records = message.records
-                if (records.isNotEmpty()) {
-                    val ndefRecord = records[0]
-                    val payload = ndefRecord.payload
-                    val textEncoding = if ((payload[0].toInt() and 128) == 0) "UTF-8" else "UTF-16"
-                    val languageCodeLength = payload[0].toInt() and 51
-                    val text = String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, charset(textEncoding))
-
-                    // Iniciar DisplayDataActivity com os dados da tag
-                    startActivity(Intent(this, CheckDataNfcActivity::class.java).apply {
-                        putExtra("tag_data", text)
-                    })
-                }
+        Log.i("teste", "Passou no onNewIntent")
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action || NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
+            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            tag?.let {
+                EraseNfcTag(it)
             }
         }
     }
+
+    private fun EraseNfcTag(tag:Tag){
+        val ndef = Ndef.get(tag)
+        if (ndef != null) {
+            try {
+                ndef.connect()
+                val emptyMessage = NdefMessage(arrayOf(NdefRecord.createTextRecord("", "")))
+                ndef.writeNdefMessage(emptyMessage)
+                ndef.close()
+                Toast.makeText(this, "NFC tag erased", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this, "Failed to erase NFC tag", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
     private fun showAlertMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
@@ -110,4 +117,3 @@ class ReadNfcActivity : AppCompatActivity() {
         alertDialog.show()
     }
 }
-

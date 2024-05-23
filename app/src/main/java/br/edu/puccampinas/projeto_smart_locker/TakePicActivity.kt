@@ -44,6 +44,7 @@ class TakePicActivity : AppCompatActivity() {
             val intent = Intent(this, SelectPeopleNumActivity::class.java)
             intent.putExtra("dadosCliente", dadosJson)
             startActivity(intent)
+            finish()
         }
 
         // Inicializa as variáveis do CameraX

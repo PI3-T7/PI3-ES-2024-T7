@@ -64,8 +64,7 @@ class PersonPicActivity: AppCompatActivity() {
 
         // Configura o clique na seta de voltar para retornar à atividade anterior
         binding.imgArrow.setOnClickListener {
-            val intent = Intent(this, SelectPeopleNumActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 

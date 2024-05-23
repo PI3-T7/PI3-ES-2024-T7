@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCheckDataNfcBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,18 +16,22 @@ class CheckDataNfcActivity : AppCompatActivity() {
 
         with(binding){
             imgArrow.setOnClickListener { finish() }
-            database.collection("Pessoas")
-                .document(intent.getStringExtra("tag_data").toString())
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        Log.e("Erro no Firebase Firestore", error.message ?: "Erro desconhecido")
-                        return@addSnapshotListener
+            try {
+                database.collection("Pessoas")
+                    .document(intent.getStringExtra("tag_data").toString())
+                    .addSnapshotListener { snapshot, error ->
+                        if (error != null) {
+                            Log.e("Erro no Firebase Firestore", error.message ?: "Erro desconhecido")
+                            return@addSnapshotListener
+                        }
+                        if (snapshot != null && snapshot.exists()) {
+                            tvName.text = snapshot.get("nome_completo").toString()
+                            tvPhone.text = snapshot.get("celular").toString()
+                        }
                     }
-                    if (snapshot != null && snapshot.exists()) {
-                        tvName.text = snapshot.get("nome_completo").toString()
-                        tvPhone.text = snapshot.get("celular").toString()
-                    }
-                }
+            }catch (e: Exception){
+                Toast.makeText(this@CheckDataNfcActivity, "Usuário não cadastrado!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

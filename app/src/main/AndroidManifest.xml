@@ -31,9 +31,21 @@
         android:theme="@style/Theme.Projeto_Smart_Locker"
         tools:targetApi="31">
         <activity
+            android:name=".EraseNfcActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".WriteNfcActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ReadNfcActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".ClosedEstablishmentActivity"
-            android:theme="@style/AppTheme"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".NetworkErrorActivity"
             android:exported="false"
@@ -77,11 +89,6 @@
         <activity
             android:name=".CheckDataNfcActivity"
             android:exported="true"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ReadNfcActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ManagerMainScreenActivity"

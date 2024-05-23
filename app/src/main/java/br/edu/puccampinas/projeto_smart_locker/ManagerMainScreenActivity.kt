@@ -36,7 +36,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
                         return@addSnapshotListener
                     }
                     if (snapshot != null && snapshot.exists()) {
-                        appCompatTextView3.text = "Olá, gerente ${snapshot.get("nome_completo")}"
+                        "Olá, gerente ${snapshot.get("nome_completo")}".also { appCompatTextView3.text = it }
                     }
                 }
             btLogout.setOnClickListener{
@@ -57,7 +57,18 @@ class ManagerMainScreenActivity : AppCompatActivity() {
                 }
             }
             viewReleaseRental.setOnClickListener{
-                startActivity(Intent(this@ManagerMainScreenActivity, QRcodeManagerActivity::class.java))
+                // Verificando se o dispositivo possui NFC
+                if (nfcAdapter == null) {
+                    Toast.makeText(this@ManagerMainScreenActivity, "O dispositivo não possui tecnologia NFC!", Toast.LENGTH_SHORT).show()
+                } else {
+                    try {
+//                        startActivity(Intent(this@ManagerMainScreenActivity, QRcodeManagerActivity::class.java))
+//                        startActivity(Intent(this@ManagerMainScreenActivity, WriteNfcActivity::class.java).putExtra("location_data", "valor da tag"))
+                        startActivity(Intent(this@ManagerMainScreenActivity, EraseNfcActivity::class.java))
+                    } catch (e: Exception) {
+                        Log.e("NFCIntentError", "Erro ao iniciar ReadNfcActivity", e)
+                    }
+                }
             }
         }
     }
