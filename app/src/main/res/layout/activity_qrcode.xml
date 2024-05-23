@@ -7,41 +7,21 @@
     android:background="@color/background"
     tools:context=".LocationActivity">
 
-    <View
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="@drawable/shape_navigation"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ImageView
         android:id="@+id/buttonVoltar2"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="42dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_arrow_back_white" />
-
-    <ImageView
-        android:id="@+id/buttonHome2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/container"
-        app:layout_constraintEnd_toEndOf="@+id/container"
-        app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/icon_home" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        app:srcCompat="@drawable/icon_arrow_back" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="312dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="90dp"
         android:gravity="center_horizontal"
         android:text="Apresente o QR Code abaixo para o gerente"
         android:textColor="@color/black"
@@ -51,11 +31,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/icon_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/img_qr_code"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="30dp"
-        app:layout_constraintBottom_toTopOf="@id/container"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

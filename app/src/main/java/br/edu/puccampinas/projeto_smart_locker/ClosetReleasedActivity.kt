@@ -196,7 +196,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
                     tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
                     tvEndLocation.text = "Fim: $endDateString"
-                    tvTime.text = "${tempoEscolhido} hora(s)"
+                    tvTime.text = tempoEscolhidoString
                 } else {
                     // Se não for possível calcular a data e hora de término, exibe uma mensagem
                     tvEndLocation.text = "Fim: Não foi possível calcular"

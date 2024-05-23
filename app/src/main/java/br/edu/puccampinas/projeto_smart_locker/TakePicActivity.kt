@@ -48,9 +48,24 @@ class TakePicActivity : AppCompatActivity() {
 
         // Configura o clique no botão de voltar
         binding.imgArrow.setOnClickListener {
-            val intent = Intent(this, SelectPeopleNumActivity::class.java)
+            if (fotosTiradas > 0) {
+                fotosTiradas-- //AQUI
+                if (imagePaths.isNotEmpty()) { //AQUI
+                    val lastImagePath = imagePaths.removeAt(imagePaths.size - 1) //AQUI
+                    val lastImageFile = File(lastImagePath) //AQUI
+                    if (lastImageFile.exists()) { //AQUI
+                        lastImageFile.delete() //AQUI
+                    }
+                }
+            }
+            val intent = Intent(this, TakePicActivity::class.java) //AQUI
+            val dadosJson = Gson().toJson(dadosCliente)
             intent.putExtra("dadosCliente", dadosJson)
+            intent.putExtra("numPessoas", numPessoas)
+            intent.putExtra("fotosTiradas", fotosTiradas)
+            intent.putStringArrayListExtra("imagePaths", imagePaths)
             startActivity(intent)
+            finish()
         }
 
         // Habilita a funcionalidade de "Edge-to-Edge" para estender a UI até as bordas da tela
@@ -110,6 +125,14 @@ class TakePicActivity : AppCompatActivity() {
                         val savedUri = outputFileResults.savedUri ?: Uri.fromFile(file)
                         val msg = "Foto salva com sucesso: $savedUri"
                         Log.d("CameraPreview", msg)
+
+                        if (numPessoas == 1 && imagePaths.isNotEmpty()) {
+                            val lastImagePath = imagePaths.removeAt(imagePaths.size - 1)
+                            val lastImageFile = File(lastImagePath)
+                            if (lastImageFile.exists()) {
+                                lastImageFile.delete()
+                            }
+                        }
 
                         // Incrementa o contador de fotos tiradas e adiciona o caminho da foto à lista
                         fotosTiradas++

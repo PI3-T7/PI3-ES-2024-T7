@@ -110,8 +110,24 @@ class PersonPicActivity : AppCompatActivity() {
         }
 
         binding.imgArrow.setOnClickListener {
-            val intent = Intent(this, SelectPeopleNumActivity::class.java)
+            if (fotosTiradas > 0) {
+                fotosTiradas--
+                if (imagePaths.isNotEmpty()) {
+                    val lastImagePath = imagePaths.removeAt(imagePaths.size - 1)
+                    val lastImageFile = File(lastImagePath)
+                    if (lastImageFile.exists()) {
+                        lastImageFile.delete()
+                    }
+                }
+            }
+            val intent = Intent(this, TakePicActivity::class.java)
+            val dadosJson = Gson().toJson(dadosCliente)
+            intent.putExtra("dadosCliente", dadosJson)
+            intent.putExtra("numPessoas", numPessoas)
+            intent.putExtra("fotosTiradas", fotosTiradas)
+            intent.putStringArrayListExtra("imagePaths", imagePaths)
             startActivity(intent)
+            finish()
         }
     }
 
