@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -114,9 +115,21 @@ class EndLeaseActivity : AppCompatActivity() {
                             // Descobre o valor a ser estornado
                             val valorEstorno = valorDiaria?.let { it - (valorTempoUso ?: 0.0) }
 
-                            binding.tvDiaria.text = "Valor da diária: R$ $valorDiaria"
-                            binding.tvUso.text = "Valor do tempo de uso: R$ $valorTempoUso"
-                            binding.tvEstorno.text = "Valor estornado: R$ $valorEstorno"
+                            // Criar um formatador para moeda brasileira
+                            val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+
+                            // Formatar os valores
+                            val valorDiariaFormatado =
+                                formatador.format(valorDiaria).replace("R$", "").trim()
+                            val valorTempoUsoFormatado =
+                                formatador.format(valorTempoUso).replace("R$", "").trim()
+                            val valorEstornoFormatado =
+                                formatador.format(valorEstorno).replace("R$", "").trim()
+
+                            // Definir os valores formatados no TextView
+                            binding.tvDiaria.text = "R$ $valorDiariaFormatado"
+                            binding.tvUso.text = "R$ $valorTempoUsoFormatado"
+                            binding.tvEstorno.text = "R$ $valorEstornoFormatado"
 
                             // Atualize o status da locação
                             atualizarStatusLocacao(id, false)
