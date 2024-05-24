@@ -6,6 +6,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBinding
@@ -38,6 +40,7 @@ class OpeningActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        hideLoading()
         with(binding) {
             imgBtnMap.setOnClickListener {
                 // Verifica se há conexão com a internet antes de abrir a tela do mapa
@@ -66,10 +69,12 @@ class OpeningActivity : AppCompatActivity() {
      */
     override fun onStart() {
         super.onStart()
+        hideLoading()
         // Obtém o usuário atualmente logado através da instância do FirebaseAuth.
         val user = FirebaseAuth.getInstance().currentUser
         // Verifica se o usuário não é nulo
         if (user != null) {
+            showLoading()
             FirebaseFirestore.getInstance()
                 .collection("Pessoas")
                 // Obtém o documento associado ao ID do usuário logado.
@@ -89,12 +94,24 @@ class OpeningActivity : AppCompatActivity() {
                 // Adiciona um listener para tratar falhas
                 .addOnFailureListener { error ->
                     // mensagem de erro se ocorrer uma falha ao acessar o Firestore.
+                    hideLoading()
                     Log.e("Erro no Firebase Firestore", error.message.toString())
                 }
         }
     }
 
-     /**
+    private fun showLoading() {
+        binding.progressBar.visibility =  View.VISIBLE
+        binding.mainContent.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+        binding.mainContent.visibility = View.VISIBLE
+        binding.lottieLogo.cancelAnimation()
+    }
+
+    /**
      * Solicita permissão de localização ao usuário.
      * @authors: Isabella.
      */
