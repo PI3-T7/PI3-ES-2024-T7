@@ -88,10 +88,8 @@ class PersonPicActivity : AppCompatActivity() {
                 binding.buttonFinish.isEnabled = false
                 // Se tirou todas as fotos necessárias, procede com o upload e salvamento
                 val calendar = Calendar.getInstance()
-                val dateFormat =
-                    SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, Locale.getDefault())
-                val timeFormat =
-                    SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, Locale.getDefault())
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
                 val dataLocacao = dateFormat.format(calendar.time)
                 val horaLocacao = timeFormat.format(calendar.time)
@@ -231,9 +229,9 @@ class PersonPicActivity : AppCompatActivity() {
             .addOnSuccessListener { documentReference ->
                 Log.d("Firestore", "Locação salva com ID: ${documentReference.id}")
                 updateArmarioStatus(locacaoData.numeroArmario.toInt())
-                val intent = Intent(this, ClosetReleasedActivity::class.java)
+                val intent = Intent(this, WriteNfcActivity::class.java)
                 intent.putExtra(
-                    "locacaoId",
+                    "location_data",
                     documentReference.id
                 ) // Envia o ID da locação para a próxima activity
                 startActivity(intent)

@@ -195,9 +195,8 @@ class TakePicActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
-            finish()
             customDialog.dismiss()
+            finish()
         }
 
         // Mostre o diálogo

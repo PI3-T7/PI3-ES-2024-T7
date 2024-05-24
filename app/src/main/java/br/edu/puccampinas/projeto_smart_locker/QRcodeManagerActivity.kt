@@ -164,7 +164,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
         builder.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
             // Retorna para a tela inicial do gerente
-            startActivity(Intent(this@QRcodeManagerActivity, ManagerMainScreenActivity::class.java))
+            finish()
         }
         builder.setCancelable(false)
         val dialog = builder.create()
@@ -199,6 +199,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
                 val intent = Intent(this, SelectPeopleNumActivity::class.java)
                 intent.putExtra("dadosCliente", dadosJson)
                 startActivity(intent)
+                finish()
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -262,7 +263,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
         btnOk.setOnClickListener {
             alertDialog.dismiss()
             // Adicione um Intent para voltar para a tela anterior
-            onBackPressed()
+            finish()
         }
 
         // Atualize a mensagem no TextView
