@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,6 +32,13 @@ class CardRegistrationActivity : AppCompatActivity() {
     private val binding by lazy { ActivityCardRegistrationBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
+
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
 
     /**
      * Método chamado quando a atividade é criada.
@@ -84,24 +92,28 @@ class CardRegistrationActivity : AppCompatActivity() {
      * @authors: Marcos, Isabella e Lais
      */
     private fun cadastrarCartao() {
-        val cartaoInfo = mapOf(
-            "validade" to binding.editDataValidade.masked,
-            "nome" to binding.editName.text.toString(),
-            "numero" to binding.editNumCartao.masked,
-        )
-        database
-            .collection("Pessoas")
-            .document(auth.currentUser?.uid.toString())
-            .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
-            .addOnSuccessListener {
-                // Inicia a CardsActivity após o cadastro bem-sucedido
-                startActivity(Intent(this, CardsActivity::class.java))
-                finish() // Finaliza a CardRegistrationActivity
-            }.addOnFailureListener {
-                showAlert("Falha ao cadastrar cartão!")
-            }
+        if (networkChecker.hasInternet()) {
+            val cartaoInfo = mapOf(
+                "validade" to binding.editDataValidade.masked,
+                "nome" to binding.editName.text.toString(),
+                "numero" to binding.editNumCartao.masked,
+            )
+            database
+                .collection("Pessoas")
+                .document(auth.currentUser?.uid.toString())
+                .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
+                .addOnSuccessListener {
+                    // Inicia a CardsActivity após o cadastro bem-sucedido
+                    startActivity(Intent(this, CardsActivity::class.java))
+                    finish()
+                }.addOnFailureListener {
+                    showAlert("Falha ao cadastrar cartão!")
+                }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
+        } else {
+            startActivity(Intent(this, NetworkErrorActivity::class.java))
+        }
     }
 
     /**
