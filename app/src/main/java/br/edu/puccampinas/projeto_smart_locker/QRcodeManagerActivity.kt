@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.Manifest
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
@@ -143,41 +144,53 @@ class QRcodeManagerActivity : AppCompatActivity() {
     }
 
     /**
-     * Função que mostra uma caixa de diálogo informando que o QR code é inválido.
+     * Exibe um diálogo de qrcode inválido com opções "SIM" e "NÃO".
+     * Este diálogo é usado para perguntar se o usuário deseja tentar novamente.
+     * @authors: Lais e Isabella
      */
     private fun showInvalidQRCodeDialog() {
-        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-        builder.setTitle("QR Code Inválido")
-        builder.setMessage("O QR code não foi gerado pelo seu aplicativo. Deseja tentar novamente?")
-        builder.setPositiveButton("Ler Novamente") { dialog, _ ->
-            dialog.dismiss()
-            // Reinicia a visualização do escaner
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_invalid_qrcode, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo e retorna para a página inicial do gerente
+            customDialog.dismiss()
+            finish()
+        }
+
+        btnYes.setOnClickListener {
+            customDialog.dismiss()
+            // Reinicia a visualização do scanner
             codescanner.startPreview()
             // Reinicia a animação da linha do scanner
             binding.scannerLine.startAnimation(
-                AnimationUtils.loadAnimation(
-                    this,
-                    R.anim.scanner_line_animation
-                )
+                AnimationUtils.loadAnimation(this, R.anim.scanner_line_animation)
             )
         }
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
-            dialog.dismiss()
-            // Retorna para a tela inicial do gerente
-            finish()
-        }
-        builder.setCancelable(false)
-        val dialog = builder.create()
-        dialog.setOnDismissListener {
+
+        customDialog.setOnDismissListener {
             // Reinicia a animação da linha do scanner quando a caixa de diálogo é fechada
             binding.scannerLine.startAnimation(
-                AnimationUtils.loadAnimation(
-                    this,
-                    R.anim.scanner_line_animation
-                )
+                AnimationUtils.loadAnimation(this, R.anim.scanner_line_animation)
             )
         }
-        dialog.show()
+
+        // Mostre o diálogo e ajuste a altura desejada
+        customDialog.show()
+        customDialog.window?.setLayout(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            700
+        )
     }
 
     /**

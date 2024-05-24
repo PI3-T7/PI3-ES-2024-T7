@@ -178,21 +178,15 @@ class ClosetReleasedActivity : AppCompatActivity() {
                         time = startDate
                         add(Calendar.HOUR_OF_DAY, tempoEscolhido)
                     }
-                    val endDate = calendar.time
-                    val endDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                    val endDateString = endDateFormat.format(endDate)
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
                     tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
-                    tvEndLocation.text = "Fim: $endDateString"
                     tvTime.text = tempoEscolhidoString
                 } else {
                     // Se não for possível calcular a data e hora de término, exibe uma mensagem
-                    tvEndLocation.text = "Fim: Não foi possível calcular"
                 }
             } else {
                 // Se os dados de data e hora forem inválidos, exibe uma mensagem
                 tvStartLocation.text = "Início: Dados inválidos"
-                tvEndLocation.text = "Fim: Dados inválidos"
             }
         }
     }

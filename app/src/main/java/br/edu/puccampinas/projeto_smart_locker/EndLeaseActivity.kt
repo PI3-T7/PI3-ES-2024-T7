@@ -138,6 +138,12 @@ class EndLeaseActivity : AppCompatActivity() {
                             if (uidUnidade != null && numeroArmario != null) {
                                 atualizarStatusArmario(uidUnidade, numeroArmario)
                             }
+
+                            // Atualize o campo de caução na locação
+                            if (valorEstorno != null) {
+                                atualizarCaucao(idLocacao, valorEstorno)
+                            }
+
                         }
                     } else {
                         // Documento não existe ou está vazio
@@ -258,4 +264,21 @@ class EndLeaseActivity : AppCompatActivity() {
                 Log.e(TAG, "Falha ao ler documento da unidade de locação", e)
             }
     }
+
+    /**
+     * Método para atualizar o campo de caução no documento da locação.
+     */
+    private fun atualizarCaucao(idLocacao: String, valorEstorno: Double) {
+        val locacoesRef = db.collection("Locações").document(idLocacao)
+
+        locacoesRef
+            .update("caucao", valorEstorno)
+            .addOnSuccessListener {
+                Log.d(TAG, "Caução atualizada com sucesso")
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Erro ao atualizar caução", e)
+            }
+    }
+
 }
