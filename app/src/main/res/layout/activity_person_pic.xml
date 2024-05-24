@@ -73,24 +73,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         >
-
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/anim_progressBar"
-            style="@style/SpinKitView.Large.ThreeBounce"
+        <!-- res/layout/activity_main.xml -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:SpinKit_Color="@color/orange"
+            android:layout_centerInParent="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Salvando dados de locação..."
-            app:layout_constraintTop_toBottomOf="@id/anim_progressBar"
+            app:layout_constraintTop_toBottomOf="@id/lottieLogo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@color/black"
