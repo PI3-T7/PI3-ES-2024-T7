@@ -1,6 +1,5 @@
 package br.edu.puccampinas.projeto_smart_locker
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -38,15 +37,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding) {
-            buttonHome2.setOnClickListener {
-                startActivity(
-                    Intent(
-                        this@ClosetReleasedActivity,
-                        ManagerMainScreenActivity::class.java
-                    )
-                )
-                finish()
-            }
+            buttonHome2.setOnClickListener { finish() }
 
             // Configura os botões de navegação entre as fotos
             prevButton.setOnClickListener {
@@ -107,7 +98,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
     /**
      * Atualiza a interface do usuário com os dados do documento.
      *
-     * @param document O documento do Firestore contendo os dados da locação.
+     * O documento do Firestore contendo os dados da locação.
      */
     /**
      * Atualiza a interface do usuário com os dados do documento.
@@ -138,7 +129,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                         Toast.makeText(this, "Pessoa não encontrada", Toast.LENGTH_SHORT).show()
                     }
                 }
-                .addOnFailureListener { e ->
+                .addOnFailureListener {
                     // Trata o erro ao acessar os dados da pessoa
                     Toast.makeText(this, "Erro ao acessar os dados da pessoa", Toast.LENGTH_SHORT).show()
                 }
@@ -160,7 +151,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                         }
                     }
                 }
-                .addOnFailureListener { e ->
+                .addOnFailureListener {
                     // Trata o erro ao acessar os dados da unidade de locação
                 }
         }
@@ -168,7 +159,10 @@ class ClosetReleasedActivity : AppCompatActivity() {
         // Atualiza os elementos da UI com os dados do documento
         with(binding) {
             // Atualiza o número do armário na interface
-            tvNumber.text = "Armário: ${document.getString("numero_armario")}"
+            tvNumber.text = buildString {
+                append("Armário: ")
+                append(document.getString("numero_armario"))
+            }
 
             // Obtém e formata a data e hora de início da locação
             val dateLocacao = document.getString("data_locacao")
@@ -194,24 +188,30 @@ class ClosetReleasedActivity : AppCompatActivity() {
                     val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
                     val endDateString = endDateFormat.format(endDate)
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
-                    tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
-                    tvEndLocation.text = "Fim: $endDateString"
+                    tvStartLocation.text = buildString {
+                        append("Início: ")
+                        append(dateTimeFormat.format(startDate))
+                    }
+                    tvEndLocation.text = buildString {
+                        append("Fim: ")
+                        append(endDateString)
+                    }
                     tvTime.text = tempoEscolhidoString
                 } else {
                     // Se não for possível calcular a data e hora de término, exibe uma mensagem
-                    tvEndLocation.text = "Fim: Não foi possível calcular"
+                    tvEndLocation.text = buildString {
+                        append("Fim: Não foi possível calcular")
+                    }
                 }
             } else {
                 // Se os dados de data e hora forem inválidos, exibe uma mensagem
-                tvStartLocation.text = "Início: Dados inválidos"
-                tvEndLocation.text = "Fim: Dados inválidos"
+                tvStartLocation.text = buildString {
+                    append("Início: Dados inválidos")
+                }
+                tvEndLocation.text = buildString {
+                    append("Fim: Dados inválidos")
+                }
             }
-
-            // Obtém e formata o preço da locação
-            val preco = document.getLong("preco")?.toDouble() ?: 0.0
-            val precoFormatado = String.format("R$ %.2f", preco).replace('.', ',')
-            // Atualiza a interface com o preço formatado
-            tvPrice.text = precoFormatado
         }
     }
 
@@ -268,7 +268,11 @@ class ClosetReleasedActivity : AppCompatActivity() {
     private fun updatePhotoIndicator() {
         val displayedChild = binding.viewFlipper.displayedChild
         val totalChildren = binding.viewFlipper.childCount
-        binding.photoIndicator.text = "${displayedChild + 1}/$totalChildren"
+        binding.photoIndicator.text = buildString {
+            append(displayedChild + 1)
+            append("/")
+            append(totalChildren)
+        }
 
         binding.prevButton.isEnabled = displayedChild != 0
         binding.nextButton.isEnabled = displayedChild != totalChildren - 1

@@ -17,7 +17,10 @@ import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
+/**
+ * Activity responsável pela tela de login do cliente.
+ * @authors: Lais, Marcos e Isabella.
+ */
 class LoginActivity : AppCompatActivity() {
     // Configuração do ViewBinding
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
@@ -32,7 +35,10 @@ class LoginActivity : AppCompatActivity() {
                 ?: throw IllegalStateException("ConnectivityManager not available")
         )
     }
-
+    /**
+     * Método onCreate é chamado quando a Activity é criada.
+     * @authors: Marcos.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -60,7 +66,10 @@ class LoginActivity : AppCompatActivity() {
             InputType.TYPE_CLASS_TEXT
         )
     }
-    // Função para enviar e-mail de redefinição de senha
+    /**
+     * Função para enviar e-mail de redefinição de senha
+     * @authors: Marcos.
+     */
     private fun forgotPassword(email: String) {
         if (email.isBlank()) {   // Verifica se o campo de e-mail está em branco
             showAlertMessage("Aviso: Por favor, digite o email da conta que você deseja recuperar antes de continuar.")
@@ -78,8 +87,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-    // Função que altera a visibilidade da senha ao alternar o toggle
+    /**
+     * Função que altera a visibilidade da senha ao alternar o toggle
+     * @authors: Isabella.
+     */
     private fun setupPasswordToggle(
         toggleButton: ToggleButton,
         editText: EditText,
@@ -97,8 +108,10 @@ class LoginActivity : AppCompatActivity() {
             editText.text?.let { editText.setSelection(it.length) }
         }
     }
-
-    // Função para voltar o cursor no incício do input
+    /**
+     * Função para voltar o cursor no incício do input
+     * @authors: Isabella.
+     */
     private fun setCursorToStartOnFocusChange(editText: EditText) {
         editText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
@@ -110,8 +123,8 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
      * @param message A mensagem a ser exibida no diálogo de alerta.
+     * @authors: Lais.
      */
-
     private fun showErrorMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
@@ -139,8 +152,8 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
      * @param message A mensagem a ser exibida no diálogo de alerta.
+     * @authors: Lais.
      */
-
     private fun showAlertMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
@@ -164,7 +177,10 @@ class LoginActivity : AppCompatActivity() {
         // Mostre o diálogo
         alertDialog.show()
     }
-
+    /**
+     * Função para fazer a validação/verificação dos campos.
+     * @authors: Isabella.
+     */
     private fun validUser(email: String, password: String) {
 
         if (networkChecker.hasInternet()) {

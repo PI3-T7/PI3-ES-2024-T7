@@ -24,24 +24,27 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:text="Verifique os dados do cliente."
+        app:layout_constraintBottom_toTopOf="@id/cardView"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="@id/cardView"
-        app:layout_constraintStart_toStartOf="@id/cardView" />
+        app:layout_constraintStart_toStartOf="@id/cardView"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="40dp"
         app:cardCornerRadius="20dp"
+        android:layout_marginBottom="10dp"
         app:cardElevation="10dp"
         app:contentPadding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/containerButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/img_arrow">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,8 +55,6 @@
                 style="@style/CardInfos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Unidade Taquaral"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,18 +65,17 @@
                 style="@style/CardInfos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Rua das Flores, 256 - Parque Taquaral"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@id/viewFlipper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_unit" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_user"
-                android:layout_width="90dp"
-                android:layout_height="120dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_retangular_radius"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <ViewFlipper
+                android:id="@+id/viewFlipper"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toTopOf="@id/prevButton"
                 app:layout_constraintEnd_toStartOf="@id/tv_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_address" />
@@ -83,25 +83,55 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_name"
                 style="@style/CardInfos"
-                android:text="Isabella Maria T Bruno"
-                app:layout_constraintBottom_toTopOf="@id/tv_phone"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/viewFlipper"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img_user"
-                app:layout_constraintTop_toTopOf="@+id/img_user" />
+                app:layout_constraintStart_toEndOf="@+id/viewFlipper"
+                app:layout_constraintTop_toTopOf="@+id/viewFlipper"
+                app:layout_constraintVertical_bias=".3" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_phone"
                 style="@style/CardInfos"
-                android:text="(19) 98913 3737"
                 app:layout_constraintBottom_toTopOf="@id/tv_number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/prevButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_arrow_prev"
+                android:text="Previous"
+                app:layout_constraintBottom_toTopOf="@id/img_clock"
+                app:layout_constraintStart_toStartOf="@id/viewFlipper"
+                app:layout_constraintTop_toBottomOf="@+id/viewFlipper" />
+
+            <TextView
+                android:id="@+id/photoIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/nextButton"
+                app:layout_constraintStart_toEndOf="@+id/prevButton"
+                app:layout_constraintTop_toBottomOf="@id/viewFlipper" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_arrow_forward"
+                app:layout_constraintBottom_toBottomOf="@id/prevButton"
+                app:layout_constraintEnd_toEndOf="@+id/viewFlipper"
+                app:layout_constraintTop_toBottomOf="@+id/viewFlipper" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_number"
                 style="@style/CardInfos"
-                android:text="Armário 158"
                 app:layout_constraintBottom_toTopOf="@id/tv_start_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_name"
@@ -110,7 +140,6 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_start_location"
                 style="@style/CardInfos"
-                android:text="Início: 14/02/2024 15:00"
                 app:layout_constraintBottom_toTopOf="@id/tv_end_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_name"
@@ -119,8 +148,6 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_end_location"
                 style="@style/CardInfos"
-                android:text="Fim: 14/02/2024 17:00"
-                app:layout_constraintBottom_toBottomOf="@+id/img_user"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_start_location" />
@@ -132,8 +159,7 @@
                 android:layout_marginTop="25dp"
                 android:src="@drawable/icon_clock"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_user" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_time"
@@ -141,32 +167,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="2 horas"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/img_clock"
                 app:layout_constraintStart_toEndOf="@+id/img_clock"
-                app:layout_constraintTop_toTopOf="@+id/img_clock" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_price"
-                style="@style/CardInfos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="R$ 50,00"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/img_clock" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_confirm"
-        style="@style/ButtonsStyle"
-        android:backgroundTint="@color/orange"
-        android:text="@string/confirm"
+    <LinearLayout
+        android:id="@+id/containerButtons"
+        android:layout_width="0dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintVertical_bias=".8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+        <Button
+            style="@style/ButtonsStyle"
+            android:id="@+id/btn_confirm"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/orange"
+            android:text="@string/confirm" />
+
+        <Button
+            style="@style/ButtonsStyle"
+            android:id="@+id/btn_error"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Foto incompatível" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/progressBar"
+            style="@style/SpinKitView.Large.ThreeBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:SpinKit_Color="@color/orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Por favor, aguarde..."
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

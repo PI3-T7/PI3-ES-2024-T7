@@ -14,5 +14,6 @@
     <color name="light_gray">#CDC8C8</color>
     <color name="white_transparent">#6DFFFFFF</color>
     <color name="input_invalid">#F44336</color>
+    <color name="green">#AFC62C</color>
 </resources>
 

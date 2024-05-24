@@ -11,41 +11,56 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.ArrayList
 import java.util.Calendar
-import java.util.HashMap
 
+/**
+ * Activity responsável pela tela principal/home do cliente.
+ * @authors: Isabella e Lais.
+ */
 class ClientMainScreenActivity : AppCompatActivity() {
-    // declaração/inicialização do layout,firebase e firestore
+    // declaração/inicialização do layout, firebase e firestore
     private val binding by lazy { ActivityClientMainScreenBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
     private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
+    private val callback = object : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            showLogoutDialog()
+        }
+    }
 
     private val db = FirebaseFirestore.getInstance()
-
-    @RequiresApi(Build.VERSION_CODES.O)
+    /**
+     * Método chamado quando a atividade é criada.
+     * @authors: Lais.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Configurando o botão voltar para sair da conta do app
+        this.onBackPressedDispatcher.addCallback(this, callback)
+
         // Checando se tem locação pendente
         checkPendingRental()
 
+        // Obtém o nome do usuário atual e exibe na tela
         database.collection("Pessoas")
             .document(auth.currentUser?.uid.toString()).addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.e("Erro no Firebase Firestore", error.message.toString())
                 }
                 if (snapshot != null && snapshot.exists()) {
-                    "Olá, ${
-                        snapshot.get("nome_completo").toString()
-                    }".also { binding.appCompatTextView3.text = it }
+                     binding.appCompatTextView3.text = buildString {
+                         append("Olá, ")
+                         append(snapshot.get("nome_completo").toString())
+                     }
                 }
             }
 
@@ -69,18 +84,16 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Container de aluguel
             containerRent.setOnClickListener {
                 verificarCartaoCadastrado()
-
             }
         }
-
     }
 
     /**
      * Exibe um diálogo de Locação Pendente customizado com uma mensagem simples e botões "SIM" e "NÃO".
-     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
-     * cancelar a pendência de locação
+     * Esse dialog tem uma função específica só para ele porque executa exclusivamente funções de
+     * cancelar a pendência de locação.
+     * @authors: Lais.
      */
-
     private fun showLocacaoPendenteDialog() {
         // Inflar o layout do diálogo personalizado
         val dialogView1 = layoutInflater.inflate(R.layout.custom_dialog_pending_rental, null)
@@ -103,7 +116,6 @@ class ClientMainScreenActivity : AppCompatActivity() {
             customDialog1.dismiss()
             // Cancela a locação pendente
             clearPendingRental()
-
         }
 
         btnYes1.setOnClickListener {
@@ -120,10 +132,10 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de Logout customizado com uma mensagem simples e botões "SIM" e "NÃO".
-     * Esse dialog tem uma função específica só para ele porque executa excluivamente funções de
+     * Esse dialog tem uma função específica só para ele porque executa exclusivamente funções de
      * logout do sistema.
+     * @authors: Lais.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showLogoutDialog() {
         // Inflate o layout customizado
         val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
@@ -149,9 +161,8 @@ class ClientMainScreenActivity : AppCompatActivity() {
         btnYes.setOnClickListener {
             // Realize o logout
             auth.signOut()
-            startActivity(Intent(this,OpeningActivity::class.java))
-            finish()
             customDialog.dismiss()
+            finish()
         }
 
         // Mostre o diálogo
@@ -160,10 +171,10 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
-     * @param message A mensagem a ser exibida no diálogo de alerta.
+     * A mensagem a ser exibida no diálogo de alerta.
+     * @authors: Lais.
      */
-
-    private fun showAlertMessage(message: String) {
+    private fun showAlertMessage() {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_warning, null)
@@ -181,12 +192,18 @@ class ClientMainScreenActivity : AppCompatActivity() {
 
         // Atualize a mensagem no TextView
         val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
-        textViewMessage.text = message
+        textViewMessage.text = buildString {
+            append("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
+        }
 
         // Mostre o diálogo
         alertDialog.show()
     }
 
+    /**
+     * Verifica se o usuário tem pelo menos um cartão cadastrado antes de permitir alugar um armário.
+     * @authors: Isabella.
+     */
     private fun verificarCartaoCadastrado() {
         // Pegando o ID do usuário logado
         val user = FirebaseAuth.getInstance().currentUser
@@ -200,18 +217,18 @@ class ClientMainScreenActivity : AppCompatActivity() {
                         // Verifica se o campo "cartoes" existe no documento
                         if (document.contains("cartoes")) {
                             // Obtém o array de cartões do documento
-                            val cartoes = document.get("cartoes") as? ArrayList<HashMap<String, String>>
+                            val cartoes = document.get("cartoes") as? ArrayList<*>
 
                             // Verifica se o array não é nulo ou vazio
                             if (!cartoes.isNullOrEmpty()) {
                                 checkHour()
                             } else {
                                 // Se não houver cartões, exibe uma mensagem ao usuário
-                                showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
+                                showAlertMessage()
                             }
                         } else {
                             // Se não houver cartões, exibe uma mensagem ao usuário
-                            showAlertMessage("Aviso: Você precisa ter pelo menos um cartão cadastrado para alugar um armário.")
+                            showAlertMessage()
                         }
                     }
                 }
@@ -226,7 +243,10 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
-    // Função responsável por solicitar permissão de localização
+    /**
+     * Solicita permissão de localização ao usuário.
+     * @authors: Isabella.
+     */
     private fun requestLocationPermission() {
         // Verifica se a versão do Android é igual ou superior a Marshmallow (API 23)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -238,7 +258,13 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
-    // Função chamada quando a resposta à solicitação de permissão é recebida
+    /**
+     * Função chamada quando a resposta à solicitação de permissão é recebida.
+     * @param requestCode Código de solicitação da permissão.
+     * @param permissions Lista de permissões solicitadas.
+     * @param grantResults Resultados das permissões concedidas ou negadas.
+     * @authors: Isabella.
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -250,14 +276,17 @@ class ClientMainScreenActivity : AppCompatActivity() {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             // Verifica se a permissão foi concedida
             if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                // Se a permissão foi concedida, inicie a activity do mapa
+                // Se a permissão foi concedida, inicia a activity do mapa
                 intent.putExtra("vindo_da_tela_usuario", true)
                 startActivity(Intent(this@ClientMainScreenActivity, MapActivity::class.java))
             }
         }
     }
 
-    // Função que verifica a hora para ver se o estabelecimento está fechado ou não
+    /**
+     * Verifica se o estabelecimento está aberto com base na hora atual.
+     * @authors: Lais.
+     */
     private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
@@ -278,7 +307,10 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
-    // Função para verificar se há uma locação pendente
+    /**
+     * Verifica se há uma locação pendente.
+     * @authors: Lais.
+     */
     private fun checkPendingRental() {
         val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
         val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
@@ -287,12 +319,14 @@ class ClientMainScreenActivity : AppCompatActivity() {
         }
     }
 
-    // Função para limpar o estado de locação pendente
+    /**
+     * Limpa o estado de locação pendente.
+     * @authors: Lais.
+     */
     private fun clearPendingRental() {
         val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean("pending_rental", false)
         editor.apply()
     }
-
 }

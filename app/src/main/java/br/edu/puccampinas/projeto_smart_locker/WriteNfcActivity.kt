@@ -9,15 +9,18 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
+import android.os.Build
 import android.provider.Settings
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBinding
 
 class WriteNfcActivity : AppCompatActivity() {
@@ -34,19 +37,40 @@ class WriteNfcActivity : AppCompatActivity() {
         Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
         PendingIntent.FLAG_MUTABLE
     ) }
+    // Definição do callback do botão voltar do android
+    private val callback = object : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            showAlertCancel()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.imgArrow.setOnClickListener { finish() }
+        // Configurando o botão voltar para sair da conta do app
+        this.onBackPressedDispatcher.addCallback(this, callback)
+
+        // Muda o texto escrito na tela
+        if (intent.getIntExtra("qtdeTags", 0) > 1){
+            binding.textView.text = buildString {
+                append("Aproxime a primeira pulseira Nfc do celular")
+            }
+        } else {
+            binding.textView.text = buildString {
+                append("Aproxime a segunda pulseira Nfc do celular")
+            }
+        }
+
+        // Tira a opção de voltar
+        binding.imgArrow.isVisible = false
     }
 
     override fun onResume() {
         super.onResume()
         // Verifica se o NFC está habilitado
         if (!nfcAdapter.isEnabled) {
-            showAlertMessage("A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC.")
+            showAlertMessage()
         }
 
         // Aplica o filtro NDEF
@@ -79,7 +103,14 @@ class WriteNfcActivity : AppCompatActivity() {
         // Se ele reconhecer alguma tag que possui algum dos dois filtros (tag discovered ou NDEF)
         // ele pega o valor da tag e passa para uma função, no caso dessa activity é o writeNfcTag
         if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action || NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
-            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+//            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            @Suppress("DEPRECATION") val tag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                //método novo para os SDK mais novos
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+            } else{
+                //método deprecated  para os SDK mais antigos
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+            }
             tag?.let {
                 writeNfcTag(it)
             }
@@ -88,8 +119,9 @@ class WriteNfcActivity : AppCompatActivity() {
 
     private fun writeNfcTag(tag: Tag): Boolean {
         Log.i("teste", "executou a função writeNfc")
+        val msg = intent.getStringExtra("location_data")
         val ndefMessage = NdefMessage(arrayOf(
-            NdefRecord.createTextRecord("en", intent.getStringExtra("location_data"))
+            NdefRecord.createTextRecord("en", msg)
         ))
 
         return try {
@@ -99,11 +131,22 @@ class WriteNfcActivity : AppCompatActivity() {
                 if (ndef.isWritable) {
                     ndef.writeNdefMessage(ndefMessage)
                     ndef.close()
-                    Toast.makeText(this, "Dados escritos na tag!", Toast.LENGTH_SHORT).show()
                     // Aqui fica o start activity para a proxima activity
+                    if (intent.getIntExtra("qtdeTags", 0) > 1){
+                        val activityIntent = Intent(this, WriteNfcActivity::class.java)
+                            .putExtra("location_data", msg)
+                            .putExtra("qtdeTags", 1)
+                        startActivity(activityIntent)
+                        finish()
+                    } else{
+                        val activityIntent = Intent(this, ClosetReleasedActivity::class.java)
+                            .putExtra("locacaoId", msg) // Envia o ID da locação para a próxima activity
+                        startActivity(activityIntent)
+                        finish()
+                    }
                     true
                 } else {
-                    showErrorMessage("A tag não é gravável!")
+                    showErrorMessage("Erro: A tag não é gravável!")
                     false
                 }
             } else {
@@ -113,25 +156,36 @@ class WriteNfcActivity : AppCompatActivity() {
                         ndefFormatable.connect()
                         ndefFormatable.format(ndefMessage)
                         ndefFormatable.close()
-                        Toast.makeText(this, "Tag formatada e dados escritos!", Toast.LENGTH_SHORT).show()
                         // Aqui fica o start activity para a proxima activity
+                        if (intent.getIntExtra("qtdeTags", 0) > 1){
+                            val activityIntent = Intent(this, WriteNfcActivity::class.java)
+                                .putExtra("location_data", msg)
+                                .putExtra("qtdeTags", 1)
+                            startActivity(activityIntent)
+                            finish()
+                        } else{
+                            val activityIntent = Intent(this, ClosetReleasedActivity::class.java)
+                                .putExtra("locacaoId", msg) // Envia o ID da locação para a próxima activity
+                            startActivity(activityIntent)
+                            finish()
+                        }
                         true
                     } catch (e: Exception) {
-                        showErrorMessage("Falha ao formatar a tag!")
+                        showErrorMessage("Erro: Falha ao formatar a tag!")
                         false
                     }
                 } else {
-                    showErrorMessage("Não é possível escrever nesta tag!")
+                    showErrorMessage("Erro: Não é possível escrever nesta tag!")
                     false
                 }
             }
         } catch (e: Exception) {
-            showErrorMessage("Falha ao escrever a tag!")
+            showErrorMessage("Erro: Falha ao escrever a tag!")
             false
         }
     }
 
-    private fun showAlertMessage(message: String) {
+    private fun showAlertMessage() {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_warning, null)
@@ -150,7 +204,9 @@ class WriteNfcActivity : AppCompatActivity() {
 
         // Atualize a mensagem no TextView
         val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
-        textViewMessage.text = message
+        textViewMessage.text = buildString {
+            append("Aviso: A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC")
+        }
 
         // Mostre o diálogo
         alertDialog.show()
@@ -178,5 +234,38 @@ class WriteNfcActivity : AppCompatActivity() {
 
         // Mostre o diálogo
         alertDialog.show()
+    }
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+        dialogView.findViewById<TextView>(R.id.cancelText).text = buildString {
+            append("Tem certeza que deseja sair da operação sem cadastrar a Tag?")
+        }
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            // Fecha o diálogo sem fazer logout
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            customDialog.dismiss()
+            finish()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
     }
 }
