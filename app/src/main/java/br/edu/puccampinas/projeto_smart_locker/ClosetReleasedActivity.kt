@@ -179,7 +179,8 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
                 if (startDate != null) {
                     // Calcula a data e hora de término da locação
-                    val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
+                    val tempoEscolhidoString =
+                        document.getString("tempo_escolhido") // Obtém a string do Firestore
                     val tempoEscolhido: Int =
                         // Extrai apenas os caracteres numéricos da string e converte para inteiro
                         tempoEscolhidoString?.replace("\\D".toRegex(), "")?.toInt()
@@ -191,7 +192,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
                         add(Calendar.HOUR_OF_DAY, tempoEscolhido)
                     }
                     val endDate = calendar.time
-                    val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
+                    val endDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                     val endDateString = endDateFormat.format(endDate)
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
                     tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"

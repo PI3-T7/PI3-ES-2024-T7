@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -168,6 +169,7 @@ class PersonPicActivity : AppCompatActivity() {
         clientId: String,
         locacaoData: LocacaoData
     ) {
+        binding.progressBar.visibility = View.VISIBLE
         val photoUrls = mutableListOf<String>()
         var uploadCount = 0 // Contador para rastrear o número de uploads bem-sucedidos
 
@@ -236,6 +238,7 @@ class PersonPicActivity : AppCompatActivity() {
                 ) // Envia o ID da locação para a próxima activity
                 startActivity(intent)
             }.addOnFailureListener { e ->
+                binding.progressBar.visibility = View.GONE
                 Log.e("Firestore", "Erro ao salvar locação no Firestore: ${e.message}", e)
             }
     }
