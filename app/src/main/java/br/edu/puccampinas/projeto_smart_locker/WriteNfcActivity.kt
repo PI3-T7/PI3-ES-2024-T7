@@ -51,17 +51,6 @@ class WriteNfcActivity : AppCompatActivity() {
         // Configurando o botão voltar para sair da conta do app
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-        // Muda o texto escrito na tela
-        if (intent.getIntExtra("qtdeTags", 0) > 1){
-            binding.textView.text = buildString {
-                append("Aproxime a primeira pulseira Nfc do celular")
-            }
-        } else {
-            binding.textView.text = buildString {
-                append("Aproxime a segunda pulseira Nfc do celular")
-            }
-        }
-
         // Tira a opção de voltar
         binding.imgArrow.isVisible = false
     }
