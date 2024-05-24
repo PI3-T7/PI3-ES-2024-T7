@@ -80,12 +80,9 @@ class OpeningActivity : AppCompatActivity() {
                         if (snapshot.get("gerente").toString() == "true") {
                             // Se o usuário for um gerente, inicia a ManagerMainScreenActivity.
                             startActivity(Intent(this, ManagerMainScreenActivity::class.java))
-                            // Encerra a OpeningActivity para que o usuário não possa voltar a ela pressionando o botão de voltar.
-                            finish()
                         } else {
                             // Se o usuário não for um gerente, inicia a ClientMainScreenActivity.
                             startActivity(Intent(this, ClientMainScreenActivity::class.java))
-                            finish()
                         }
                     }
                 }

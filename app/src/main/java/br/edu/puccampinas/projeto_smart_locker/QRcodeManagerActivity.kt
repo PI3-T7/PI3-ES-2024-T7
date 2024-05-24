@@ -183,26 +183,22 @@ class QRcodeManagerActivity : AppCompatActivity() {
     /**
      * Função que lida com a resposta do IntentIntegrator para escaneamento de QR code.
      */
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents == null) {
-                // Escaneamento cancelado
-                Toast.makeText(this, "Escaneamento cancelado", Toast.LENGTH_LONG).show()
-            } else {
-                // Obtem o conteúdo do QR code (string JSON)
-                val dadosJson = result.contents
-                // Desserializa a string JSON para um objeto DadosCliente
-                val dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
-
-                // Envia os dados do cliente para a próxima atividade
-                val intent = Intent(this, SelectPeopleNumActivity::class.java)
-                intent.putExtra("dadosCliente", dadosJson)
-                startActivity(intent)
-                finish()
-            }
+        if (result.contents == null) {
+            // Escaneamento cancelado
+            Toast.makeText(this, "Escaneamento cancelado", Toast.LENGTH_LONG).show()
         } else {
-            super.onActivityResult(requestCode, resultCode, data)
+            // Obtem o conteúdo do QR code (string JSON)
+            val dadosJson = result.contents
+
+            // Envia os dados do cliente para a próxima atividade
+            val intent = Intent(this, SelectPeopleNumActivity::class.java)
+            intent.putExtra("dadosCliente", dadosJson)
+            startActivity(intent)
+            finish()
         }
     }
     /**
@@ -223,7 +219,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
             .document(nomeDocumento)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                val lockers = documentSnapshot.data?.get("lockers") as Map<String, Boolean>?
+                val lockers = documentSnapshot.data?.get("lockers") as Map<*, *>?
 
                 // Verifica se há armários disponíveis
                 if (lockers != null && lockers.containsValue(true)) {
@@ -234,7 +230,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
                     finish()
                 } else {
                     // Não há armários disponíveis na unidade de locação
-                    showAlertMessage("Aviso: Não há mais armários disponíveis nessa unidade!")
+                    showAlertMessage()
                 }
             }
             .addOnFailureListener { e ->
@@ -245,10 +241,10 @@ class QRcodeManagerActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de AVISO customizado com uma mensagem simples e um botão "OK".
-     * @param message A mensagem a ser exibida no diálogo de alerta.
+     * A mensagem a ser exibida no diálogo de alerta.
      */
 
-    private fun showAlertMessage(message: String) {
+    private fun showAlertMessage() {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_warning, null)
@@ -268,7 +264,9 @@ class QRcodeManagerActivity : AppCompatActivity() {
 
         // Atualize a mensagem no TextView
         val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
-        textViewMessage.text = message
+        textViewMessage.text = buildString {
+            append("Aviso: Não há mais armários disponíveis nessa unidade!")
+        }
 
         // Mostre o diálogo
         alertDialog.show()
