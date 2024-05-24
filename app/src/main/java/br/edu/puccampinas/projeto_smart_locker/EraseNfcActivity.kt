@@ -33,6 +33,9 @@ class EraseNfcActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Obter o ID da locação passado através da intent
+        val idLocacao = intent.getStringExtra("idLocacao")
+
         binding.imgArrow.setOnClickListener { finish() }
     }
 
@@ -84,8 +87,13 @@ class EraseNfcActivity : AppCompatActivity() {
                 val emptyMessage = NdefMessage(arrayOf(NdefRecord.createTextRecord("", "")))
                 ndef.writeNdefMessage(emptyMessage)
                 ndef.close()
-                Toast.makeText(this, "NFC tag erased", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "NFC tag apagada!", Toast.LENGTH_SHORT).show()
                 // passa para a proxima activity
+                val idLocacao = intent.getStringExtra("idLocacao")
+                val intent = Intent(this, EndLeaseActivity::class.java)
+                intent.putExtra("idLocacao", idLocacao)
+                startActivity(intent)
+                finish()
             } catch (e: Exception) {
                 showErrorMessage("Erro ao limpar os dados cadastrados!")
             }

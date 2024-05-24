@@ -39,7 +39,7 @@ class OpenLockerActivity : AppCompatActivity() {
             } else if (binding.btnFinish.isChecked) {
 
                 // Se o botão encerrar locação estiver selecionado
-                val intent = Intent(this, EndLeaseActivity::class.java)
+                val intent = Intent(this, EraseNfcActivity::class.java)
                 intent.putExtra("idLocacao", idLocacao)
                 startActivity(intent)
                 finish()
