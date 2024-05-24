@@ -56,4 +56,5 @@
     <string name="card_register_failure">Erro: Falha ao cadastrar cartão. Tente novamente mais tarde.</string>
     <string name="closed_establishment">Não é possível fazer uma locação nesse horário.</string>
     <string name="closed_establishment2">Por favor, tente novamente amanhã a partir das 7h00.</string>
+    <string name="invalid_qr_code">Erro: O Qrcode não foi gerado pelo seu aplicativo. Deseja tentar novamente?</string>
 </resources>
