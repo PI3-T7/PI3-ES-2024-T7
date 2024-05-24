@@ -54,13 +54,16 @@ class WriteNfcActivity : AppCompatActivity() {
         binding.textView.text = if (intent.getIntExtra("qtdeTags", 0) == 1){
             "Aproxime a pulseira Nfc do celular"
         }else if(intent.getIntExtra("qtdeTags", 0) == 2){
-            "Aproxime a primeira\npulseira Nfc do celular."
+            "Aproxime a primeira pulseira Nfc do celular."
         }else{
-            "Aproxime a segunda\npulseira Nfc do celular"
+            "Aproxime a segunda pulseira Nfc do celular"
         }
 
         // Tira a opção de voltar
         binding.imgArrow.isVisible = false
+        // Coloca a opção de sair
+        binding.cancelNfc.isVisible = true
+        binding.cancelNfc.setOnClickListener { showAlertCancel() }
     }
 
     override fun onResume() {
