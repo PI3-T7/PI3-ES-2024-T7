@@ -6,7 +6,10 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -46,31 +49,6 @@ class TakePicActivity : AppCompatActivity() {
         fotosTiradas = intent.getIntExtra("fotosTiradas", 0)
         imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
 
-        // Configura o clique no botão de voltar
-        binding.imgArrow.setOnClickListener {
-            if (fotosTiradas > 0) {
-                fotosTiradas-- //AQUI
-                if (imagePaths.isNotEmpty()) { //AQUI
-                    val lastImagePath = imagePaths.removeAt(imagePaths.size - 1) //AQUI
-                    val lastImageFile = File(lastImagePath) //AQUI
-                    if (lastImageFile.exists()) { //AQUI
-                        lastImageFile.delete() //AQUI
-                    }
-                }
-            }
-            val intent = Intent(this, TakePicActivity::class.java) //AQUI
-            val dadosJson = Gson().toJson(dadosCliente)
-            intent.putExtra("dadosCliente", dadosJson)
-            intent.putExtra("numPessoas", numPessoas)
-            intent.putExtra("fotosTiradas", fotosTiradas)
-            intent.putStringArrayListExtra("imagePaths", imagePaths)
-            startActivity(intent)
-            finish()
-        }
-
-        // Habilita a funcionalidade de "Edge-to-Edge" para estender a UI até as bordas da tela
-        enableEdgeToEdge()
-
         // Inicializa as variáveis relacionadas à câmera
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -83,6 +61,10 @@ class TakePicActivity : AppCompatActivity() {
         binding.buttonTakePic.setOnClickListener {
             takePhoto()
             blinkPreview()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            showAlertCancel()
         }
 
         // Atualiza o texto informativo sobre a captura de fotos
@@ -146,10 +128,15 @@ class TakePicActivity : AppCompatActivity() {
                         intent.putExtra("numPessoas", numPessoas)
                         intent.putExtra("fotosTiradas", fotosTiradas)
                         startActivity(intent)
+                        finish()
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Log.e("CameraPreview", "Erro ao capturar imagem: ${exception.message}", exception)
+                        Log.e(
+                            "CameraPreview",
+                            "Erro ao capturar imagem: ${exception.message}",
+                            exception
+                        )
                     }
                 }
             )
@@ -179,5 +166,41 @@ class TakePicActivity : AppCompatActivity() {
             else -> ""
         }
         binding.textTakeThePic.text = msg
+    }
+
+    /**
+     * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
+     * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
+     */
+    private fun showAlertCancel() {
+        // Inflate o layout customizado
+        val dialogView = layoutInflater.inflate(R.layout.custom_dialog_cancel_operation, null)
+
+        // Crie o AlertDialog e ajuste sua altura desejada
+        val customDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false) // Impede o fechamento do diálogo ao tocar fora dele
+            .create()
+
+        // Defina a altura desejada para o diálogo
+        customDialog.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, 600)
+
+        // Configure os botões do diálogo
+        val btnNo = dialogView.findViewById<Button>(R.id.btnNo3)
+        val btnYes = dialogView.findViewById<Button>(R.id.btnYes3)
+
+        btnNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+
+        btnYes.setOnClickListener {
+            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+            finish()
+            customDialog.dismiss()
+        }
+
+        // Mostre o diálogo
+        customDialog.show()
     }
 }

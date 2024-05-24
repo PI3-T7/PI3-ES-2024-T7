@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    app:layoutDescription="@xml/scene_read_nfc"
     tools:context=".ReadNfcActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -18,30 +20,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/appCompatTextView5"
-        android:layout_width="0dp"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_phone"
+        android:layout_width="wrap_content"
+        android:elevation="2dp"
         android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:text="@string/bring_bracelet_close"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        android:rotation="-25"
+        android:src="@drawable/img_phone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- acho que esse botão será removido dependendo de como é a leitura da nfc -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_abrir_armario"
-        style="@style/ButtonsStyle"
-        android:backgroundTint="@color/orange"
-        android:text="Abrir Armário"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_bracelet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_bracelet"
+        app:layout_constraintBottom_toBottomOf="@+id/img_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.576"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_phone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aproxime a pulseira Nfc do celular"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView5"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintTop_toBottomOf="@+id/img_phone"
+        app:layout_constraintVertical_bias="0.3" />
 
+    <Button
+        android:id="@+id/btnTeste"
+        style="@style/ButtonsStyle"
+        android:layout_marginBottom="30dp"
+        android:text="TESTE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

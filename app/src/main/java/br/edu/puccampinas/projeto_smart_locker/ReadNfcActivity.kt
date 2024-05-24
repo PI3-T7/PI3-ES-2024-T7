@@ -15,6 +15,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBinding
 
+/**
+ * Activity responsável pela leitura de tags NFC.
+ * @author Marcos Miotto
+ */
 class ReadNfcActivity : AppCompatActivity() {
     private val binding by lazy { ActivityReadNfcBinding.inflate( layoutInflater ) }
     private val nfcAdapter by lazy { NfcAdapter.getDefaultAdapter(this) }
@@ -25,13 +29,20 @@ class ReadNfcActivity : AppCompatActivity() {
         PendingIntent.FLAG_MUTABLE
     ) }
 
+    /**
+     * Chamado quando a atividade é criada pela primeira vez.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.imgArrow.setOnClickListener { finish() }
+        binding.btnTeste.setOnClickListener { startActivity(Intent(this,CheckDataNfcActivity::class.java)) }
     }
 
+    /**
+     * Chamado quando a atividade está prestes a se tornar visível.
+     */
     override fun onResume() {
         super.onResume()
 
@@ -52,11 +63,18 @@ class ReadNfcActivity : AppCompatActivity() {
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, arrayOf(intentFilter), null)
     }
 
+    /**
+     * Chamado quando a atividade não está mais visível para o usuário.
+     */
     override fun onPause() {
         super.onPause()
         nfcAdapter?.disableForegroundDispatch(this)
     }
 
+    /**
+     * Chamado quando a atividade recebe um novo Intent.
+     * @param intent O novo Intent que foi recebido.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
@@ -64,6 +82,11 @@ class ReadNfcActivity : AppCompatActivity() {
             readNfcTag(it)
         }
     }
+
+    /**
+     * Lê uma tag NFC e processa os dados.
+     * @param tag A tag NFC a ser lida.
+     */
     private fun readNfcTag(tag: Tag) {
         val ndef = Ndef.get(tag)
         ndef?.let { ndefTag ->
@@ -85,6 +108,11 @@ class ReadNfcActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Mostra um alerta informando que o NFC está desabilitado.
+     * @param message A mensagem a ser exibida no alerta.
+     */
     private fun showAlertMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)

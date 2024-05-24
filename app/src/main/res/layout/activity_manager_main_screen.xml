@@ -56,7 +56,6 @@
         android:id="@+id/appCompatTextView3"
         style="@style/StringsOptions"
         android:layout_marginBottom="10dp"
-        android:text="Ola, Gerente nome nome"
         android:textColor="@color/white"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/view_read_nfc"

@@ -42,7 +42,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
         binding.scannerLine.startAnimation(scannerLineAnimation)
 
         binding.imgArrow.setOnClickListener {
-            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+            finish()
         }
 
         // Verifica se a permissão da câmera foi concedida
@@ -230,6 +230,7 @@ class QRcodeManagerActivity : AppCompatActivity() {
                     val intent = Intent(this@QRcodeManagerActivity, SelectPeopleNumActivity::class.java)
                     intent.putExtra("dadosCliente", dadosReais)
                     startActivity(intent)
+                    finish()
                 } else {
                     // Não há armários disponíveis na unidade de locação
                     showAlertMessage("Aviso: Não há mais armários disponíveis nessa unidade!")
