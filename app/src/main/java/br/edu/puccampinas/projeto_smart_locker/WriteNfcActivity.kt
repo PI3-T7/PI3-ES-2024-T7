@@ -51,6 +51,17 @@ class WriteNfcActivity : AppCompatActivity() {
         // Configurando o botão voltar para sair da conta do app
         this.onBackPressedDispatcher.addCallback(this, callback)
 
+        // Muda o texto escrito na tela
+        if (intent.getIntExtra("qtdeTags", 0) > 1){
+            binding.textView.text = buildString {
+                append("Aproxime a primeira pulseira Nfc do celular")
+            }
+        } else {
+            binding.textView.text = buildString {
+                append("Aproxime a segunda pulseira Nfc do celular")
+            }
+        }
+
         // Tira a opção de voltar
         binding.imgArrow.isVisible = false
     }
@@ -146,12 +157,18 @@ class WriteNfcActivity : AppCompatActivity() {
                         ndefFormatable.format(ndefMessage)
                         ndefFormatable.close()
                         // Aqui fica o start activity para a proxima activity
-                        val intent = Intent(this, ClosetReleasedActivity::class.java)
-                        intent.putExtra(
-                            "locacaoId",
-                            msg
-                        ) // Envia o ID da locação para a próxima activity
-                        startActivity(intent)
+                        if (intent.getIntExtra("qtdeTags", 0) > 1){
+                            val activityIntent = Intent(this, WriteNfcActivity::class.java)
+                                .putExtra("location_data", msg)
+                                .putExtra("qtdeTags", 1)
+                            startActivity(activityIntent)
+                            finish()
+                        } else{
+                            val activityIntent = Intent(this, ClosetReleasedActivity::class.java)
+                                .putExtra("locacaoId", msg) // Envia o ID da locação para a próxima activity
+                            startActivity(activityIntent)
+                            finish()
+                        }
                         true
                     } catch (e: Exception) {
                         showErrorMessage("Erro: Falha ao formatar a tag!")
