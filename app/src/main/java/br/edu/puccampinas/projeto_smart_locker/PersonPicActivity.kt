@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -82,6 +83,7 @@ class PersonPicActivity : AppCompatActivity() {
     }
 
     private fun savePic() {
+        binding.progressBar.visibility = View.VISIBLE
         when (status) {
             "1/1" -> {
                 binding.buttonFinish.isEnabled = false
