@@ -25,6 +25,7 @@ import android.widget.Button
 
 /**
  * Activity responsável pelo registro de cartões.
+ * @authors: Alex, Isabella, Marcos e Lais
  */
 class CardRegistrationActivity : AppCompatActivity() {
     private val binding by lazy { ActivityCardRegistrationBinding.inflate(layoutInflater) }
@@ -33,6 +34,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Método chamado quando a atividade é criada.
+     * @authors: Alex, Isabella, Marcos e Lais
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +81,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Função que realiza o cadastro de um novo cartão.
+     * @authors: Marcos, Isabella e Lais
      */
     private fun cadastrarCartao() {
         val cartaoInfo = mapOf(
@@ -103,6 +106,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Função responsável por fazer a validação dos campos de input do cartão
+     * @authors: Marcos, Isabella e Lais
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun isInputsValid() {
@@ -147,6 +151,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Função que faz a validação do numero do cartão
+     * @author: Isabella
      * @param cardNumber - o número do cartão
      * @return true se o numero do cartão for válido, false caso contrário.
      */
@@ -156,7 +161,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Verifica se a data de validade do cartão é válida.
-     *
+     * @author: Isabella
      * @param date A data de validade do cartão no formato "MM/YY".
      * @return true se a data de validade for válida, false caso contrário.
      */
@@ -184,7 +189,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Verifica se o cvv é válido
-     *
+     * @author: Isabella
      * @param cvv O cvv do cartão.
      * @return true se o cvv for válido, false caso contrário.
      */
@@ -195,6 +200,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Cria um TextWatcher com formatação e validação customizadas.
+     * @authors: Marcos e Isabella
      * Este TextWatcher atualiza o texto de um TextView com o conteúdo atualizado de um EditText.
      * @param textView O TextView associado que exibirá o texto atualizado.
      * @return Um TextWatcher configurado para atualizar o textView conforme o texto do EditText é alterado.
@@ -215,6 +221,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de alerta com uma mensagem simples e um botão "OK".
+     * @author: Isabella
      * @param message A mensagem a ser exibida no diálogo de alerta.
      */
     private fun showAlert(message: String) {
@@ -227,6 +234,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de confirmação de cancelamento com opções "SIM" e "NÃO".
+     * @authors: Lais e Isabella
      * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
      * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
      * @param button O identificador do botão que acionou o diálogo de cancelamento.
@@ -265,6 +273,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
+     * @author: Lais
      * @param message A mensagem a ser exibida no diálogo de alerta.
      */
 
@@ -295,6 +304,7 @@ class CardRegistrationActivity : AppCompatActivity() {
 
     /**
      * Atualiza o estado visual de um campo de entrada de texto com base no status fornecido.
+     * @author: Isabella
      * @param editText O campo de entrada de texto a ser atualizado.
      * @param textView O textView associado que exibirá mensagens de erro.
      * @param text A mensagem de erro a ser exibida.

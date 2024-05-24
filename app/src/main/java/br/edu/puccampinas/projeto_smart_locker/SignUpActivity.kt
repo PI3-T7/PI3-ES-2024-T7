@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore
  * @property database Instância do Firebase Firestore para interagir com o banco de dados em tempo real.
  * @property values Um mapa para armazenar os valores inseridos pelo usuário durante o cadastro.
  * @property networkChecker Instância de NetworkChecker para verificar a conectividade de rede.
+ * @authors: Isabella, Marcos e Lais.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class SignUpActivity : AppCompatActivity() {
@@ -49,7 +50,10 @@ class SignUpActivity : AppCompatActivity() {
                 ?: throw IllegalStateException("ConnectivityManager not available")
         )
     }
-
+    /**
+     * Método onCreate é chamado quando a Activity é criada.
+     * @authors: Isabella.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -102,8 +106,10 @@ class SignUpActivity : AppCompatActivity() {
             )
         }
     }
-
-    // Função para alterar o estado do toggle das senhas
+    /**
+     * Função para alterar o estado do toggle das senhas.
+     * @authors: Isabella.
+     */
     private fun setupPasswordToggle(
         toggleButton: ToggleButton,
         editText: EditText,
@@ -125,6 +131,7 @@ class SignUpActivity : AppCompatActivity() {
     /**
      * Define o comportamento de colocar o cursor no início do texto quando o editText sai de foco.
      * @param editText O EditText para o qual o comportamento será aplicado.
+     * @authors: Isabella.
      */
     private fun setCursorToStartOnFocusChange(editText: EditText) {
         editText.setOnFocusChangeListener { _, hasFocus ->
@@ -141,6 +148,7 @@ class SignUpActivity : AppCompatActivity() {
      *  - Valida o CPF, a data de nascimento, o número de telefone, a senha, a confirmação de senha e o email.
      *  - Atualiza o estado visual dos campos de entrada de texto com base nas validações.
      *  - Se todas as validações passarem, chama a função `registerUser()` para realizar o cadastro do usuário.
+     *  @authors: Isabella.
      */
     private fun validData() {
         with(binding) {
@@ -216,6 +224,7 @@ class SignUpActivity : AppCompatActivity() {
     /**
      * Exibe um diálogo de ERRO customizado com uma mensagem simples e um botão "OK".
      * @param message A mensagem a ser exibida no diálogo de alerta.
+     * @authors: Lais.
      */
     private fun showErrorMessage(message: String) {
         // Inflate o layout personalizado
@@ -245,6 +254,7 @@ class SignUpActivity : AppCompatActivity() {
      * Valida um número de CPF.
      * @param document O número de CPF a ser validado.
      * @return Um par contendo um booleano que indica se o CPF é válido e uma mensagem de erro.
+     * @authors: Marcos.
      */
     private fun isCPF(document: String): Pair<Boolean, String> {
         val numbers = document.filter { it.isDigit() }.map { it.toString().toInt() }
@@ -264,6 +274,7 @@ class SignUpActivity : AppCompatActivity() {
      * Verifica se a data fornecida é valida e se indica que o usuário tem pelo menos 14 anos de idade.
      * @param givenDate A data de nascimento fornecida pelo usuário.
      * @return Um par contendo um booleano que indica se a data indica uma idade válida e uma mensagem de erro.
+     * @authors: Isabella.
      */
     private fun isLegalAge(givenDate: String): Pair<Boolean, String> {
         if (givenDate.length < 10) return Pair(false, "Data inválida")
@@ -285,6 +296,7 @@ class SignUpActivity : AppCompatActivity() {
      * Valida um número de telefone.
      * @param givenPhone O número de telefone a ser validado.
      * @return Um par contendo um booleano que indica se o número de telefone é válido e uma mensagem de erro.
+     * @authors: Isabella.
      */
     private fun isPhone(givenPhone: String): Pair<Boolean, String> {
         val phone = givenPhone.filter { it.isDigit() }
@@ -300,6 +312,7 @@ class SignUpActivity : AppCompatActivity() {
      * Valida uma senha com base em determinados critérios.
      * @param givenPassword A senha a ser validada.
      * @return Um par contendo um booleano que indica se a senha é válida e uma mensagem de erro.
+     * @authors: Isabella.
      */
     private fun isPassword(givenPassword: String): Pair<Boolean, String> {
         if (givenPassword.length < 8) {
@@ -324,6 +337,7 @@ class SignUpActivity : AppCompatActivity() {
      * Valida um endereço de email.
      * @param email O endereço de email a ser validado.
      * @return Um par contendo um booleano que indica se o email é válido e uma mensagem de erro.
+     * @authors: Isabella.
      */
     private fun isEmail(email: String): Pair<Boolean, String> {
         val isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -335,6 +349,7 @@ class SignUpActivity : AppCompatActivity() {
      * @param givenPassword1 A primeira senha.
      * @param givenPassword2 A segunda senha.
      * @return Um par contendo um booleano que indica se as senhas são iguais e uma mensagem de erro.
+     * @authors: Isabella.
      */
     private fun arePasswords(
         givenPassword1: String,
@@ -352,6 +367,7 @@ class SignUpActivity : AppCompatActivity() {
      * inicia a VerifyActivity e encerra a SignUpActivity atual.
      * Se houver um erro na operação, exibe um alerta com a mensagem apropriada.
      * Se não houver conexão com a internet, inicia a NetworkErrorActivity.
+     * @authors: Marcos.
      */
     private fun registerUser() {
         if (networkChecker.hasInternet()) {
@@ -383,6 +399,7 @@ class SignUpActivity : AppCompatActivity() {
      * @param textView O textView associado que exibirá mensagens de erro.
      * @param text A mensagem de erro a ser exibida.
      * @param status O status que indica se há um erro (true) ou não (false).
+     * @authors: Isabella.
      */
     private fun updateInputState(
         editText: EditText,
