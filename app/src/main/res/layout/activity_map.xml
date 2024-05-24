@@ -7,8 +7,7 @@
     android:orientation="vertical"
     tools:context=".MapActivity">
 
-
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="60dp"
@@ -17,37 +16,37 @@
         app:layout_constraintBottom_toTopOf="@id/map_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/voltarOpening"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="25dp"
-        android:elevation="2dp"
-        android:src="@drawable/icon_arrow_back_white"
-        app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintStart_toStartOf="@id/view"
-        app:layout_constraintTop_toTopOf="@id/view" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/voltarOpening"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:elevation="2dp"
+            android:src="@drawable/icon_arrow_back_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="32dp"
-        android:drawableEnd="@drawable/icon_custom_pin"
-        android:drawablePadding="20dp"
-        android:elevation="2dp"
-        android:gravity="center_vertical|end"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:text="Escolha um pin SmartLocker"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintEnd_toEndOf="@id/view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/view" />
-
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="32dp"
+            android:drawableEnd="@drawable/icon_custom_pin"
+            android:drawablePadding="20dp"
+            android:elevation="2dp"
+            android:gravity="center_vertical|end"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="Escolha um pin SmartLocker"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/voltarOpening"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment
         android:id="@+id/map_fragment"
