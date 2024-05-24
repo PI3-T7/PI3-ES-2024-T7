@@ -12,17 +12,13 @@ import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBindin
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-/**
- * Activity responsável pela tela de abertura do aplicativo.
- * @RequiresApi(Build.VERSION_CODES.O) - Necessário para a funcionalidade no Android O e superior.
- * @authors: Isabella e Marcos.
- */
 @RequiresApi(Build.VERSION_CODES.O)
 class OpeningActivity : AppCompatActivity() {
-    private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
+    private val REQUEST_LOCATION_PERMISSION =
+        1001 // Defina um código de solicitação para a permissão de localização
     private val binding by lazy { ActivityOpeningBinding.inflate(layoutInflater) }
 
-    // Inicialização de uma instância de NetworkChecker para verificar a conectividade de rede.
+    // Inicialização de uma instancia de NetworkChecker para verificar a conectividad de rede.
     private val networkChecker by lazy {
         NetworkChecker(
             ContextCompat.getSystemService(this, ConnectivityManager::class.java)
@@ -30,11 +26,8 @@ class OpeningActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * Método onCreate é chamado quando a Activity é criada.
-     * Aqui são configurados os clickListeners dos botões da tela inicial, direcionando para as respectivas telas.
-     * @authors: Marcos.
-     */
+    // no onCreate serão colocados os clickListeners dos botões da tela inicial
+    // levando para as respectivas telas
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -42,67 +35,46 @@ class OpeningActivity : AppCompatActivity() {
             imgBtnMap.setOnClickListener {
                 // Verifica se há conexão com a internet antes de abrir a tela do mapa
                 if (networkChecker.hasInternet()) {
-                    // Quando o botão for clicado, solicita a permissão de localização
+                    // Quando o botão for clicado, solicite a permissão de localização
                     requestLocationPermission()
                 } else {
                     startActivity(Intent(this@OpeningActivity, NetworkErrorActivity::class.java))
                 }
             }
-            // botão para para ir para tela de SignUp
             btnBegin.setOnClickListener {
                 startActivity(Intent(this@OpeningActivity, SignUpActivity::class.java))
             }
-            // botão para ir para tela de login
             btnAlready.setOnClickListener {
                 startActivity(Intent(this@OpeningActivity, LoginActivity::class.java))
             }
         }
     }
 
-    /**
-     * Método onStart é chamado quando a Activity está prestes a se tornar visível.
-     * Leva o usuário para a tela principal do app caso ele já esteja logado.
-     * @authors: Marcos.
-     */
+    // o onStart levará o usuário para a tela principal do app caso ele já esteja logado
     override fun onStart() {
         super.onStart()
-        // Obtém o usuário atualmente logado através da instância do FirebaseAuth.
         val user = FirebaseAuth.getInstance().currentUser
-        // Verifica se o usuário não é nulo
         if (user != null) {
             FirebaseFirestore.getInstance()
                 .collection("Pessoas")
-                // Obtém o documento associado ao ID do usuário logado.
-                .document(user.uid).get()
-                // Adiciona um listener para tratar o sucesso.
-                .addOnSuccessListener { snapshot ->
-                    // Verifica se o snapshot do documento não é nulo e se o documento existe.
+                .document(user.uid).get().addOnSuccessListener { snapshot ->
                     if (snapshot != null && snapshot.exists()) {
-                        // Verifica se o campo "gerente" no documento é "true".
                         if (snapshot.get("gerente").toString() == "true") {
-                            // Se o usuário for um gerente, inicia a ManagerMainScreenActivity.
                             startActivity(Intent(this, ManagerMainScreenActivity::class.java))
-                            // Encerra a OpeningActivity para que o usuário não possa voltar a ela pressionando o botão de voltar.
                             finish()
                         } else {
-                            // Se o usuário não for um gerente, inicia a ClientMainScreenActivity.
                             startActivity(Intent(this, ClientMainScreenActivity::class.java))
                             finish()
                         }
                     }
                 }
-                // Adiciona um listener para tratar falhas
                 .addOnFailureListener { error ->
-                    // mensagem de erro se ocorrer uma falha ao acessar o Firestore.
                     Log.e("Erro no Firebase Firestore", error.message.toString())
                 }
         }
     }
 
-    /**
-     * Solicita permissão de localização ao usuário.
-     * @authors: Isabella.
-     */
+    // Função responsável por solicitar permissão de localização
     private fun requestLocationPermission() {
         // Verifica se a versão do Android é igual ou superior a Marshmallow (API 23)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -114,13 +86,7 @@ class OpeningActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Função chamada quando a resposta à solicitação de permissão é recebida.
-     * @param requestCode Código de solicitação da permissão.
-     * @param permissions Lista de permissões solicitadas.
-     * @param grantResults Resultados das permissões concedidas ou negadas.
-     * @authors: Isabella.
-     */
+    // Função chamada quando a resposta à solicitação de permissão é recebida
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
