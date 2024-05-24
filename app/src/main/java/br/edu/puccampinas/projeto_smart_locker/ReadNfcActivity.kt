@@ -37,7 +37,6 @@ class ReadNfcActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imgArrow.setOnClickListener { finish() }
-        binding.btnTeste.setOnClickListener { startActivity(Intent(this,CheckDataNfcActivity::class.java)) }
     }
 
     /**

@@ -44,24 +44,16 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Aproxime a pulseira Nfc do celular"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:layout_marginHorizontal="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_phone"
         app:layout_constraintVertical_bias="0.3" />
-
-    <Button
-        android:id="@+id/btnTeste"
-        style="@style/ButtonsStyle"
-        android:layout_marginBottom="30dp"
-        android:text="TESTE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
