@@ -7,44 +7,46 @@
     android:layout_height="match_parent"
     tools:context=".RouteMappingActivity">
 
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@color/orange"
         android:elevation="2dp"
+        app:layout_constraintBottom_toTopOf="@id/map_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btnVoltar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="25dp"
-        android:elevation="2dp"
-        android:src="@drawable/icon_arrow_back_white"
-        app:layout_constraintBottom_toBottomOf="@id/container"
-        app:layout_constraintStart_toStartOf="@id/container"
-        app:layout_constraintTop_toTopOf="@id/container" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnVoltar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:elevation="2dp"
+            android:src="@drawable/icon_arrow_back_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="42dp"
-        android:drawableEnd="@drawable/icon_custom_pin"
-        android:drawablePadding="20dp"
-        android:elevation="2dp"
-        android:gravity="center_vertical|end"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:text="Rota até o pin selecionado"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/container"
-        app:layout_constraintEnd_toEndOf="@id/container"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/container" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="32dp"
+            android:drawableEnd="@drawable/icon_custom_pin"
+            android:drawablePadding="20dp"
+            android:elevation="2dp"
+            android:gravity="center_vertical|end"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="Escolha um pin SmartLocker"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnVoltar"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <fragment
         android:id="@+id/map_fragment"
@@ -60,8 +62,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_info_route"
-        android:layout_width="380dp"
-        android:layout_height="250dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/shape_info_routemap"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,13 +77,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="49dp"
+            android:layout_marginTop="20dp"
             android:text="Terminal Rodoviário de Campinas"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textInfo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -90,11 +92,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="24dp"
             android:text="R. Dr. Pereira Lima, 85 - Vila Industrial, Campinas - SP, 13035-505"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/textInfo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -104,13 +104,15 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             android:text="Para alugar um armário no local selecionado, você precisa estar conectado."
             android:textColor="@color/white"
             android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_address"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/button"
