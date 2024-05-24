@@ -74,32 +74,6 @@ class OpeningActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        val user = FirebaseAuth.getInstance().currentUser
-//        if (user != null) {
-//            FirebaseFirestore.getInstance()
-//                .collection("Pessoas")
-//                .document(user.uid)
-//                .get()  // Usa get() ao invés de addSnapshotListener
-//                .addOnSuccessListener { snapshot ->
-//                    if (snapshot != null && snapshot.exists()) {
-//                        val isManager = snapshot.getBoolean("gerente") ?: false
-//                        val targetActivity = if (isManager) {
-//                            ManagerMainScreenActivity::class.java
-//                        } else {
-//                            ClientMainScreenActivity::class.java
-//                        }
-//                        startActivity(Intent(this, targetActivity))
-//                        finish()  // Adiciona finish para evitar retornar a esta atividade
-//                    }
-//                }
-//                .addOnFailureListener { error ->
-//                    Log.e("Erro no Firebase Firestore", error.message.toString())
-//                }
-//        }
-//    }
-
     // Função responsável por solicitar permissão de localização
     private fun requestLocationPermission() {
         // Verifica se a versão do Android é igual ou superior a Marshmallow (API 23)

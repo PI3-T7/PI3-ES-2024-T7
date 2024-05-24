@@ -101,7 +101,6 @@ class ManagerMainScreenActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this@ManagerMainScreenActivity,OpeningActivity::class.java))
             customDialog.dismiss()
             finish()
         }

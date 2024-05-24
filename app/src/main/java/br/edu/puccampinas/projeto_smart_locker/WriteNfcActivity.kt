@@ -88,8 +88,9 @@ class WriteNfcActivity : AppCompatActivity() {
 
     private fun writeNfcTag(tag: Tag): Boolean {
         Log.i("teste", "executou a função writeNfc")
+        val msg = intent.getStringExtra("location_data")
         val ndefMessage = NdefMessage(arrayOf(
-            NdefRecord.createTextRecord("en", intent.getStringExtra("location_data"))
+            NdefRecord.createTextRecord("en", msg)
         ))
 
         return try {
@@ -101,6 +102,12 @@ class WriteNfcActivity : AppCompatActivity() {
                     ndef.close()
                     Toast.makeText(this, "Dados escritos na tag!", Toast.LENGTH_SHORT).show()
                     // Aqui fica o start activity para a proxima activity
+                    val intent = Intent(this, ClosetReleasedActivity::class.java)
+                    intent.putExtra(
+                        "locacaoId",
+                        msg
+                    ) // Envia o ID da locação para a próxima activity
+                    startActivity(intent)
                     true
                 } else {
                     showErrorMessage("A tag não é gravável!")
@@ -115,6 +122,12 @@ class WriteNfcActivity : AppCompatActivity() {
                         ndefFormatable.close()
                         Toast.makeText(this, "Tag formatada e dados escritos!", Toast.LENGTH_SHORT).show()
                         // Aqui fica o start activity para a proxima activity
+                        val intent = Intent(this, ClosetReleasedActivity::class.java)
+                        intent.putExtra(
+                            "locacaoId",
+                            msg
+                        ) // Envia o ID da locação para a próxima activity
+                        startActivity(intent)
                         true
                     } catch (e: Exception) {
                         showErrorMessage("Falha ao formatar a tag!")

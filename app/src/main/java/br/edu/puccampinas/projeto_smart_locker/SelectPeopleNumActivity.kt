@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivitySelectPeopleBinding
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
@@ -25,6 +23,8 @@ class SelectPeopleNumActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectPeopleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
@@ -119,9 +119,8 @@ class SelectPeopleNumActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
-            finish()
             customDialog.dismiss()
+            finish()
         }
 
         // Mostre o diálogo
@@ -138,5 +137,6 @@ class SelectPeopleNumActivity : AppCompatActivity() {
         intent.putExtra("dadosCliente", dadosJson)
         intent.putExtra("numPessoas", numPessoas)
         startActivity(intent)
+        finish()
     }
 }
