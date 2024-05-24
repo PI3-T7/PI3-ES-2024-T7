@@ -74,7 +74,6 @@ class ManagerMainScreenActivity : AppCompatActivity() {
             // Configura o botão para liberar aluguel, navegando para a atividade de QR code
             viewReleaseRental.setOnClickListener{
                 // Verificando se o dispositivo possui NFC, por enquanto deixar sem verificação
-                /*
                 if (nfcAdapter == null) {
                     showLogoutDialog()
                 } else {
@@ -83,8 +82,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                         Log.e("NFCIntentError", "Erro ao iniciar ReadNfcActivity", e)
                     }
-                }*/
-                startActivity(Intent(this@ManagerMainScreenActivity, QRcodeManagerActivity::class.java))
+                }
             }
         }
     }

@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Aproxime a pulseira Nfc do celular"
         android:textColor="@color/black"
+        android:gravity="center"
         android:textSize="20sp"
         android:layout_marginHorizontal="40dp"
         app:layout_constraintBottom_toBottomOf="parent"

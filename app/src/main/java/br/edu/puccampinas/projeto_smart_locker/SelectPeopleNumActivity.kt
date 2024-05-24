@@ -23,19 +23,16 @@ class SelectPeopleNumActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectPeopleBinding
     private lateinit var dadosCliente: DadosCliente
     private var numPessoas: Int = 0
+    private val broadcastFunction by lazy { LocalBroadcastManager.getInstance(this) }
     // Definição do BroadcastReceiver para fechar a activity a partir de outra
     private val closeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "finish_select_people_num") {
-                finish()
-            }
+            if (intent?.action == "finish_select_people_num") { finish() }
         }
     }
     // Definição do callback do botão voltar do android
     private val callback = object : OnBackPressedCallback(true){
-        override fun handleOnBackPressed() {
-            showAlertCancel()
-        }
+        override fun handleOnBackPressed() { showAlertCancel() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +42,8 @@ class SelectPeopleNumActivity : AppCompatActivity() {
 
         // Configurando o botão voltar para sair da operação
         this.onBackPressedDispatcher.addCallback(this, callback)
-
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        LocalBroadcastManager.getInstance(this)
-            .registerReceiver(closeReceiver, IntentFilter("finish_select_people_num"))
+        broadcastFunction.registerReceiver(closeReceiver, IntentFilter("finish_select_people_num"))
 
         val dadosJson = intent.getStringExtra("dadosCliente")
         dadosCliente = Gson().fromJson(dadosJson, DadosCliente::class.java)
@@ -155,7 +150,7 @@ class SelectPeopleNumActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver)
+        broadcastFunction.unregisterReceiver(closeReceiver)
     }
 
     private fun startCameraActivity() {
