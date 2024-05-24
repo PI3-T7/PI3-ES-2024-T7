@@ -140,10 +140,6 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".OpeningActivity"
             android:exported="true"
             android:theme="@style/AppTheme">

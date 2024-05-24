@@ -1,24 +1,25 @@
 package br.edu.puccampinas.projeto_smart_locker
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityEndLeaseBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.text.*
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class EndLeaseActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityEndLeaseBinding.inflate(layoutInflater) }
     private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -30,73 +31,86 @@ class EndLeaseActivity : AppCompatActivity() {
             // Referência para o documento específico da locação
             val locacaoRef = db.collection("Locações").document(id)
 
-            // Obtenha os dados do documento da locação
-            locacaoRef.get()
-                .addOnSuccessListener { document ->
+            // Inicia uma coroutine para chamadas de funções suspensas
+            lifecycleScope.launch {
+                try {
+                    val document = locacaoRef.get().await()
                     if (document != null && document.exists()) {
                         // Documento existe, obtenha os campos desejados
                         val uidUnidade = document.getString("uid_unidade")
                         val horaLocacao = document.getString("hora_locacao")
                         val numeroArmario = document.getString("numero_armario")
-                        val diaria: Double? = uidUnidade?.let { obterDiaria(it) }
+                        val diaria = uidUnidade?.let { obterDiaria(it) }
 
-
+                        // Continue com a lógica de negócio aqui
+                        if (diaria != null && horaLocacao != null) {
+                            processLeaseEnd(uidUnidade, horaLocacao, diaria)
+                        }
                     } else {
-                        // Documento não existe ou está vazio
                         Log.d(TAG, "Documento não encontrado ou vazio")
                     }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Erro ao obter documento:", e)
                 }
-                .addOnFailureListener { exception ->
-                    // Tratar falha na obtenção dos dados
-                    Log.e(TAG, "Erro ao obter documento:", exception)
-                }
+            }
         } ?: run {
-            // ID da locação é nulo
             Log.d(TAG, "ID da locação é nulo")
         }
     }
 
-    companion object {
-        private const val TAG = "EndLeaseActivity"
-    }
-
     private suspend fun obterDiaria(uidUnidade: String): Double {
         return withContext(Dispatchers.IO) {
-            // Referência para o documento específico da unidade de locação
             val unidadeRef = db.collection("Unidades de Locação").document(uidUnidade)
 
             try {
-                // Obtenha o documento de forma assíncrona
                 val document = unidadeRef.get().await()
-
                 if (document.exists()) {
-                    // Documento existe, obtenha o array de preços
                     val prices = document.get("prices") as? List<Double>
-
-                    // Verifique se o array de preços não é nulo e tem pelo menos 5 elementos
                     if (prices != null && prices.size >= 5) {
-                        // Obtenha o quinto elemento (índice 4) do array de preços
-                        val diaria = prices[4]
-
-                        // Retorne o valor da diária
-                        diaria
+                        prices[4]
                     } else {
-                        // O array de preços é nulo ou não tem pelo menos 5 elementos
                         throw IllegalStateException("Array de preços é nulo ou tem menos de 5 elementos")
                     }
                 } else {
-                    // Documento não existe ou está vazio
                     throw IllegalStateException("Documento não encontrado ou vazio")
                 }
             } catch (e: Exception) {
-                // Tratar falha na obtenção dos dados
                 throw e
             }
         }
     }
 
+    private fun processLeaseEnd(uidUnidade: String, horaLocacao: String, diaria: Double) {
+        // Converta as strings de hora em objetos Calendar
+        val formatoHora = SimpleDateFormat("HH:mm", Locale.getDefault())
 
+        val horaInicio = Calendar.getInstance().apply {
+            time = formatoHora.parse(horaLocacao)!!
+        }
+        val horaFim = Calendar.getInstance().apply {
+            time = Calendar.getInstance().time
+        }
+
+        // Calcule a diferença de tempo em minutos
+        val diferencaTempoMillis = horaFim.timeInMillis - horaInicio.timeInMillis
+        val diferencaTempoMinutos = diferencaTempoMillis / (1000 * 60)
+
+        val valorPorHora = diaria / 11.0
+        val valorPorMinuto = valorPorHora / 60.0
+
+        val valorTempoUso = diferencaTempoMinutos * valorPorMinuto
+        val valorEstorno = diaria - valorTempoUso
+
+        binding.tvDiaria.text = "Valor da diária: R$ $diaria"
+        binding.tvUso.text = "Valor do tempo de uso: R$ $valorTempoUso"
+        binding.tvEstorno.text = "Valor estornado: R$ $valorEstorno"
+    }
+
+    companion object {
+        private const val TAG = "EndLeaseActivity"
+    }
 }
+
 
 
 

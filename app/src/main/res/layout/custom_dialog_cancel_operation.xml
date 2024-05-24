@@ -15,6 +15,7 @@
         android:contentDescription="@string/question_logout" />
 
     <TextView
+        android:id="@+id/cancelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
