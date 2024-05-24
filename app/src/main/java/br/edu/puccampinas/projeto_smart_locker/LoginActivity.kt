@@ -51,6 +51,8 @@ class LoginActivity : AppCompatActivity() {
             btLogin.setOnClickListener {
                 // Chama a função para validar o usuário ao clicar no botão de login
                 validUser(editUsuario.text.toString(), editSenha.text.toString())
+                // desabilita o botão
+                binding.btLogin.isEnabled = false
             }
             txtEsqueceuSenha.setOnClickListener {
                 // Chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
@@ -139,6 +141,7 @@ class LoginActivity : AppCompatActivity() {
         val btnOk = view.findViewById<Button>(R.id.btnOk)
         btnOk.setOnClickListener {
             alertDialog.dismiss()
+            binding.btLogin.isEnabled = true
         }
 
         // Atualize a mensagem no TextView
@@ -168,6 +171,7 @@ class LoginActivity : AppCompatActivity() {
         val btnOk = view.findViewById<Button>(R.id.btnOk)
         btnOk.setOnClickListener {
             alertDialog.dismiss()
+            binding.btLogin.isEnabled = true
         }
 
         // Atualize a mensagem no TextView

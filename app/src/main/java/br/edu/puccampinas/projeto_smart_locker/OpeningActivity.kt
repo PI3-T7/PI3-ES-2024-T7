@@ -6,6 +6,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityOpeningBinding
@@ -70,6 +72,7 @@ class OpeningActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         // Verifica se o usuário não é nulo
         if (user != null) {
+            showLoading()
             FirebaseFirestore.getInstance()
                 .collection("Pessoas")
                 // Obtém o documento associado ao ID do usuário logado.
@@ -94,9 +97,21 @@ class OpeningActivity : AppCompatActivity() {
                 // Adiciona um listener para tratar falhas
                 .addOnFailureListener { error ->
                     // mensagem de erro se ocorrer uma falha ao acessar o Firestore.
+                    hideLoading()
                     Log.e("Erro no Firebase Firestore", error.message.toString())
                 }
         }
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility =  View.VISIBLE
+        binding.mainContent.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+        binding.mainContent.visibility = View.VISIBLE
+        binding.lottieLogo.cancelAnimation()
     }
 
     /**
