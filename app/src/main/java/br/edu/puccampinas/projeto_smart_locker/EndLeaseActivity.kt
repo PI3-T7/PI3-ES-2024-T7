@@ -6,23 +6,44 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityEndLeaseBinding
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.text.*
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
+/**
+ * Classe responsável pela atividade de encerramento de locação.
+ * @author: Lais
+ */
 class EndLeaseActivity : AppCompatActivity() {
 
+    // Binding da atividade
     private val binding by lazy { ActivityEndLeaseBinding.inflate(layoutInflater) }
+    // Referência ao Firestore
     private val db = FirebaseFirestore.getInstance()
+
+    /**
+     * Método chamado quando a atividade é criada.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Configurar o botão de confirmação para voltar à tela principal do gerente
+        binding.btnConfirm.setOnClickListener {
+            startActivity(Intent(this, ManagerMainScreenActivity::class.java))
+            finish()
+        }
+
+        // Obter o ID da locação passado através da intent
         val idLocacao = intent.getStringExtra("idLocacao")
 
         // Verifique se o ID da locação não é nulo
@@ -38,9 +59,73 @@ class EndLeaseActivity : AppCompatActivity() {
                         val uidUnidade = document.getString("uid_unidade")
                         val horaLocacao = document.getString("hora_locacao")
                         val numeroArmario = document.getString("numero_armario")
-                        val diaria: Double? = uidUnidade?.let { obterDiaria(it) }
+                        Log.d(TAG, "Hora da Locação: $horaLocacao")
 
+                        // Criar uma coroutine
+                        GlobalScope.launch(Dispatchers.Main) {
+                            // Chamar a função suspensa dentro da coroutine
+                            val valorDiaria: Double? = uidUnidade?.let { obterDiaria(it) }
+                            Log.d(TAG, "Valor da diária: $valorDiaria")
 
+                            // Obtenha a hora de término
+                            val calendar = Calendar.getInstance()
+                            val horaFim = calendar.time // Hora de término atual
+                            val horarioFormatado = obterHorarioFormatado(horaFim)
+                            Log.d(TAG, "Horario Fim Locação: $horarioFormatado")
+
+                            // Formatar horaLocacao e horaFim para Date
+                            val formatoHora = SimpleDateFormat("HH:mm", Locale.getDefault())
+                            val formatoCompleto =
+                                SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
+                            // Obtenha a data atual no formato de data e hora completa
+                            val dataAtual =
+                                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+                            // Formatar horaLocacao e horaFim para Date
+                            val horaLocacaoDate = formatoCompleto.parse("$dataAtual $horaLocacao")
+                            var horaFimDate = formatoCompleto.parse("$dataAtual $horarioFormatado")
+
+                            // Se a hora de término for anterior à hora de locação, adicione um dia
+                            if (horaFimDate.before(horaLocacaoDate)) {
+                                val cal = Calendar.getInstance()
+                                cal.time = horaFimDate
+                                cal.add(Calendar.DAY_OF_MONTH, 1)
+                                horaFimDate = cal.time
+                            }
+
+                            // Calcule a diferença de tempo em minutos
+                            val diferencaTempoMillis = horaFimDate.time - horaLocacaoDate.time
+                            val diferencaTempoMinutos =
+                                diferencaTempoMillis / (1000 * 60) // Conversão de milissegundos para minutos
+                            Log.d(TAG, "Diferenca Tempo Minutos: $diferencaTempoMinutos")
+
+                            // Descobre valor por hora para descobrir valor por minuto de uso
+                            val valorPorHora =
+                                valorDiaria?.div(11.0) // 11 é o tempo total da diária (7h-18h)
+                            val valorPorMinuto = valorPorHora?.div(60.0)
+
+                            // Descobre quanto ficou a locação de acordo com o tempo de uso
+                            val valorTempoUso = valorPorMinuto?.let {
+                                val valor = diferencaTempoMinutos * it
+                                BigDecimal(valor).setScale(2, RoundingMode.HALF_UP).toDouble()
+                            }
+
+                            // Descobre o valor a ser estornado
+                            val valorEstorno = valorDiaria?.let { it - (valorTempoUso ?: 0.0) }
+
+                            binding.tvDiaria.text = "Valor da diária: R$ $valorDiaria"
+                            binding.tvUso.text = "Valor do tempo de uso: R$ $valorTempoUso"
+                            binding.tvEstorno.text = "Valor estornado: R$ $valorEstorno"
+
+                            // Atualize o status da locação
+                            atualizarStatusLocacao(id, false)
+
+                            // Atualize o status do armário
+                            if (uidUnidade != null && numeroArmario != null) {
+                                atualizarStatusArmario(uidUnidade, numeroArmario)
+                            }
+                        }
                     } else {
                         // Documento não existe ou está vazio
                         Log.d(TAG, "Documento não encontrado ou vazio")
@@ -60,6 +145,9 @@ class EndLeaseActivity : AppCompatActivity() {
         private const val TAG = "EndLeaseActivity"
     }
 
+    /*
+    * Método para obter a diária da unidade de locação.
+    */
     private suspend fun obterDiaria(uidUnidade: String): Double {
         return withContext(Dispatchers.IO) {
             // Referência para o documento específico da unidade de locação
@@ -95,122 +183,66 @@ class EndLeaseActivity : AppCompatActivity() {
         }
     }
 
+    /*
+     * Método para formatar a hora.
+     */
+    private fun obterHorarioFormatado(date: Date): String {
+        val formato = SimpleDateFormat("HH:mm", Locale.getDefault()) // Define o formato de hora
+        return formato.format(date) // Formata a data para o formato especificado
+    }
 
+    /*
+     * Método para atualizar o status da locação no banco de dados.
+     */
+    private fun atualizarStatusLocacao(uidLocacao: String, status: Boolean) {
+        val locacoesRef = db.collection("Locações").document(uidLocacao)
+
+        locacoesRef
+            .update("status", status)
+            .addOnSuccessListener {
+                Log.d(TAG, "Status da locação atualizado com sucesso")
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Erro ao atualizar status da locação", e)
+            }
+    }
+
+    /*
+     * Método para atualizar o status do armário no banco de dados.
+     */
+    private fun atualizarStatusArmario(uidUnidade: String, numeroArmario: String) {
+        val unidadesRef = db.collection("Unidades de Locação").document(uidUnidade)
+
+        unidadesRef.get()
+            .addOnSuccessListener { document ->
+                val lockers = document?.get("lockers") as? Map<String, Boolean>
+
+                if (lockers != null) {
+                    // Atualizar o status do armário especificado para true
+                    val updatedLockers = lockers.toMutableMap()
+                    updatedLockers[numeroArmario] = true
+
+                    // Atualizar o documento com o novo mapa de armários
+                    unidadesRef
+                        .update("lockers", updatedLockers)
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Status do armário atualizado com sucesso")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e(TAG, "Erro ao atualizar status do armário", e)
+                        }
+                } else {
+                    // O mapa de armários não está disponível no documento
+                    Toast.makeText(
+                        this,
+                        "Mapa de armários não encontrado no documento",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                // Tratar falha na leitura do documento
+                Log.e(TAG, "Falha ao ler documento da unidade de locação", e)
+            }
+    }
 }
-
-
-
-
-//        // Acessar o documento na coleção "Unidades de Locação" com base no uidUnidade
-//        if (uidUnidade != null) {
-//            db.collection("Unidades de Locação").document(uidUnidade).get()
-//                .addOnSuccessListener { document ->
-//                    if (document != null) {
-//                        // Verificar se o documento existe e se contém o campo "prices" como um array
-//                        val prices = document.get("prices") as? ArrayList<*>
-//                        if (prices != null && prices.size >= 5) {
-//                            val valorDiaria: Double = try {
-//                                prices[4]?.toString()?.toDouble() ?: 0.0
-//                            } catch (e: NumberFormatException) {
-//                                0.0
-//                            }
-//                            val horaLocacao = intent.getStringExtra("hora_locacao")
-//
-//                            // Obtenha a hora de término
-//                            val calendar = Calendar.getInstance()
-//                            val horaFim = calendar.time // Hora de término atual
-//
-//                            // Converta as strings de hora em objetos Calendar
-//                            val formatoHora = SimpleDateFormat("HH:mm", Locale.getDefault())
-//
-//                            val horaInicio = Calendar.getInstance().apply {
-//                                time = horaLocacao?.let { formatoHora.parse(it) }!!
-//                            }
-//                            val horaFinish = Calendar.getInstance().apply {
-//                                time = formatoHora.parse(horaFim.toString())!!
-//                            }
-//
-//                            // Calcule a diferença de tempo em minutos
-//                            val diferencaTempoMillis = horaFinish.timeInMillis - horaInicio.timeInMillis
-//                            val diferencaTempoMinutos = diferencaTempoMillis / (1000 * 60) // Conversão de milissegundos para minutos
-//
-//                            // descobre valor por hora para descobrir valor por minuto de uso
-//                            val valorPorHora = valorDiaria/11.0 //11 é o tempo total da diária (7h-18h)
-//                            val valorPorMinuto = valorPorHora/60.0
-//
-//                            // descobre quanto ficou a locação de acordo com o tempo de uso
-//                            val valorTempoUso = diferencaTempoMinutos * valorPorMinuto
-//
-//                            // descobre o valor a ser estornado
-//                            val valorEstorno = valorDiaria - valorTempoUso
-//
-//                            binding.tvDiaria.text = "Valor da diária: R$ $valorDiaria"
-//                            binding.tvUso.text = "Valor do tempo de uso: R$ $valorTempoUso"
-//                            binding.tvEstorno.text = "Valor estornado: R$ $valorEstorno"
-//
-//                        } else {
-//                            // O array "prices" não tem pelo menos 5 elementos ou é nulo
-//                            Toast.makeText(this, "O array 'prices' não tem pelo menos 5 elementos ou é nulo", Toast.LENGTH_SHORT).show()
-//                        }
-//                    } else {
-//                        // O documento não existe
-//                        Toast.makeText(this, "Documento não existe", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//                .addOnFailureListener {
-//                    // Tratar falha na leitura do documento
-//                    Toast.makeText(this, "Falha ao ler documento", Toast.LENGTH_SHORT).show()
-//                }
-//
-//            // mudando o status no banco pois a locação foi encerrada
-//            val uidLocacao = intent.getStringExtra("uid_locacao")
-//            if (uidLocacao != null) {
-//                val locacoesRef = db.collection("Locações").document(uidLocacao)
-//
-//                // Atualizar o status para false
-//                locacoesRef
-//                    .update("status", false)
-//            } else {
-//                Toast.makeText(this, "Uid da locação nulo", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//
-//        // mudando o status no banco pois a locação foi encerrada (armario volta a ficar disponivel)
-//        val numeroArmario = intent.getStringExtra("numero_armario")
-//
-//        if (uidUnidade != null && numeroArmario != null) {
-//            val unidadesRef = db.collection("Unidades de Locação").document(uidUnidade)
-//
-//            // Atualizar o status do armário para true
-//            unidadesRef
-//                .get()
-//                .addOnSuccessListener { document ->
-//                    val lockers = document?.get("lockers") as? Map<String, Boolean>
-//
-//                    if (lockers != null) {
-//                        // Atualizar o status do armário especificado para true
-//                        val updatedLockers = lockers.toMutableMap()
-//                        updatedLockers[numeroArmario] = true
-//
-//                        // Atualizar o documento com o novo mapa de armários
-//                        unidadesRef
-//                            .update("lockers", updatedLockers)
-//                    } else {
-//                        // O mapa de armários não está disponível no documento
-//                        Toast.makeText(this, "Mapa de armários não encontrado no documento", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//                .addOnFailureListener { e ->
-//                    // Tratar falha na leitura do documento
-//                    Toast.makeText(this, "Falha ao ler documento da unidade de locação: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//        } else {
-//            Toast.makeText(this, "Uid da unidade ou numero do armario nulos.", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        binding.btnConfirm.setOnClickListener {
-//            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
-//            finish()
-//        }
-//    }
-//}
