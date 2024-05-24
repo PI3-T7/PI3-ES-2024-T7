@@ -51,6 +51,14 @@ class WriteNfcActivity : AppCompatActivity() {
         // Configurando o botão voltar para sair da conta do app
         this.onBackPressedDispatcher.addCallback(this, callback)
 
+        binding.textView.text = if (intent.getIntExtra("qtdeTags", 0) == 1){
+            "Aproxime a pulseira Nfc do celular"
+        }else if(intent.getIntExtra("qtdeTags", 0) == 2){
+            "Aproxime a primeira\npulseira Nfc do celular."
+        }else{
+            "Aproxime a segunda\npulseira Nfc do celular"
+        }
+
         // Tira a opção de voltar
         binding.imgArrow.isVisible = false
     }
@@ -121,10 +129,15 @@ class WriteNfcActivity : AppCompatActivity() {
                     ndef.writeNdefMessage(ndefMessage)
                     ndef.close()
                     // Aqui fica o start activity para a proxima activity
-                    if (intent.getIntExtra("qtdeTags", 0) > 1){
+                    if (intent.getIntExtra("qtdeTags", 0) == 1){
+                        val activityIntent = Intent(this, ClosetReleasedActivity::class.java)
+                            .putExtra("locacaoId", msg) // Envia o ID da locação para a próxima activity
+                        startActivity(activityIntent)
+                        finish()
+                    }else if (intent.getIntExtra("qtdeTags", 0) == 2){
                         val activityIntent = Intent(this, WriteNfcActivity::class.java)
                             .putExtra("location_data", msg)
-                            .putExtra("qtdeTags", 1)
+                            .putExtra("qtdeTags", 3)
                         startActivity(activityIntent)
                         finish()
                     } else{
@@ -146,10 +159,10 @@ class WriteNfcActivity : AppCompatActivity() {
                         ndefFormatable.format(ndefMessage)
                         ndefFormatable.close()
                         // Aqui fica o start activity para a proxima activity
-                        if (intent.getIntExtra("qtdeTags", 0) > 1){
+                        if (intent.getIntExtra("qtdeTags", 0) == 2){
                             val activityIntent = Intent(this, WriteNfcActivity::class.java)
                                 .putExtra("location_data", msg)
-                                .putExtra("qtdeTags", 1)
+                                .putExtra("qtdeTags", 3)
                             startActivity(activityIntent)
                             finish()
                         } else{
