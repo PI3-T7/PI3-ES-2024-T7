@@ -24,6 +24,8 @@ class OpenLockerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        val idLocacao = intent.getStringExtra("idLocacao")
+
         binding.btnClose.setOnClickListener {
             showAlertCancel()
         }
@@ -38,6 +40,7 @@ class OpenLockerActivity : AppCompatActivity() {
 
                 // Se o botão encerrar locação estiver selecionado
                 val intent = Intent(this, EndLeaseActivity::class.java)
+                intent.putExtra("idLocacao", idLocacao)
                 startActivity(intent)
                 finish()
             } else {

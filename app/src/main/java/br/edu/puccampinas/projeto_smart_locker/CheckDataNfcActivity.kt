@@ -40,8 +40,10 @@ class CheckDataNfcActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // Dados estáticos da locação de id F3uA1nWPrPD0ns3F9FMe
-        loadLocacaoData("E6YQV8vJ3y0JqOPpq7TX")
+        val idLocacao = intent.getStringExtra("tag_data")
+        if (idLocacao != null) {
+            loadLocacaoData(idLocacao)
+        }
 
         with(binding) {
             // Configura os botões de navegação entre as fotos
@@ -56,7 +58,9 @@ class CheckDataNfcActivity : AppCompatActivity() {
 
             // A foto corresponde à pessoa
             btnConfirm.setOnClickListener {
-                startActivity(Intent(this@CheckDataNfcActivity,OpenLockerActivity::class.java))
+                val intent = Intent(this@CheckDataNfcActivity,OpenLockerActivity::class.java)
+                intent.putExtra("idLocacao", idLocacao)
+                startActivity(intent)
                 finish()
             }
 
