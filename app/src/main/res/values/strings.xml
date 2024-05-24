@@ -37,7 +37,7 @@
     <string name="card_name_detail">Isabella Maria T Bruno</string>
     <string name="card_expiration_detail">12/24</string>
     <string name="card_cvv_detail">000</string>
-    <string name="reade_nfc">Ler pulseira</string>
+    <string name="reade_nfc">Abrir Armário</string>
     <string name="release_rental">Liberar locação</string>
     <string name="bring_bracelet_close">Aproxime a pulseira NFC do celular.</string>
     <string name="confirm">Confirmar</string>
