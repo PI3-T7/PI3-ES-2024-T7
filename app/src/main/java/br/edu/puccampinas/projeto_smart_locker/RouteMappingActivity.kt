@@ -15,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -97,11 +98,20 @@ class RouteMappingActivity : AppCompatActivity() {
             if (user != null) {
                 // Usuário está logado
                 val intent = Intent(this, ClientMainScreenActivity::class.java)
+
+                // Adiciona as flags para limpar a pilha de atividades e iniciar uma nova tarefa
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+                // Inicia a MainActivity
                 startActivity(intent)
+
+                // Finaliza a RotaActivity
+                finish()
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     // Usuário não está logado
                     val intent = Intent(this, OpeningActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 }
             }

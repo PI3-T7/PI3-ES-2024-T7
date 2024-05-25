@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 
@@ -81,9 +82,7 @@ class CardRegistrationActivity : AppCompatActivity() {
                 showAlertCancel()
             }
 
-            nav.buttonVoltar.setOnClickListener {
-                showAlertCancel()
-            }
+            nav.buttonVoltar.visibility = View.GONE
         }
     }
 
@@ -249,7 +248,6 @@ class CardRegistrationActivity : AppCompatActivity() {
      * @authors: Lais e Isabella
      * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
      * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
-     * @param button O identificador do botão que acionou o diálogo de cancelamento.
      */
     private fun showAlertCancel() {
         // Inflate o layout customizado
@@ -274,7 +272,8 @@ class CardRegistrationActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,CardsActivity::class.java))
+            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             finish()
             customDialog.dismiss()
         }

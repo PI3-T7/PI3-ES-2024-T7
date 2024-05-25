@@ -14,7 +14,7 @@ class ClosedEstablishmentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnMenu.setOnClickListener {
-            startActivity(Intent(this, ClientMainScreenActivity::class.java))
+            finish()
         }
 
     }
