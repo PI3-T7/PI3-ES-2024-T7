@@ -61,7 +61,6 @@ class QRcodeActivity : AppCompatActivity() {
 
         buttonVoltar2.setOnClickListener {
             clearPendingRental()
-            startActivity(Intent(this@QRcodeActivity, LocationActivity::class.java))
             finish()
         }
 
@@ -133,7 +132,13 @@ class QRcodeActivity : AppCompatActivity() {
 
         btnYes.setOnClickListener {
             clearPendingRental()
-            startActivity(Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java))
+
+            // Cria uma Intent para a MainActivity
+            val intent = Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java)
+
+            // Adiciona as flags para limpar a pilha de atividades e iniciar uma nova tarefa
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
             finish()
             customDialog.dismiss()
         }
