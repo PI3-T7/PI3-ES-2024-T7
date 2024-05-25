@@ -15,7 +15,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -34,6 +33,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Classe principal da atividade de mapeamento de rotas.
+ * Extende AppCompatActivity e é responsável por exibir um mapa com a rota do usuário até um local específico.
+ * @authors: Alex, Isabella e Lais
+ */
 class RouteMappingActivity : AppCompatActivity() {
     // declaração do banco e das variaveis que serão usadas para representar as localizações/unidades
     private lateinit var firestore: FirebaseFirestore
@@ -54,6 +58,7 @@ class RouteMappingActivity : AppCompatActivity() {
     private lateinit var botaoVoltarMapa: ImageView
 
     companion object {
+        // Constante para solicitação de permissão de acesso à localização
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
@@ -61,6 +66,7 @@ class RouteMappingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_route_mapping)
 
+        // Inicializa Firestore e o cliente de localização
         firestore = FirebaseFirestore.getInstance()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -68,6 +74,7 @@ class RouteMappingActivity : AppCompatActivity() {
         placeName = intent.getStringExtra("placeName") ?: ""
         placeAddress = intent.getStringExtra("placeAddress") ?: ""
 
+        // Inicializa os componentes da UI
         tvInfo = findViewById(R.id.textInfo)
         btnAction = findViewById(R.id.button)
         tvName = findViewById(R.id.tv_name)
@@ -78,8 +85,10 @@ class RouteMappingActivity : AppCompatActivity() {
         tvName.text = placeName
         tv_address.text = placeAddress
 
+        // Atualiza a UI com base no estado do usuário (logado ou não)
         updateUIForUserState()
 
+        // Obtém o fragmento do mapa e configura o mapa quando estiver pronto
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
 
@@ -88,11 +97,13 @@ class RouteMappingActivity : AppCompatActivity() {
             setupMap()
         }
 
+        // Configura o botão de voltar ao mapa
         botaoVoltarMapa.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
 
+        // Configura o botão de ação para redirecionar conforme o estado do usuário
         btnAction.setOnClickListener {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {
@@ -117,6 +128,11 @@ class RouteMappingActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Atualiza a interface do usuário com base no estado de login do usuário.
+     * @author: Alex
+     */
     private fun updateUIForUserState() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
@@ -129,6 +145,11 @@ class RouteMappingActivity : AppCompatActivity() {
             tvInfo.text = "Para alugar um armário no local selecionado, você precisa estar conectado."
         }
     }
+
+    /**
+     * Configura o mapa: adiciona marcadores, obtém a localização do usuário e traça a rota.
+     * @author: Alex e Lais
+     */
     private fun setupMap() {
         // define um adaptador para as janelas de informações dos marcadores
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
@@ -174,6 +195,10 @@ class RouteMappingActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carrega os lugares (Unidades de Locação) do Firestore e adiciona marcadores no mapa.
+     * @author: Alex, Isabella e Lais
+     */
     private fun loadPlacesFromFirestore() {
         // obtém a coleção de lugares do Firestore
         val placesCollection = firestore.collection("Unidades de Locação")
@@ -206,6 +231,10 @@ class RouteMappingActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Adiciona marcadores no mapa para cada lugar carregado do Firestore.
+     * @author: Alex, Isabella e Lais
+     */
     private fun addMarkers() {
         // itera sobre a lista de lugares
         places.forEach { place ->
@@ -219,7 +248,6 @@ class RouteMappingActivity : AppCompatActivity() {
                         .icon(
                             BitmapHelper.vectorToBitmap(
                                 this, R.drawable.icon_custom_pin,
-                                //ContextCompat.getColor(this, R.color.orange)
                             )
                         )
                 )
@@ -228,6 +256,10 @@ class RouteMappingActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Traça a rota entre a localização de origem e o destino utilizando a API de direções do Google.
+     * @author: Alex, Isabella e Lais
+     */
     private fun traceRoute(origin: LatLng, destination: LatLng) {
         // configuração do GeoApiContext com a chave de API
         val geoApiContext = GeoApiContext.Builder()
@@ -258,7 +290,11 @@ class RouteMappingActivity : AppCompatActivity() {
             }
         }
     }
-    // configurações do desenho do traçado da rota
+
+    /**
+     * Desenha a rota no mapa com base no resultado da solicitação de direções.
+     * @author: Lais
+     */
     private fun drawRoute(result: DirectionsResult) {
         Log.d("RotaActivity", "Desenhando rota no mapa")
 
@@ -280,7 +316,7 @@ class RouteMappingActivity : AppCompatActivity() {
                 }
             }
         }
-
+        // Adiciona a polilinha ao mapa
         googleMap.addPolyline(options)
     }
 
