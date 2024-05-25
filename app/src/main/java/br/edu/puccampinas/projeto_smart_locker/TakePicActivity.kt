@@ -46,7 +46,7 @@ class TakePicActivity : AppCompatActivity() {
     private lateinit var imagePaths: ArrayList<String>
     private val storage by lazy { FirebaseStorage.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
-    private val brodcastFunction by lazy { LocalBroadcastManager.getInstance(this) }
+    private val broadcastFunction by lazy { LocalBroadcastManager.getInstance(this) }
     // Definição do status de cadastro de fotos (1/1, 1/2 ou 2/2)
     private lateinit var status: String
     // Definição do BroadcastReceiver para fechar a activity a partir de outra
@@ -107,19 +107,19 @@ class TakePicActivity : AppCompatActivity() {
         this.onBackPressedDispatcher.addCallback(this, callback)
 
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        brodcastFunction.registerReceiver(closeReceiver, IntentFilter("finish_take_pic"))
+        broadcastFunction.registerReceiver(closeReceiver, IntentFilter("finish_take_pic"))
 
         // Registra o BroadcastReceiver para realizar a função oneOfOne
-        brodcastFunction.registerReceiver(oneOfOneReceiver, IntentFilter("oneOfOne"))
+        broadcastFunction.registerReceiver(oneOfOneReceiver, IntentFilter("oneOfOne"))
 
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        brodcastFunction.registerReceiver(oneOfTwoReceiver, IntentFilter("oneOfTwo"))
+        broadcastFunction.registerReceiver(oneOfTwoReceiver, IntentFilter("oneOfTwo"))
 
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        brodcastFunction.registerReceiver(twoOfTwoReceiver, IntentFilter("twoOfTwo"))
+        broadcastFunction.registerReceiver(twoOfTwoReceiver, IntentFilter("twoOfTwo"))
 
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        brodcastFunction.registerReceiver(deleteFotoReceiver, IntentFilter("deleteFoto"))
+        broadcastFunction.registerReceiver(deleteFotoReceiver, IntentFilter("deleteFoto"))
 
         // Inicializa as variáveis relacionadas à câmera
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -376,8 +376,8 @@ class TakePicActivity : AppCompatActivity() {
                     "1/1" -> intent.putExtra("qtdeTags", 1)
                     else -> intent.putExtra("qtdeTags", 2)
                 }
-                brodcastFunction.sendBroadcast(Intent("finish_person_pic"))
-                brodcastFunction.sendBroadcast(Intent("finish_select_people_num"))
+                broadcastFunction.sendBroadcast(Intent("finish_person_pic"))
+                broadcastFunction.sendBroadcast(Intent("finish_select_people_num"))
                 startActivity(intent)
                 finish()
             }.addOnFailureListener { e ->
@@ -462,7 +462,7 @@ class TakePicActivity : AppCompatActivity() {
 
         btnYes.setOnClickListener {
             customDialog.dismiss()
-            brodcastFunction.sendBroadcast(Intent("finish_select_people_num"))
+            broadcastFunction.sendBroadcast(Intent("finish_select_people_num"))
             finish()
         }
 
@@ -492,10 +492,10 @@ class TakePicActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        brodcastFunction.unregisterReceiver(closeReceiver)
-        brodcastFunction.unregisterReceiver(oneOfOneReceiver)
-        brodcastFunction.unregisterReceiver(oneOfTwoReceiver)
-        brodcastFunction.unregisterReceiver(twoOfTwoReceiver)
-        brodcastFunction.unregisterReceiver(deleteFotoReceiver)
+        broadcastFunction.unregisterReceiver(closeReceiver)
+        broadcastFunction.unregisterReceiver(oneOfOneReceiver)
+        broadcastFunction.unregisterReceiver(oneOfTwoReceiver)
+        broadcastFunction.unregisterReceiver(twoOfTwoReceiver)
+        broadcastFunction.unregisterReceiver(deleteFotoReceiver)
     }
 }
