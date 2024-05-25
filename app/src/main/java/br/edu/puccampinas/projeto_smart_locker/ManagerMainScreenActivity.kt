@@ -75,7 +75,7 @@ class ManagerMainScreenActivity : AppCompatActivity() {
             viewReleaseRental.setOnClickListener{
                 // Verificando se o dispositivo possui NFC, por enquanto deixar sem verificação
                 if (nfcAdapter == null) {
-                    showLogoutDialog()
+                    showErrorMessage()
                 } else {
                     try {
                         startActivity(Intent(this@ManagerMainScreenActivity, QRcodeManagerActivity::class.java))

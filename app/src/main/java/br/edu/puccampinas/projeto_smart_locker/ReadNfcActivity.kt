@@ -6,12 +6,14 @@ import android.content.IntentFilter
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBinding
@@ -54,7 +56,7 @@ class ReadNfcActivity : AppCompatActivity() {
         }
 
         // Aplica o filtro NDEF
-        val intentFilter = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
+        val intentFilterNdef = IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
             try {
                 addDataType("text/plain")
@@ -62,7 +64,11 @@ class ReadNfcActivity : AppCompatActivity() {
                 throw RuntimeException("Failed to add MIME type.", e)
             }
         }
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, arrayOf(intentFilter), null)
+        // Aplica o filtro Tag Discovered
+        val intentFilterTag = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED).apply {
+            addCategory(Intent.CATEGORY_DEFAULT)
+        }
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, arrayOf(intentFilterNdef, intentFilterTag), null)
     }
 
     /**
@@ -79,9 +85,18 @@ class ReadNfcActivity : AppCompatActivity() {
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-        tag?.let {
-            readNfcTag(it)
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action || NfcAdapter.ACTION_TAG_DISCOVERED == intent.action) {
+//            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            @Suppress("DEPRECATION") val tag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                //método novo para os SDK mais novos
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+            } else{
+                //método deprecated  para os SDK mais antigos
+                intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+            }
+            tag?.let {
+                readNfcTag(it)
+            }
         }
     }
 
@@ -91,20 +106,30 @@ class ReadNfcActivity : AppCompatActivity() {
      */
     private fun readNfcTag(tag: Tag) {
         val ndef = Ndef.get(tag)
-        ndef?.let { ndefTag ->
-            val ndefMessage = ndefTag.cachedNdefMessage
-            ndefMessage?.let { message ->
-                val records = message.records
-                if (records.isNotEmpty()) {
-                    val ndefRecord = records[0]
-                    val payload = ndefRecord.payload
-                    val textEncoding = if ((payload[0].toInt() and 128) == 0) "UTF-8" else "UTF-16"
-                    val languageCodeLength = payload[0].toInt() and 51
-                    val text = String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, charset(textEncoding))
-                    // Verificação se a tag possui conteudo cadastrado no banco
-                    validData(text)
+        try {
+            ndef?.let { ndefTag ->
+                val ndefMessage = ndefTag.cachedNdefMessage
+                ndefMessage?.let { message ->
+                    val records = message.records
+                    if (records.isNotEmpty()) {
+                        val ndefRecord = records[0]
+                        val payload = ndefRecord.payload
+                        val textEncoding =
+                            if ((payload[0].toInt() and 128) == 0) "UTF-8" else "UTF-16"
+                        val languageCodeLength = payload[0].toInt() and 51
+                        val text = String(
+                            payload,
+                            languageCodeLength + 1,
+                            payload.size - languageCodeLength - 1,
+                            charset(textEncoding)
+                        )
+                        // Verificação se a tag possui conteudo cadastrado no banco
+                        validData(text)
+                    }
                 }
             }
+        }catch (e: Exception) {
+            showErrorMessage("Aviso: Não é possível resgatar conteúdo da Tag!")
         }
     }
 
@@ -124,7 +149,7 @@ class ReadNfcActivity : AppCompatActivity() {
                         return@addSnapshotListener
                     }
                 }
-                showErrorMessage()
+                showErrorMessage("Aviso: A Tag detectada não possui cadastro de locação!")
             }
         }
     }
@@ -158,7 +183,7 @@ class ReadNfcActivity : AppCompatActivity() {
         // Mostre o diálogo
         alertDialog.show()
     }
-    private fun showErrorMessage() {
+    private fun showErrorMessage(message: String) {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_error, null)
@@ -177,7 +202,7 @@ class ReadNfcActivity : AppCompatActivity() {
         // Atualize a mensagem no TextView
         val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
         textViewMessage.text = buildString {
-            append("Aviso: A Tag detectada não possui cadastro de locação!")
+            append(message)
         }
 
         // Mostre o diálogo
