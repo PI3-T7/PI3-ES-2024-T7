@@ -55,8 +55,12 @@ class LoginActivity : AppCompatActivity() {
                 binding.btLogin.isEnabled = false
             }
             txtEsqueceuSenha.setOnClickListener {
-                // Chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
-                forgotPassword(editUsuario.text.toString())
+                if (networkChecker.hasInternet()){
+                    // Se tiver internet chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
+                    forgotPassword(editUsuario.text.toString())
+                } else {
+                    startActivity(Intent(this@LoginActivity, NetworkErrorActivity::class.java))
+                }
             }
         }
         // Configura o cursor para começar no início do campo de usuário ao receber o foco
@@ -68,6 +72,12 @@ class LoginActivity : AppCompatActivity() {
             InputType.TYPE_CLASS_TEXT
         )
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding.btLogin.isEnabled = true
+    }
+
     /**
      * Função para enviar e-mail de redefinição de senha
      * @authors: Marcos.

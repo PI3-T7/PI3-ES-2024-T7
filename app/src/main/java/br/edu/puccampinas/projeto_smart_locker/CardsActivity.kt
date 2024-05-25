@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -61,8 +62,12 @@ class CardsActivity : AppCompatActivity() {
         preencherDados()
 
         // Aqui estão os botões de voltar e home do navbar
-        binding.nav.buttonVoltar.setOnClickListener { finish() }
-        binding.nav.buttonHome.setOnClickListener { finish() }
+        binding.nav.buttonVoltar.visibility = View.GONE
+        binding.nav.buttonHome.setOnClickListener {
+            val intent = Intent(this,ClientMainScreenActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            finish()
+        }
 
         // Aqui é atribuido um filtro ao broadcast para poder ser executado em outra activity a
         // partir deste filtro

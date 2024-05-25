@@ -1,5 +1,6 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -12,6 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityClientMainScreenBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +32,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
     private val database by lazy { FirebaseFirestore.getInstance() }
     private val REQUEST_LOCATION_PERMISSION = 1001 // Código de solicitação para a permissão de localização
     private val callback = object : OnBackPressedCallback(true){
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun handleOnBackPressed() {
             showLogoutDialog()
         }
@@ -40,6 +43,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
      * Método chamado quando a atividade é criada.
      * @authors: Lais.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -130,12 +134,17 @@ class ClientMainScreenActivity : AppCompatActivity() {
         customDialog1.show()
     }
 
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+    }
+
     /**
      * Exibe um diálogo de Logout customizado com uma mensagem simples e botões "SIM" e "NÃO".
      * Esse dialog tem uma função específica só para ele porque executa exclusivamente funções de
      * logout do sistema.
      * @authors: Lais.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showLogoutDialog() {
         // Inflate o layout customizado
         val dialogView = layoutInflater.inflate(R.layout.custom_dialog_logout, null)
@@ -162,6 +171,7 @@ class ClientMainScreenActivity : AppCompatActivity() {
             // Realize o logout
             auth.signOut()
             customDialog.dismiss()
+            startActivity(Intent(this@ClientMainScreenActivity,OpeningActivity::class.java))
             finish()
         }
 
