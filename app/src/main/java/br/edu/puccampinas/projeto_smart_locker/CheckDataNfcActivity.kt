@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCheckDataNfcBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
@@ -55,11 +56,12 @@ class CheckDataNfcActivity : AppCompatActivity() {
                 binding.viewFlipper.showNext()
                 updatePhotoIndicator()
             }
-
+            imgArrow.setOnClickListener { finish() }
             // A foto corresponde à pessoa
             btnConfirm.setOnClickListener {
                 val intent = Intent(this@CheckDataNfcActivity,OpenLockerActivity::class.java)
                 intent.putExtra("idLocacao", idLocacao)
+                LocalBroadcastManager.getInstance(this@CheckDataNfcActivity).sendBroadcast(Intent("finish_read_nfc"))
                 startActivity(intent)
                 finish()
             }
@@ -322,7 +324,7 @@ class CheckDataNfcActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("finish_read_nfc"))
             finish()
             customDialog.dismiss()
         }
