@@ -8,12 +8,14 @@ import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 /**
  * Activity responsável pela leitura de tags NFC.
@@ -22,6 +24,7 @@ import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBindin
 class ReadNfcActivity : AppCompatActivity() {
     private val binding by lazy { ActivityReadNfcBinding.inflate( layoutInflater ) }
     private val nfcAdapter by lazy { NfcAdapter.getDefaultAdapter(this) }
+    private val database by lazy { FirebaseFirestore.getInstance() }
     private val pendingIntent by lazy { PendingIntent.getActivity(
         this,
         0,
@@ -47,7 +50,7 @@ class ReadNfcActivity : AppCompatActivity() {
 
         // Verifica se o NFC está habilitado
         if (!nfcAdapter.isEnabled) {
-            showAlertMessage("Aviso: A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC.")
+            showAlertMessage()
         }
 
         // Aplica o filtro NDEF
@@ -98,21 +101,38 @@ class ReadNfcActivity : AppCompatActivity() {
                     val textEncoding = if ((payload[0].toInt() and 128) == 0) "UTF-8" else "UTF-16"
                     val languageCodeLength = payload[0].toInt() and 51
                     val text = String(payload, languageCodeLength + 1, payload.size - languageCodeLength - 1, charset(textEncoding))
-
-                    // Iniciar DisplayDataActivity com os dados da tag
-                    startActivity(Intent(this, CheckDataNfcActivity::class.java).apply {
-                        putExtra("tag_data", text)
-                    })
+                    // Verificação se a tag possui conteudo cadastrado no banco
+                    validData(text)
                 }
+            }
+        }
+    }
+
+    private fun validData(text: String) {
+        database.collection("Locações").addSnapshotListener { value, error ->
+            if (error != null){
+                Log.e("Firebase Firestore Error", error.message.toString())
+                return@addSnapshotListener
+            }
+            if (value != null){
+                for (i in value.documents){
+                    if(i.id == text){
+                        // Iniciar DisplayDataActivity com os dados da tag
+                        startActivity(Intent(this, CheckDataNfcActivity::class.java).apply {
+                            putExtra("tag_data", text)
+                        })
+                        return@addSnapshotListener
+                    }
+                }
+                showErrorMessage()
             }
         }
     }
 
     /**
      * Mostra um alerta informando que o NFC está desabilitado.
-     * @param message A mensagem a ser exibida no alerta.
      */
-    private fun showAlertMessage(message: String) {
+    private fun showAlertMessage() {
         // Inflate o layout personalizado
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.custom_dialog_warning, null)
@@ -131,7 +151,34 @@ class ReadNfcActivity : AppCompatActivity() {
 
         // Atualize a mensagem no TextView
         val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
-        textViewMessage.text = message
+        textViewMessage.text = buildString {
+            append("Aviso: A tecnologia NFC está desabilitada! Por favor, vá até as configurações do seu dispositivo e habilite o NFC.")
+        }
+
+        // Mostre o diálogo
+        alertDialog.show()
+    }
+    private fun showErrorMessage() {
+        // Inflate o layout personalizado
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.custom_dialog_error, null)
+
+        // Crie o AlertDialog com o layout personalizado
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        // Configure o botão OK para fechar o diálogo
+        val btnOk = view.findViewById<Button>(R.id.btnOk)
+        btnOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        // Atualize a mensagem no TextView
+        val textViewMessage = view.findViewById<TextView>(R.id.tvMessage)
+        textViewMessage.text = buildString {
+            append("Aviso: A Tag detectada não possui cadastro de locação!")
+        }
 
         // Mostre o diálogo
         alertDialog.show()

@@ -49,10 +49,10 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
             }
             btLogin.setOnClickListener {
-                // Chama a função para validar o usuário ao clicar no botão de login
-                validUser(editUsuario.text.toString(), editSenha.text.toString())
                 // desabilita o botão
                 binding.btLogin.isEnabled = false
+                // Chama a função para validar o usuário ao clicar no botão de login
+                validUser(editUsuario.text.toString(), editSenha.text.toString())
             }
             txtEsqueceuSenha.setOnClickListener {
                 // Chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"

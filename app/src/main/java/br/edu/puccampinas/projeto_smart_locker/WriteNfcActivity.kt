@@ -118,7 +118,6 @@ class WriteNfcActivity : AppCompatActivity() {
     }
 
     private fun writeNfcTag(tag: Tag): Boolean {
-        Log.i("teste", "executou a função writeNfc")
         val msg = intent.getStringExtra("location_data")
         val ndefMessage = NdefMessage(arrayOf(
             NdefRecord.createTextRecord("en", msg)

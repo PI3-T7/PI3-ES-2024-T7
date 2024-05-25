@@ -153,7 +153,6 @@ class TakePicActivity : AppCompatActivity() {
      * Inicia a câmera e configura os casos de uso (Preview e ImageCapture).
      */
     private fun startCamera() {
-        Log.i("teste", "passou pelo startCamera")
         cameraProviderFuture.addListener({
             imageCapture = ImageCapture.Builder().build()
             val cameraProvider = cameraProviderFuture.get()

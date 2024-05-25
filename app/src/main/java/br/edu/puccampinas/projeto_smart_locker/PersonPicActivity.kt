@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,12 +23,18 @@ class PersonPicActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonPicBinding
     private lateinit var status: String
     private lateinit var imagePaths: ArrayList<String>
+    private val broadcastFunction by lazy { LocalBroadcastManager.getInstance(this) }
     // Definição do BroadcastReceiver para fechar a activity a partir de outra
     private val closeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "finish_person_pic") {
-                finish()
-            }
+            if (intent?.action == "finish_person_pic") { finish() }
+        }
+    }
+    // Definição do callback do botão voltar do android
+    private val callback = object : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            LocalBroadcastManager.getInstance(this@PersonPicActivity).sendBroadcast(Intent("deleteFoto"))
+            finish()
         }
     }
 
@@ -36,9 +43,11 @@ class PersonPicActivity : AppCompatActivity() {
         binding = ActivityPersonPicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configurando o botão voltar para sair da conta do app
+        this.onBackPressedDispatcher.addCallback(this, callback)
+
         // Registra o BroadcastReceiver para finalizar a activity a partir de outra
-        LocalBroadcastManager.getInstance(this)
-            .registerReceiver(closeReceiver, IntentFilter("finish_person_pic"))
+        broadcastFunction.registerReceiver(closeReceiver, IntentFilter("finish_person_pic"))
 
         status = intent.getStringExtra("status").toString()
         imagePaths = intent.getStringArrayListExtra("imagePaths") ?: ArrayList()
@@ -73,7 +82,7 @@ class PersonPicActivity : AppCompatActivity() {
         }
 
         binding.imgArrow.setOnClickListener {
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("deleteFoto"))
+            broadcastFunction.sendBroadcast(Intent("deleteFoto"))
             finish()
         }
 
@@ -87,15 +96,15 @@ class PersonPicActivity : AppCompatActivity() {
         when (status) {
             "1/1" -> {
                 binding.buttonFinish.isEnabled = false
-                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("oneOfOne"))
+                broadcastFunction.sendBroadcast(Intent("oneOfOne"))
             }
             "1/2" -> {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("oneOfTwo"))
+                broadcastFunction.sendBroadcast(Intent("oneOfTwo"))
                 finish()
             }
             else -> {
                 binding.buttonFinish.isEnabled = false
-                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("twoOfTwo"))
+                broadcastFunction.sendBroadcast(Intent("twoOfTwo"))
             }
         }
     }
@@ -125,8 +134,8 @@ class PersonPicActivity : AppCompatActivity() {
 
         btnYes.setOnClickListener {
             customDialog.dismiss()
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("finish_take_pic"))
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("finish_select_people_num"))
+            broadcastFunction.sendBroadcast(Intent("finish_take_pic"))
+            broadcastFunction.sendBroadcast(Intent("finish_select_people_num"))
             finish()
         }
 
@@ -136,7 +145,7 @@ class PersonPicActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver)
+        broadcastFunction.unregisterReceiver(closeReceiver)
     }
 
 }
