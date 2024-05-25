@@ -1,6 +1,8 @@
 package br.edu.puccampinas.projeto_smart_locker
 
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
@@ -16,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityReadNfcBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -27,12 +30,19 @@ class ReadNfcActivity : AppCompatActivity() {
     private val binding by lazy { ActivityReadNfcBinding.inflate( layoutInflater ) }
     private val nfcAdapter by lazy { NfcAdapter.getDefaultAdapter(this) }
     private val database by lazy { FirebaseFirestore.getInstance() }
+    private val broadcastFunction by lazy { LocalBroadcastManager.getInstance(this) }
     private val pendingIntent by lazy { PendingIntent.getActivity(
         this,
         0,
         Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
         PendingIntent.FLAG_MUTABLE
     ) }
+    // Definição do BroadcastReceiver para fechar a activity a partir de outra
+    private val closeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "finish_read_nfc") { finish() }
+        }
+    }
 
     /**
      * Chamado quando a atividade é criada pela primeira vez.
@@ -40,6 +50,7 @@ class ReadNfcActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        broadcastFunction.registerReceiver(closeReceiver, IntentFilter("finish_read_nfc"))
 
         binding.imgArrow.setOnClickListener { finish() }
     }
@@ -133,6 +144,7 @@ class ReadNfcActivity : AppCompatActivity() {
         }
     }
 
+    // Função que valida se o dado que está na tag está dentro do firestore
     private fun validData(text: String) {
         database.collection("Locações").addSnapshotListener { value, error ->
             if (error != null){
@@ -207,5 +219,10 @@ class ReadNfcActivity : AppCompatActivity() {
 
         // Mostre o diálogo
         alertDialog.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        broadcastFunction.unregisterReceiver(closeReceiver)
     }
 }
