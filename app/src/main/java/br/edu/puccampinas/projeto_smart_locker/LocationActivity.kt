@@ -14,8 +14,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -31,13 +29,19 @@ import com.google.gson.Gson
 import java.util.*
 import kotlin.math.*
 
+/**
+ * Activity responsável por gerenciar a localização do usuário e a seleção de opções de locação.
+ * authors: Lais, Isabella, Alex e Marcos
+ */
 class LocationActivity : AppCompatActivity() {
 
+    // Binding para acessar os elementos do layout
     private val binding by lazy { ActivityLocationBinding.inflate(layoutInflater) }
 
     // Variável que acessa os serviços de localização da API
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    // Variáveis para armazenar a latitude e longitude do usuário
     private var latitudeUser: Double = 0.0
     private var longitudeUser: Double = 0.0
 
@@ -46,21 +50,28 @@ class LocationActivity : AppCompatActivity() {
         private const val MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     }
 
+    /**
+     * BroadcastReceiver para finalizar a atividade quando um determinado filtro é recebido.
+     * @author: Isabella
+     */
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             finish()
         }
     }
 
+    // Instância do banco de dados Firestore
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Registrar o BroadcastReceiver
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, IntentFilter("meuFiltro"))
 
+        // Inicializar o cliente de localização
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Verifique e solicite permissão de acesso à localização
@@ -79,15 +90,13 @@ class LocationActivity : AppCompatActivity() {
             obterLocalizacaoAtual()
         }
 
+        // Configurar listeners dos botões
         binding.buttonHome1.setOnClickListener {
-            startActivity(Intent(this@LocationActivity, ClientMainScreenActivity::class.java))
             finish()
         }
 
         binding.buttonVoltar1.setOnClickListener {
             finish()
-            startActivity(Intent(this@LocationActivity, ClientMainScreenActivity::class.java))
-
         }
 
         // Evento do botão que confirma a locação e chama a Activity para gerar o QRcode
@@ -96,12 +105,19 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Função onStart para verificar a hora antes de deixar locar
+     * @author: Lais
+     */
     override fun onStart() {
         super.onStart()
         // Atualiza o layout depois de verificar a hora
         checkHour()
     }
 
+    /**
+     * @author: Lais
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -122,6 +138,10 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Manda os dados que foram escolhidos para criação do Qrcode
+     * @authors: Lais e Isabela
+     */
     private fun mandarDadosQrcode(){
         // Criando o objeto dados apenas para testar a passagem de dados para o QRcode
         // A classe DadosCliente está no final do código
@@ -254,6 +274,10 @@ class LocationActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+    /**
+     * Obtém a localização atual do usuário e carrega os dados do banco de dados.
+     * @authors: Lais e Isabela
+     */
     private fun obterLocalizacaoAtual() {
 
         // Obter a última localização conhecida do usuário
@@ -302,6 +326,10 @@ class LocationActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Carrega os dados do banco de dados Firestore com base na localização atual do usuário.
+     * @author: Lais
+     */
     private fun carregarDadosBanco() {
         val sharedPreferences = getSharedPreferences("uid", MODE_PRIVATE)
         val valorRecuperado = sharedPreferences.getString("uid", null)
@@ -387,6 +415,10 @@ class LocationActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Limpa as opções dos RadioButtons.
+     * @author: Lais
+     */
     private fun clearRadioButtonOptions() {
         // Limpar os textos dos RadioButtons
         binding.btn30min.text = ""
@@ -396,6 +428,11 @@ class LocationActivity : AppCompatActivity() {
         binding.btnUntil18.text = ""
     }
 
+    /**
+     * Adiciona os preços aos RadioButtons.
+     * @param prices Lista de preços.
+     * @author: Lais
+     */
     private fun addPricesToRadioButtons(prices: List<*>?) {
         // Certifique-se de que há preços suficientes para cada RadioButton
         if (prices != null) {
@@ -443,7 +480,15 @@ class LocationActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    // cálculo da distância
+    /**
+     * Calcula a distância entre duas coordenadas geográficas usando a fórmula de Haversine.
+     * @param lat1 Latitude do primeiro ponto.
+     * @param lon1 Longitude do primeiro ponto.
+     * @param lat2 Latitude do segundo ponto.
+     * @param lon2 Longitude do segundo ponto.
+     * @return Distância em quilômetros.
+     * @author: Lais
+     */
     private fun calcularDistancia(
         lat1: Double, lon1: Double, lat2: Double, lon2: Double
     ): Double {
@@ -459,6 +504,10 @@ class LocationActivity : AppCompatActivity() {
         return r * c
     }
 
+    /**
+     * Verifica a hora atual e atualiza o layout.
+     * @author: Lais
+     */
     private fun checkHour() {
         // Obter a hora atual
         val calendario = Calendar.getInstance()
@@ -504,7 +553,10 @@ class LocationActivity : AppCompatActivity() {
     }
 }
 
-// Classe que faz a passagem de dados do cliente para o QRcode
+/**
+ * Classe que passa os dados do cliente para a geração do qrcode.
+ * @authors: Lais e Isabela
+ */
 data class DadosCliente(
     var id: String,
     var nome: String,

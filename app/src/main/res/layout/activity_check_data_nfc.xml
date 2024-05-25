@@ -219,15 +219,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/progressBar"
-            style="@style/SpinKitView.Large.ThreeBounce"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:SpinKit_Color="@color/orange"
+            android:layout_centerInParent="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -238,7 +241,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+            app:layout_constraintTop_toBottomOf="@id/lottieLogo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

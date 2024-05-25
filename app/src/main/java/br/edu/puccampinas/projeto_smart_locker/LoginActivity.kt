@@ -49,12 +49,18 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
             }
             btLogin.setOnClickListener {
+                // desabilita o botão
+                binding.btLogin.isEnabled = false
                 // Chama a função para validar o usuário ao clicar no botão de login
                 validUser(editUsuario.text.toString(), editSenha.text.toString())
             }
             txtEsqueceuSenha.setOnClickListener {
-                // Chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
-                forgotPassword(editUsuario.text.toString())
+                if (networkChecker.hasInternet()){
+                    // Se tiver internet chama a função para redefinir a senha ao clicar no texto "Esqueceu sua senha?"
+                    forgotPassword(editUsuario.text.toString())
+                } else {
+                    startActivity(Intent(this@LoginActivity, NetworkErrorActivity::class.java))
+                }
             }
         }
         // Configura o cursor para começar no início do campo de usuário ao receber o foco
@@ -66,6 +72,12 @@ class LoginActivity : AppCompatActivity() {
             InputType.TYPE_CLASS_TEXT
         )
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding.btLogin.isEnabled = true
+    }
+
     /**
      * Função para enviar e-mail de redefinição de senha
      * @authors: Marcos.
@@ -139,6 +151,7 @@ class LoginActivity : AppCompatActivity() {
         val btnOk = view.findViewById<Button>(R.id.btnOk)
         btnOk.setOnClickListener {
             alertDialog.dismiss()
+            binding.btLogin.isEnabled = true
         }
 
         // Atualize a mensagem no TextView
@@ -168,6 +181,7 @@ class LoginActivity : AppCompatActivity() {
         val btnOk = view.findViewById<Button>(R.id.btnOk)
         btnOk.setOnClickListener {
             alertDialog.dismiss()
+            binding.btLogin.isEnabled = true
         }
 
         // Atualize a mensagem no TextView

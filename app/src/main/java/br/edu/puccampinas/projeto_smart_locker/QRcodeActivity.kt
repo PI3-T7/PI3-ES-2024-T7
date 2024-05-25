@@ -17,24 +17,31 @@ import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import java.io.ByteArrayOutputStream
-
-
+/**
+ * Activity responsável pela exibição do QRcode na parte do cliente.
+ * @authors: Lais e Isabella.
+ */
 class QRcodeActivity : AppCompatActivity() {
-
+    // Declaração das variáveis
     private lateinit var imgQRcode: ImageView
     private lateinit var cancelLocation: ImageView
     private lateinit var buttonVoltar2: ImageView
     private var qrCodeBitmap: Bitmap? = null // Declaração da variável qrCodeBitmap
-
+    /**
+     * Método chamado quando a atividade é criada.
+     * @authors: Lais.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qrcode)
 
+        // Inicializa as referências aos elementos de UI no layout
         imgQRcode = findViewById(R.id.img_qr_code)
         cancelLocation = findViewById(R.id.cancelLocation)
         buttonVoltar2 = findViewById(R.id.buttonVoltar2)
-
+        // Obtém uma instância das preferências compartilhadas
         val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
+        // Recupera o valor booleano "pending_rental" das preferências compartilhadas, padrão é false se não existir.
         val pendingRental = sharedPreferences.getBoolean("pending_rental", false)
 
         if (pendingRental) {
@@ -61,7 +68,6 @@ class QRcodeActivity : AppCompatActivity() {
 
         buttonVoltar2.setOnClickListener {
             clearPendingRental()
-            startActivity(Intent(this@QRcodeActivity, LocationActivity::class.java))
             finish()
         }
 
@@ -70,8 +76,10 @@ class QRcodeActivity : AppCompatActivity() {
             showAlertCancel()
         }
     }
-
-    // Função que gera um QRcode
+    /**
+     * Função que gera um QRcode
+     * @authors: Isabella.
+     */
     private fun generateQRCode(text: String) {
         val prefixo = "SMARTLOCKER_"
         val dadosComPrefixo = prefixo + text // Adiciona o prefixo aos dados
@@ -89,14 +97,21 @@ class QRcodeActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-
-    // Função que faz a conversão uma matriz de bits (BitMatrix) em um objeto Bitmap
+    /**
+     * Função que faz a conversão uma matriz de bits (BitMatrix) em um objeto Bitmap
+     * @authors: Isabella.
+     */
     private fun toBitmap(matrix: BitMatrix): Bitmap {
+        // Obtém a largura e a altura da matriz
         val width = matrix.width
         val height = matrix.height
+        // Cria um Bitmap com a mesma largura e altura da matriz
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
         for (x in 0 until width) {
             for (y in 0 until height) {
+                // Define a cor do pixel no Bitmap com base no valor do pixel na matriz
+                // Se o valor na matriz for verdadeiro, define o pixel como preto
+                // Caso contrário, define o pixel como uma cor clara
                 bmp.setPixel(x, y, if (matrix[x, y]) 0xFF000000.toInt() else 0xFFFFF9F3.toInt())
             }
         }
@@ -108,6 +123,7 @@ class QRcodeActivity : AppCompatActivity() {
      * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
      * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
      * @param button O identificador do botão que acionou o diálogo de cancelamento.
+     * @authors: Lais.
      */
     private fun showAlertCancel() {
         // Inflate o layout customizado
@@ -133,7 +149,13 @@ class QRcodeActivity : AppCompatActivity() {
 
         btnYes.setOnClickListener {
             clearPendingRental()
-            startActivity(Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java))
+
+            // Cria uma Intent para a MainActivity
+            val intent = Intent(this@QRcodeActivity, ClientMainScreenActivity::class.java)
+
+            // Adiciona as flags para limpar a pilha de atividades e iniciar uma nova tarefa
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
             finish()
             customDialog.dismiss()
         }
@@ -141,24 +163,30 @@ class QRcodeActivity : AppCompatActivity() {
         // Mostre o diálogo
         customDialog.show()
     }
-
-    // Função para salvar o estado de locação pendente
+    /**
+     * Função para salvar o estado de locação pendente
+     * @authors: Lais.
+     */
     private fun savePendingRental() {
         val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean("pending_rental", true)
         editor.apply()
     }
-
-    // Função para limpar o estado de locação pendente
+    /**
+     * Função para limpar o estado de locação pendente
+     * @authors: Lais.
+     */
     private fun clearPendingRental() {
         val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean("pending_rental", false)
         editor.apply()
     }
-
-    // Função para salvar o QR code em SharedPreferences
+    /**
+     * Função para salvar o QR code em SharedPreferences
+     * @authors: Lais.
+     */
     private fun saveQRCodeToSharedPreferences(bitmap: Bitmap?) {
         if (bitmap != null) {
             val sharedPreferences = getSharedPreferences("SmartLockerPrefs", Context.MODE_PRIVATE)
@@ -168,16 +196,20 @@ class QRcodeActivity : AppCompatActivity() {
             editor.apply()
         }
     }
-
-    // Função para codificar Bitmap em Base64
+    /**
+     * Função para codificar Bitmap em Base64
+     * @authors: Lais.
+     */
     private fun encodeToBase64(image: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
-
-    // Função para decodificar string Base64 em Bitmap
+    /**
+     * Função para decodificar string Base64 em Bitmap
+     * @authors: Lais.
+     */
     private fun decodeBase64(input: String): Bitmap {
         val decodedByte = Base64.decode(input, 0)
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.size)

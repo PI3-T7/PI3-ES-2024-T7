@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityCheckDataNfcBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
@@ -55,11 +56,12 @@ class CheckDataNfcActivity : AppCompatActivity() {
                 binding.viewFlipper.showNext()
                 updatePhotoIndicator()
             }
-
+            imgArrow.setOnClickListener { finish() }
             // A foto corresponde à pessoa
             btnConfirm.setOnClickListener {
                 val intent = Intent(this@CheckDataNfcActivity,OpenLockerActivity::class.java)
                 intent.putExtra("idLocacao", idLocacao)
+                LocalBroadcastManager.getInstance(this@CheckDataNfcActivity).sendBroadcast(Intent("finish_read_nfc"))
                 startActivity(intent)
                 finish()
             }
@@ -194,21 +196,15 @@ class CheckDataNfcActivity : AppCompatActivity() {
                         time = startDate
                         add(Calendar.HOUR_OF_DAY, tempoEscolhido)
                     }
-                    val endDate = calendar.time
-                    val endDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                    val endDateString = endDateFormat.format(endDate)
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
                     tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
-                    tvEndLocation.text = "Fim: $endDateString"
                     tvTime.text = tempoEscolhidoString
                 } else {
                     // Se não for possível calcular a data e hora de término, exibe uma mensagem
-                    tvEndLocation.text = "Fim: Não foi possível calcular"
                 }
             } else {
                 // Se os dados de data e hora forem inválidos, exibe uma mensagem
                 tvStartLocation.text = "Início: Dados inválidos"
-                tvEndLocation.text = "Fim: Dados inválidos"
             }
         }
     }
@@ -328,7 +324,7 @@ class CheckDataNfcActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("finish_read_nfc"))
             finish()
             customDialog.dismiss()
         }

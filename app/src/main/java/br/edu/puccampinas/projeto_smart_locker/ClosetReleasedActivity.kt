@@ -1,5 +1,6 @@
 package br.edu.puccampinas.projeto_smart_locker
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -98,11 +99,6 @@ class ClosetReleasedActivity : AppCompatActivity() {
     /**
      * Atualiza a interface do usuário com os dados do documento.
      *
-     * O documento do Firestore contendo os dados da locação.
-     */
-    /**
-     * Atualiza a interface do usuário com os dados do documento.
-     *
      * @param document O documento do Firestore contendo os dados da locação.
      */
     private fun updateUIWithDocumentData(document: DocumentSnapshot) {
@@ -159,10 +155,7 @@ class ClosetReleasedActivity : AppCompatActivity() {
         // Atualiza os elementos da UI com os dados do documento
         with(binding) {
             // Atualiza o número do armário na interface
-            tvNumber.text = buildString {
-                append("Armário: ")
-                append(document.getString("numero_armario"))
-            }
+            tvNumber.text = "Armário: ${document.getString("numero_armario")}"
 
             // Obtém e formata a data e hora de início da locação
             val dateLocacao = document.getString("data_locacao")
@@ -173,7 +166,8 @@ class ClosetReleasedActivity : AppCompatActivity() {
                 val startDate = dateTimeFormat.parse("$dateLocacao $horaLocacao")
                 if (startDate != null) {
                     // Calcula a data e hora de término da locação
-                    val tempoEscolhidoString = document.getString("tempo_escolhido") // Obtém a string do Firestore
+                    val tempoEscolhidoString =
+                        document.getString("tempo_escolhido") // Obtém a string do Firestore
                     val tempoEscolhido: Int =
                         // Extrai apenas os caracteres numéricos da string e converte para inteiro
                         tempoEscolhidoString?.replace("\\D".toRegex(), "")?.toInt()
@@ -184,33 +178,15 @@ class ClosetReleasedActivity : AppCompatActivity() {
                         time = startDate
                         add(Calendar.HOUR_OF_DAY, tempoEscolhido)
                     }
-                    val endDate = calendar.time
-                    val endDateFormat = SimpleDateFormat("dd/MM HH:mm", Locale.getDefault())
-                    val endDateString = endDateFormat.format(endDate)
                     // Atualiza a interface com a data e hora de início, de término e o tempo de locação
-                    tvStartLocation.text = buildString {
-                        append("Início: ")
-                        append(dateTimeFormat.format(startDate))
-                    }
-                    tvEndLocation.text = buildString {
-                        append("Fim: ")
-                        append(endDateString)
-                    }
+                    tvStartLocation.text = "Início: ${dateTimeFormat.format(startDate)}"
                     tvTime.text = tempoEscolhidoString
                 } else {
                     // Se não for possível calcular a data e hora de término, exibe uma mensagem
-                    tvEndLocation.text = buildString {
-                        append("Fim: Não foi possível calcular")
-                    }
                 }
             } else {
                 // Se os dados de data e hora forem inválidos, exibe uma mensagem
-                tvStartLocation.text = buildString {
-                    append("Início: Dados inválidos")
-                }
-                tvEndLocation.text = buildString {
-                    append("Fim: Dados inválidos")
-                }
+                tvStartLocation.text = "Início: Dados inválidos"
             }
         }
     }

@@ -2,6 +2,7 @@ package br.edu.puccampinas.projeto_smart_locker
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 
@@ -31,6 +33,13 @@ class CardRegistrationActivity : AppCompatActivity() {
     private val binding by lazy { ActivityCardRegistrationBinding.inflate(layoutInflater) }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val database by lazy { FirebaseFirestore.getInstance() }
+
+    private val networkChecker by lazy {
+        NetworkChecker(
+            ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+                ?: throw IllegalStateException("ConnectivityManager not available")
+        )
+    }
 
     /**
      * Método chamado quando a atividade é criada.
@@ -73,9 +82,7 @@ class CardRegistrationActivity : AppCompatActivity() {
                 showAlertCancel()
             }
 
-            nav.buttonVoltar.setOnClickListener {
-                showAlertCancel()
-            }
+            nav.buttonVoltar.visibility = View.GONE
         }
     }
 
@@ -84,24 +91,28 @@ class CardRegistrationActivity : AppCompatActivity() {
      * @authors: Marcos, Isabella e Lais
      */
     private fun cadastrarCartao() {
-        val cartaoInfo = mapOf(
-            "validade" to binding.editDataValidade.masked,
-            "nome" to binding.editName.text.toString(),
-            "numero" to binding.editNumCartao.masked,
-        )
-        database
-            .collection("Pessoas")
-            .document(auth.currentUser?.uid.toString())
-            .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
-            .addOnSuccessListener {
-                // Inicia a CardsActivity após o cadastro bem-sucedido
-                startActivity(Intent(this, CardsActivity::class.java))
-                finish() // Finaliza a CardRegistrationActivity
-            }.addOnFailureListener {
-                showAlert("Falha ao cadastrar cartão!")
-            }
+        if (networkChecker.hasInternet()) {
+            val cartaoInfo = mapOf(
+                "validade" to binding.editDataValidade.masked,
+                "nome" to binding.editName.text.toString(),
+                "numero" to binding.editNumCartao.masked,
+            )
+            database
+                .collection("Pessoas")
+                .document(auth.currentUser?.uid.toString())
+                .update("cartoes", FieldValue.arrayUnion(cartaoInfo))
+                .addOnSuccessListener {
+                    // Inicia a CardsActivity após o cadastro bem-sucedido
+                    startActivity(Intent(this, CardsActivity::class.java))
+                    finish()
+                }.addOnFailureListener {
+                    showAlert("Falha ao cadastrar cartão!")
+                }
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("meuFiltro"))
+        } else {
+            startActivity(Intent(this, NetworkErrorActivity::class.java))
+        }
     }
 
     /**
@@ -237,7 +248,6 @@ class CardRegistrationActivity : AppCompatActivity() {
      * @authors: Lais e Isabella
      * Este diálogo é usado para confirmar se o usuário deseja cancelar uma operação.
      * Dependendo da escolha do usuário, a atividade pode ser finalizada e outra atividade pode ser iniciada.
-     * @param button O identificador do botão que acionou o diálogo de cancelamento.
      */
     private fun showAlertCancel() {
         // Inflate o layout customizado
@@ -262,7 +272,8 @@ class CardRegistrationActivity : AppCompatActivity() {
         }
 
         btnYes.setOnClickListener {
-            startActivity(Intent(this,CardsActivity::class.java))
+            startActivity(Intent(this,ManagerMainScreenActivity::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             finish()
             customDialog.dismiss()
         }
