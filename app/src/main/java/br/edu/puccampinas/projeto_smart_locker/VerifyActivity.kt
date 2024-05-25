@@ -5,12 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import br.edu.puccampinas.projeto_smart_locker.databinding.ActivityVerifyBinding
 import com.google.firebase.auth.FirebaseAuth
-
+/**
+ * Activity responsável pela verificação de email.
+ * @authors: Marcos.
+ */
 class VerifyActivity : AppCompatActivity() {
     // Configuração do ViewBinding
     private val binding by lazy { ActivityVerifyBinding.inflate( layoutInflater ) }
     // Configuração do FirebaseAuth
     private val auth by lazy { FirebaseAuth.getInstance() }
+    /**
+     * Método chamado quando a atividade é criada.
+     * @authors: Marcos.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
